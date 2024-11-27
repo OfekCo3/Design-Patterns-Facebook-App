@@ -15,17 +15,24 @@ namespace BasicFacebookFeatures
     public partial class FormMain : Form
     {
         private User m_activeUser;
-        //private readonly AppPreferences r_appPreferences;
         private LoginResult m_loginResult;
         //private ProfileAnalyzerForm m_analyzerForm;
         //private ProfilePicFilterForm m_filterForm;
+
         //private FacebookHelper m_facebookHelper;
+
+        private enum eComboboxMainOptions
+        {
+            Feed,
+            Likes,
+            Albums,
+            Groups
+        }
 
         public FormMain()
         {
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
-            //r_appPreferences = AppSettings.LoadAppSettingsFromFile();
         }
 
         FacebookWrapper.LoginResult m_LoginResult;
@@ -73,8 +80,6 @@ namespace BasicFacebookFeatures
             const bool isLoggingIn = true;
 
             m_activeUser = m_loginResult.LoggedInUser;
-            //m_facebookHelper = new FacebookHelper(m_activeUser);
-
             buttonLogin.Text = $"Logged in as {m_activeUser.Name}";
             buttonLogin.BackColor = Color.LightGreen;
             tabMainApp.Text = $"{m_activeUser.Name}";
@@ -192,6 +197,72 @@ namespace BasicFacebookFeatures
             }
         }
 
+        private void loadUserLikedPages()
+        {
+            listBoxMain.Items.Clear();
+            listBoxMain.DisplayMember = "Name";
+            try
+            {
+                foreach (Page page in m_activeUser.LikedPages)
+                {
+                    listBoxMain.Items.Add(page);
+                }
+
+                if (listBoxMain.Items.Count == 0)
+                {
+                    listBoxMain.Items.Add("No liked pages to display");
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("failed to retrive liked pages");
+            }
+        }
+
+        private void loadUserGroups()
+        {
+            listBoxMain.Items.Clear();
+            listBoxMain.DisplayMember = "Name";
+            try
+            {
+                foreach (Group group in m_activeUser.Groups)
+                {
+                    listBoxMain.Items.Add(group);
+                }
+
+                if (listBoxMain.Items.Count == 0)
+                {
+                    listBoxMain.Items.Add("No groups to display");
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("failed to retrive groups");
+            }
+        }
+
+        private void loadUserAlbums()
+        {
+            listBoxMain.Items.Clear();
+            listBoxMain.DisplayMember = "Name";
+            try
+            {
+                foreach (Album album in m_activeUser.Albums)
+                {
+                    listBoxMain.Items.Add(album);
+                }
+
+                if (listBoxMain.Items.Count == 0)
+                {
+                    listBoxMain.Items.Add("No Albums to display");
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("falied to retrive albums");
+            }
+        }
+
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             FacebookService.LogoutWithUI();
@@ -249,24 +320,134 @@ namespace BasicFacebookFeatures
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            eComboboxMainOptions selectedFeature = (eComboboxMainOptions)comboBoxMain.SelectedIndex;
+
+            switch (selectedFeature)
+            {
+                case eComboboxMainOptions.Feed:
+                    loadUserFeed();
+                    break;
+                case eComboboxMainOptions.Likes:
+                    loadUserLikedPages();
+                    break;
+                case eComboboxMainOptions.Albums:
+                    loadUserAlbums();
+                    break;
+                case eComboboxMainOptions.Groups:
+                    loadUserGroups();
+                    break;
+            }
+
+        }
+
+        private void textBoxPost_TextChanged(object sender, EventArgs e)
+        {
+            const bool v_PostButtonsEnabled = true;
+
+            changePostButtonsState(v_PostButtonsEnabled);
+
+        }
+        private void changePostButtonsState(bool i_ButtonsState)
+        {
+            buttonPost.Enabled = i_ButtonsState;
+            buttonAddPicture.Enabled = i_ButtonsState;
+            buttonCancelPost.Enabled = i_ButtonsState;
+        }
+
+        private void buttonPost_Click(object sender, EventArgs e)
+        {
+            const bool v_PostButtonsEnabled = true;
+
+            try
+            {
+                if (m_activeUser != null)
+                {
+                    if (string.IsNullOrWhiteSpace(textBoxPost.Text))
+                    {
+                        throw new Exception("Please enter your post first!");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Status postedStatus = m_activeUser.PostStatus(textBoxPost.Text);
+
+                            if (postedStatus == null)
+                            {
+                                throw new Exception("Post failed :(");
+                            }
+                        }
+                        catch (Exception exception)
+                        {
+                            throw new Exception();
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception("Please Login first!");
+                }
+                changePostButtonsState(!v_PostButtonsEnabled);
+                MessageBox.Show("Posted!");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+            finally
+            {
+                textBoxPost.Text = string.Empty;
+            }
+
+        }
+
+        private void buttonAddPicture_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = openFileDialogPostPicture.ShowDialog();
+
+            if (dialogResult == DialogResult.OK)
+            {
+                string picturePath = openFileDialogPostPicture.FileName;
+
+                if (string.IsNullOrWhiteSpace(picturePath))
+                {
+                    throw new Exception("Please choose a picture first!");
+                }
+                else
+                {
+                    try
+                    {
+                        Status postedStatus = m_activeUser.PostStatus(i_StatusText: textBoxPost.Text, i_PictureURL: picturePath);
+                        
+                        if (postedStatus == null)
+                        {
+                            throw new Exception("Picture post failed :(");
+                        }
+                    }
+                    
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show(exception.Message);
+                    }
+
+                }
+            }
+
+        }
+
+        private void openFileDialogPostPicture_FileOk(object sender, CancelEventArgs e)
         {
 
         }
 
-        private void label1_Click_1(object sender, EventArgs e)
+        private void buttonCancelPost_Click(object sender, EventArgs e)
         {
+            const bool v_PostButtonsEnabled = true;
 
-        }
-
-        private void label1_Click_2(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
+            textBoxPost.Text = string.Empty;
+            changePostButtonsState(!v_PostButtonsEnabled);
         }
     }
 }
