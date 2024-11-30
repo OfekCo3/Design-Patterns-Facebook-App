@@ -282,7 +282,6 @@
             this.checkBoxRememberMe.TabIndex = 73;
             this.checkBoxRememberMe.Text = "Remember Me";
             this.checkBoxRememberMe.UseVisualStyleBackColor = true;
-            this.checkBoxRememberMe.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // FormMain
             // 

@@ -312,33 +312,6 @@ namespace BasicFacebookFeatures
             buttonLogout.Enabled = false;
         }
 
-        private void postButton_Click(object sender, EventArgs e)
-        {
-            const bool v_EnablePostButtons = true;
-
-            try
-            {
-                //m_facebookHelper.PublishStatus(textBoxPost.Text);
-                togglePostButtons(!v_EnablePostButtons);
-                MessageBox.Show("Post published successfully!");
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-            finally
-            {
-                textBoxPost.Text = string.Empty;
-            }
-        }
-
-        private void togglePostButtons(bool isEnabled)
-        {
-            buttonPost.Enabled = isEnabled;
-            buttonAddPicture.Enabled = isEnabled;
-            buttonCancelPost.Enabled = isEnabled;
-        }
-
         private void textBoxAppID_TextChanged(object sender, EventArgs e)
         {
 
@@ -415,12 +388,12 @@ namespace BasicFacebookFeatures
 
                             if (postedStatus == null)
                             {
-                                throw new Exception("Post failed :(");
+                                throw new Exception("Post failed");
                             }
                         }
                         catch (Exception exception)
                         {
-                            throw new Exception();
+                            throw new Exception("Post failed");
                         }
                     }
                 }
@@ -462,13 +435,13 @@ namespace BasicFacebookFeatures
                         
                         if (postedStatus == null)
                         {
-                            throw new Exception("Picture post failed :(");
+                            throw new Exception("Picture post failed");
                         }
                     }
                     
                     catch (Exception exception)
                     {
-                        MessageBox.Show(exception.Message);
+                        MessageBox.Show("Picture post failed");
                     }
 
                 }
@@ -487,11 +460,6 @@ namespace BasicFacebookFeatures
 
             textBoxPost.Text = string.Empty;
             changePostButtonsState(!v_PostButtonsEnabled);
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

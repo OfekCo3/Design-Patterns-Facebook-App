@@ -20,12 +20,7 @@ namespace BasicFacebookFeatures
         public Size LastWindowSize { get; set; }
 
         private AppSettings()
-        {
-            //RememberLoggedInUser = false;
-            //AccessToken = null;
-            //LastWindowLocation = new Point(80, 50);
-            //LastWindowSize = new Size(1000, 500);
-            
+        {            
             if (!File.Exists(sr_SaveSettingsFilePath))
             {
                 File.Create(sr_SaveSettingsFilePath).Dispose();
