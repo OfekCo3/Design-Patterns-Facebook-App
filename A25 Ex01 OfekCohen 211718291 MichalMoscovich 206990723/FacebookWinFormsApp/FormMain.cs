@@ -14,12 +14,9 @@ namespace BasicFacebookFeatures
 {
     public partial class FormMain : Form
     {
-        private User m_activeUser;
-        private LoginResult m_loginResult;
-        //private ProfileAnalyzerForm m_analyzerForm;
-        //private ProfilePicFilterForm m_filterForm;
-
-        //private FacebookHelper m_facebookHelper;
+        private User m_ActiveUser;
+        private LoginResult m_LoginResult;
+        private readonly AppSettings r_AppSettings;
 
         private enum eComboboxMainOptions
         {
@@ -33,15 +30,57 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
+            this.StartPosition = FormStartPosition.Manual;
+            r_AppSettings = AppSettings.LoadFromFile();
         }
 
-        FacebookWrapper.LoginResult m_LoginResult;
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            r_AppSettings.LastWindowLocation = this.Location;
+            r_AppSettings.LastWindowSize = this.Size;
+
+            if (checkBoxRememberMe.Checked && m_LoginResult != null)
+            {
+                r_AppSettings.RememberLoggedInUser = true;
+                r_AppSettings.AccessToken = m_LoginResult.AccessToken;
+            }
+            else
+            {
+                r_AppSettings.RememberLoggedInUser = false;
+                r_AppSettings.AccessToken = null;
+            }
+
+            r_AppSettings.SaveToFile();
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            checkBoxRememberMe.Checked = r_AppSettings.RememberLoggedInUser;
+            this.Size = r_AppSettings.LastWindowSize;
+            this.Location = r_AppSettings.LastWindowLocation;
+            base.OnShown(e);
+            if (r_AppSettings.RememberLoggedInUser && !string.IsNullOrEmpty(r_AppSettings.AccessToken))
+            {
+                try
+                {
+                    m_LoginResult = FacebookService.Connect(r_AppSettings.AccessToken);
+                    loadUserDataToUI();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
+                    m_LoginResult = null;
+                }
+            }
+        }
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
             Clipboard.SetText("design.patterns");
 
-            if (m_loginResult == null)
+            if (m_LoginResult == null)
             {
                 login();
             }
@@ -49,7 +88,7 @@ namespace BasicFacebookFeatures
 
         private void login()
         {
-            m_loginResult = FacebookService.Login(
+            m_LoginResult = FacebookService.Login(
                 textBoxAppID.Text,
                 "email",
                 "public_profile",
@@ -64,14 +103,14 @@ namespace BasicFacebookFeatures
                 "user_posts"
             );
 
-            if (!string.IsNullOrEmpty(m_loginResult.AccessToken))
+            if (!string.IsNullOrEmpty(m_LoginResult.AccessToken))
             {
                 loadUserDataToUI();
             }
             else
             {
-                MessageBox.Show(m_loginResult.ErrorMessage, "Login Failed");
-                m_loginResult = null;
+                MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
+                m_LoginResult = null;
             }
         }
 
@@ -79,10 +118,10 @@ namespace BasicFacebookFeatures
         {
             const bool isLoggingIn = true;
 
-            m_activeUser = m_loginResult.LoggedInUser;
-            buttonLogin.Text = $"Logged in as {m_activeUser.Name}";
+            m_ActiveUser = m_LoginResult.LoggedInUser;
+            buttonLogin.Text = $"Logged in as {m_ActiveUser.Name}";
             buttonLogin.BackColor = Color.LightGreen;
-            tabMainApp.Text = $"{m_activeUser.Name}";
+            tabMainApp.Text = $"{m_ActiveUser.Name}";
             updateUIBasedOnLoginStatus(isLoggingIn);
             loadUserInformation();
         }
@@ -99,11 +138,11 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                pictureBoxProfile.ImageLocation = !string.IsNullOrEmpty(m_activeUser.PictureNormalURL)
-                    ? m_activeUser.PictureNormalURL
+                pictureBoxProfile.ImageLocation = !string.IsNullOrEmpty(m_ActiveUser.PictureNormalURL)
+                    ? m_ActiveUser.PictureNormalURL
                     : null;
 
-                pictureBoxCover.ImageLocation = m_activeUser.Cover?.SourceURL;
+                pictureBoxCover.ImageLocation = m_ActiveUser.Cover?.SourceURL;
             }
             catch (Exception)
             {
@@ -121,7 +160,7 @@ namespace BasicFacebookFeatures
 
             try
             {
-                foreach (Event userEvent in m_activeUser.Events)
+                foreach (Event userEvent in m_ActiveUser.Events)
                 {
                     if (userEvent.Name != null)
                     {
@@ -146,7 +185,7 @@ namespace BasicFacebookFeatures
 
             try
             {
-                foreach (Post post in m_activeUser.NewsFeed)
+                foreach (Post post in m_ActiveUser.NewsFeed)
                 {
                     if (!string.IsNullOrEmpty(post.Message))
                     {
@@ -180,7 +219,7 @@ namespace BasicFacebookFeatures
 
             try
             {
-                foreach (User friend in m_activeUser.Friends)
+                foreach (User friend in m_ActiveUser.Friends)
                 {
                     listBoxFriends.Items.Add(friend);
                 }
@@ -203,7 +242,7 @@ namespace BasicFacebookFeatures
             listBoxMain.DisplayMember = "Name";
             try
             {
-                foreach (Page page in m_activeUser.LikedPages)
+                foreach (Page page in m_ActiveUser.LikedPages)
                 {
                     listBoxMain.Items.Add(page);
                 }
@@ -225,7 +264,7 @@ namespace BasicFacebookFeatures
             listBoxMain.DisplayMember = "Name";
             try
             {
-                foreach (Group group in m_activeUser.Groups)
+                foreach (Group group in m_ActiveUser.Groups)
                 {
                     listBoxMain.Items.Add(group);
                 }
@@ -247,7 +286,7 @@ namespace BasicFacebookFeatures
             listBoxMain.DisplayMember = "Name";
             try
             {
-                foreach (Album album in m_activeUser.Albums)
+                foreach (Album album in m_ActiveUser.Albums)
                 {
                     listBoxMain.Items.Add(album);
                 }
@@ -362,7 +401,7 @@ namespace BasicFacebookFeatures
 
             try
             {
-                if (m_activeUser != null)
+                if (m_ActiveUser != null)
                 {
                     if (string.IsNullOrWhiteSpace(textBoxPost.Text))
                     {
@@ -372,7 +411,7 @@ namespace BasicFacebookFeatures
                     {
                         try
                         {
-                            Status postedStatus = m_activeUser.PostStatus(textBoxPost.Text);
+                            Status postedStatus = m_ActiveUser.PostStatus(textBoxPost.Text);
 
                             if (postedStatus == null)
                             {
@@ -419,7 +458,7 @@ namespace BasicFacebookFeatures
                 {
                     try
                     {
-                        Status postedStatus = m_activeUser.PostStatus(i_StatusText: textBoxPost.Text, i_PictureURL: picturePath);
+                        Status postedStatus = m_ActiveUser.PostStatus(i_StatusText: textBoxPost.Text, i_PictureURL: picturePath);
                         
                         if (postedStatus == null)
                         {
@@ -448,6 +487,11 @@ namespace BasicFacebookFeatures
 
             textBoxPost.Text = string.Empty;
             changePostButtonsState(!v_PostButtonsEnabled);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
