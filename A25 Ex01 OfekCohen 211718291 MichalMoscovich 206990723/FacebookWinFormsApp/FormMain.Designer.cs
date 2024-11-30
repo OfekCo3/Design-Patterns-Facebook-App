@@ -47,6 +47,7 @@
             this.buttonLogin = new System.Windows.Forms.Button();
             this.pictureBoxCover = new System.Windows.Forms.PictureBox();
             this.tabMainApp = new System.Windows.Forms.TabControl();
+            this.openFileDialogPostPicture = new System.Windows.Forms.OpenFileDialog();
             this.tabMainPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCover)).BeginInit();
@@ -72,10 +73,10 @@
             this.tabMainPage.Controls.Add(this.buttonLogout);
             this.tabMainPage.Controls.Add(this.buttonLogin);
             this.tabMainPage.Controls.Add(this.pictureBoxCover);
-            this.tabMainPage.Location = new System.Drawing.Point(4, 27);
+            this.tabMainPage.Location = new System.Drawing.Point(4, 35);
             this.tabMainPage.Name = "tabMainPage";
             this.tabMainPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMainPage.Size = new System.Drawing.Size(1044, 635);
+            this.tabMainPage.Size = new System.Drawing.Size(1044, 627);
             this.tabMainPage.TabIndex = 0;
             this.tabMainPage.Text = "tabPage1";
             this.tabMainPage.UseVisualStyleBackColor = true;
@@ -91,6 +92,7 @@
             this.buttonCancelPost.TabIndex = 72;
             this.buttonCancelPost.Text = "Cancel";
             this.buttonCancelPost.UseVisualStyleBackColor = false;
+            this.buttonCancelPost.Click += new System.EventHandler(this.buttonCancelPost_Click);
             // 
             // buttonAddPicture
             // 
@@ -102,6 +104,7 @@
             this.buttonAddPicture.TabIndex = 71;
             this.buttonAddPicture.Text = "Add a Picture";
             this.buttonAddPicture.UseVisualStyleBackColor = false;
+            this.buttonAddPicture.Click += new System.EventHandler(this.buttonAddPicture_Click);
             // 
             // buttonPost
             // 
@@ -113,6 +116,7 @@
             this.buttonPost.TabIndex = 70;
             this.buttonPost.Text = "Post";
             this.buttonPost.UseVisualStyleBackColor = false;
+            this.buttonPost.Click += new System.EventHandler(this.buttonPost_Click);
             // 
             // comboBoxMain
             // 
@@ -126,35 +130,36 @@
             "My Groups"});
             this.comboBoxMain.Location = new System.Drawing.Point(8, 369);
             this.comboBoxMain.Name = "comboBoxMain";
-            this.comboBoxMain.Size = new System.Drawing.Size(142, 32);
+            this.comboBoxMain.Size = new System.Drawing.Size(142, 40);
             this.comboBoxMain.TabIndex = 67;
             this.comboBoxMain.Text = "My Feed:";
+            this.comboBoxMain.SelectedIndexChanged += new System.EventHandler(this.comboBoxMain_SelectedIndexChanged);
             // 
             // listBoxMain
             // 
             this.listBoxMain.FormattingEnabled = true;
-            this.listBoxMain.ItemHeight = 18;
+            this.listBoxMain.ItemHeight = 26;
             this.listBoxMain.Location = new System.Drawing.Point(8, 412);
             this.listBoxMain.Name = "listBoxMain";
-            this.listBoxMain.Size = new System.Drawing.Size(332, 202);
+            this.listBoxMain.Size = new System.Drawing.Size(332, 186);
             this.listBoxMain.TabIndex = 55;
             // 
             // listBoxFriends
             // 
             this.listBoxFriends.FormattingEnabled = true;
-            this.listBoxFriends.ItemHeight = 18;
+            this.listBoxFriends.ItemHeight = 26;
             this.listBoxFriends.Location = new System.Drawing.Point(707, 412);
             this.listBoxFriends.Name = "listBoxFriends";
-            this.listBoxFriends.Size = new System.Drawing.Size(331, 202);
+            this.listBoxFriends.Size = new System.Drawing.Size(331, 186);
             this.listBoxFriends.TabIndex = 66;
             // 
             // listBoxEvents
             // 
             this.listBoxEvents.FormattingEnabled = true;
-            this.listBoxEvents.ItemHeight = 18;
+            this.listBoxEvents.ItemHeight = 26;
             this.listBoxEvents.Location = new System.Drawing.Point(358, 412);
             this.listBoxEvents.Name = "listBoxEvents";
-            this.listBoxEvents.Size = new System.Drawing.Size(331, 202);
+            this.listBoxEvents.Size = new System.Drawing.Size(331, 186);
             this.listBoxEvents.TabIndex = 65;
             // 
             // pictureBoxProfile
@@ -171,20 +176,18 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(704, 383);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 18);
+            this.label2.Size = new System.Drawing.Size(90, 26);
             this.label2.TabIndex = 63;
             this.label2.Text = "Friends:";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(355, 383);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 18);
+            this.label1.Size = new System.Drawing.Size(133, 26);
             this.label1.TabIndex = 62;
             this.label1.Text = "Next events:";
-            this.label1.Click += new System.EventHandler(this.label1_Click_2);
             // 
             // textBoxPost
             // 
@@ -193,32 +196,31 @@
             this.textBoxPost.Size = new System.Drawing.Size(970, 159);
             this.textBoxPost.TabIndex = 57;
             this.textBoxPost.Text = "";
+            this.textBoxPost.TextChanged += new System.EventHandler(this.textBoxPost_TextChanged);
             // 
             // labelAddPost
             // 
             this.labelAddPost.AutoSize = true;
             this.labelAddPost.Location = new System.Drawing.Point(8, 147);
             this.labelAddPost.Name = "labelAddPost";
-            this.labelAddPost.Size = new System.Drawing.Size(82, 18);
+            this.labelAddPost.Size = new System.Drawing.Size(122, 26);
             this.labelAddPost.TabIndex = 56;
             this.labelAddPost.Text = "Add a post:";
-            this.labelAddPost.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // labelAppId
             // 
             this.labelAppId.AutoSize = true;
             this.labelAppId.Location = new System.Drawing.Point(8, 81);
             this.labelAppId.Name = "labelAppId";
-            this.labelAppId.Size = new System.Drawing.Size(55, 18);
+            this.labelAppId.Size = new System.Drawing.Size(85, 26);
             this.labelAppId.TabIndex = 55;
             this.labelAppId.Text = "App ID:";
-            this.labelAppId.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBoxAppID
             // 
             this.textBoxAppID.Location = new System.Drawing.Point(69, 75);
             this.textBoxAppID.Name = "textBoxAppID";
-            this.textBoxAppID.Size = new System.Drawing.Size(199, 24);
+            this.textBoxAppID.Size = new System.Drawing.Size(199, 32);
             this.textBoxAppID.TabIndex = 54;
             this.textBoxAppID.Text = "1450160541956417";
             this.textBoxAppID.TextChanged += new System.EventHandler(this.textBoxAppID_TextChanged);
@@ -264,9 +266,14 @@
             this.tabMainApp.Size = new System.Drawing.Size(1052, 666);
             this.tabMainApp.TabIndex = 54;
             // 
+            // openFileDialogPostPicture
+            // 
+            this.openFileDialogPostPicture.FileName = "openFileDialog1";
+            this.openFileDialogPostPicture.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialogPostPicture_FileOk);
+            // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1052, 666);
             this.Controls.Add(this.tabMainApp);
@@ -306,6 +313,7 @@
         private System.Windows.Forms.Button buttonCancelPost;
         private System.Windows.Forms.Button buttonAddPicture;
         private System.Windows.Forms.Button buttonPost;
+        private System.Windows.Forms.OpenFileDialog openFileDialogPostPicture;
     }
 }
 
