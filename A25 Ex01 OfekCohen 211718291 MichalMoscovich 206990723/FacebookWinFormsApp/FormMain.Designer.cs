@@ -48,6 +48,7 @@
             this.pictureBoxCover = new System.Windows.Forms.PictureBox();
             this.tabMainApp = new System.Windows.Forms.TabControl();
             this.openFileDialogPostPicture = new System.Windows.Forms.OpenFileDialog();
+            this.checkBoxRememberMe = new System.Windows.Forms.CheckBox();
             this.tabMainPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCover)).BeginInit();
@@ -56,6 +57,7 @@
             // 
             // tabMainPage
             // 
+            this.tabMainPage.Controls.Add(this.checkBoxRememberMe);
             this.tabMainPage.Controls.Add(this.buttonCancelPost);
             this.tabMainPage.Controls.Add(this.buttonAddPicture);
             this.tabMainPage.Controls.Add(this.buttonPost);
@@ -271,6 +273,16 @@
             this.openFileDialogPostPicture.FileName = "openFileDialog1";
             this.openFileDialogPostPicture.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialogPostPicture_FileOk);
             // 
+            // checkBoxRememberMe
+            // 
+            this.checkBoxRememberMe.AutoSize = true;
+            this.checkBoxRememberMe.Location = new System.Drawing.Point(287, 22);
+            this.checkBoxRememberMe.Name = "checkBoxRememberMe";
+            this.checkBoxRememberMe.Size = new System.Drawing.Size(183, 30);
+            this.checkBoxRememberMe.TabIndex = 73;
+            this.checkBoxRememberMe.Text = "Remember Me";
+            this.checkBoxRememberMe.UseVisualStyleBackColor = true;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
@@ -314,6 +326,7 @@
         private System.Windows.Forms.Button buttonAddPicture;
         private System.Windows.Forms.Button buttonPost;
         private System.Windows.Forms.OpenFileDialog openFileDialogPostPicture;
+        private System.Windows.Forms.CheckBox checkBoxRememberMe;
     }
 }
 
