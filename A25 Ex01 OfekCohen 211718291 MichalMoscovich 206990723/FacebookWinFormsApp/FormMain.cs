@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using static BasicFacebookFeatures.ProfilePictureFilter;
 
 namespace BasicFacebookFeatures
 {
@@ -17,6 +18,7 @@ namespace BasicFacebookFeatures
         private User m_ActiveUser;
         private LoginResult m_LoginResult;
         private readonly AppSettings r_AppSettings;
+        private ProfilePictureFilter m_ProfilePictureFilter;
 
         private enum eComboboxMainOptions
         {
@@ -32,7 +34,29 @@ namespace BasicFacebookFeatures
             FacebookService.s_CollectionLimit = 25;
             this.StartPosition = FormStartPosition.Manual;
             r_AppSettings = AppSettings.LoadFromFile();
+            initializeFilterComponents();
+            m_ProfilePictureFilter = new ProfilePictureFilter();
+
         }
+
+        private void initializeFilterComponents()
+        {
+            comboBoxFilters.DataSource = Enum.GetValues(typeof(ProfileFilters));
+            comboBoxFilters.SelectedIndex = 0;
+            comboBoxFilters.DropDownStyle = ComboBoxStyle.DropDownList;
+            
+            if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out ProfileFilters savedFilter))
+            {
+                comboBoxFilters.SelectedItem = savedFilter;
+            }
+            else
+            {
+                comboBoxFilters.SelectedIndex = 0; // Default to "None"
+            }
+
+            buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((ProfileFilters)comboBoxFilters.SelectedIndex);
+        }
+
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -40,6 +64,7 @@ namespace BasicFacebookFeatures
 
             r_AppSettings.LastWindowLocation = this.Location;
             r_AppSettings.LastWindowSize = this.Size;
+            r_AppSettings.LastSelectedFilter = comboBoxFilters.SelectedItem.ToString();
 
             if (checkBoxRememberMe.Checked && m_LoginResult != null)
             {
@@ -60,7 +85,9 @@ namespace BasicFacebookFeatures
             checkBoxRememberMe.Checked = r_AppSettings.RememberLoggedInUser;
             this.Size = r_AppSettings.LastWindowSize;
             this.Location = r_AppSettings.LastWindowLocation;
+
             base.OnShown(e);
+
             if (r_AppSettings.RememberLoggedInUser && !string.IsNullOrEmpty(r_AppSettings.AccessToken))
             {
                 try
@@ -74,6 +101,13 @@ namespace BasicFacebookFeatures
                     m_LoginResult = null;
                 }
             }
+
+            ProfileFilters savedFilter = (ProfileFilters)comboBoxFilters.SelectedItem;
+            if (savedFilter != ProfileFilters.None)
+            {
+                applySelectedFilter(savedFilter);
+            }
+
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -132,6 +166,7 @@ namespace BasicFacebookFeatures
             buttonLogout.Enabled = i_IsLoggedIn;
             comboBoxMain.Enabled = i_IsLoggedIn;
             textBoxPost.Enabled = i_IsLoggedIn;
+            buttonProfilePictureFilter.Enabled = i_IsLoggedIn;
         }
 
         private void loadUserInformation()
@@ -460,6 +495,40 @@ namespace BasicFacebookFeatures
 
             textBoxPost.Text = string.Empty;
             changePostButtonsState(!v_PostButtonsEnabled);
+        }
+
+        private void buttonProfilePictureFilter_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void applySelectedFilter(ProfileFilters filter)
+        {
+            if (pictureBoxProfile.Image == null)
+            {
+                MessageBox.Show("No profile picture loaded.");
+                return;
+            }
+
+            try
+            {
+                if (filter == ProfileFilters.None)
+                {
+                    pictureBoxProfile.ImageLocation = m_ActiveUser?.PictureNormalURL;
+                }
+
+                Image filteredImage = m_ProfilePictureFilter.ApplyFilter(pictureBoxProfile.Image, filter);
+                pictureBoxProfile.Image = filteredImage;
+                MessageBox.Show($"Filter '{filter}' applied successfully!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to apply filter: {ex.Message}");
+            }
+        }
+
+        private void comboBoxFiltersSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

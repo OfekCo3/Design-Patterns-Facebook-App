@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using static BasicFacebookFeatures.ProfilePictureFilter;
 
 namespace BasicFacebookFeatures
 {
@@ -14,6 +15,7 @@ namespace BasicFacebookFeatures
         private const string k_AppSettingsFileName = "appConfig.xml";
         private static readonly string sr_SaveSettingsFilePath = string.Format($"{AppDomain.CurrentDomain.BaseDirectory}//{k_AppSettingsFileName}");
 
+        public string LastSelectedFilter { get; set; } = ProfileFilters.None.ToString();
         public bool RememberLoggedInUser { get; set; }
         public string AccessToken { get; set; }
         public Point LastWindowLocation { get; set; }

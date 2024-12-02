@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.tabMainPage = new System.Windows.Forms.TabPage();
+            this.comboBoxFilters = new System.Windows.Forms.ComboBox();
+            this.buttonProfilePictureFilter = new System.Windows.Forms.Button();
+            this.checkBoxRememberMe = new System.Windows.Forms.CheckBox();
             this.buttonCancelPost = new System.Windows.Forms.Button();
             this.buttonAddPicture = new System.Windows.Forms.Button();
             this.buttonPost = new System.Windows.Forms.Button();
@@ -48,7 +51,6 @@
             this.pictureBoxCover = new System.Windows.Forms.PictureBox();
             this.tabMainApp = new System.Windows.Forms.TabControl();
             this.openFileDialogPostPicture = new System.Windows.Forms.OpenFileDialog();
-            this.checkBoxRememberMe = new System.Windows.Forms.CheckBox();
             this.tabMainPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCover)).BeginInit();
@@ -57,6 +59,8 @@
             // 
             // tabMainPage
             // 
+            this.tabMainPage.Controls.Add(this.comboBoxFilters);
+            this.tabMainPage.Controls.Add(this.buttonProfilePictureFilter);
             this.tabMainPage.Controls.Add(this.checkBoxRememberMe);
             this.tabMainPage.Controls.Add(this.buttonCancelPost);
             this.tabMainPage.Controls.Add(this.buttonAddPicture);
@@ -84,11 +88,42 @@
             this.tabMainPage.UseVisualStyleBackColor = true;
             this.tabMainPage.Click += new System.EventHandler(this.tabPage1_Click);
             // 
+            // comboBoxFiltersSelect
+            // 
+            this.comboBoxFilters.FormattingEnabled = true;
+            this.comboBoxFilters.Location = new System.Drawing.Point(709, 133);
+            this.comboBoxFilters.Name = "comboBoxFiltersSelect";
+            this.comboBoxFilters.Size = new System.Drawing.Size(163, 34);
+            this.comboBoxFilters.TabIndex = 75;
+            this.comboBoxFilters.SelectedIndexChanged += new System.EventHandler(this.comboBoxFiltersSelect_SelectedIndexChanged);
+            // 
+            // buttonProfilePictureFilter
+            // 
+            this.buttonProfilePictureFilter.Enabled = false;
+            this.buttonProfilePictureFilter.Location = new System.Drawing.Point(885, 129);
+            this.buttonProfilePictureFilter.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonProfilePictureFilter.Name = "buttonProfilePictureFilter";
+            this.buttonProfilePictureFilter.Size = new System.Drawing.Size(114, 34);
+            this.buttonProfilePictureFilter.TabIndex = 74;
+            this.buttonProfilePictureFilter.Text = "Filter";
+            this.buttonProfilePictureFilter.UseVisualStyleBackColor = true;
+            this.buttonProfilePictureFilter.Click += new System.EventHandler(this.buttonProfilePictureFilter_Click);
+            // 
+            // checkBoxRememberMe
+            // 
+            this.checkBoxRememberMe.AutoSize = true;
+            this.checkBoxRememberMe.Location = new System.Drawing.Point(287, 22);
+            this.checkBoxRememberMe.Name = "checkBoxRememberMe";
+            this.checkBoxRememberMe.Size = new System.Drawing.Size(183, 30);
+            this.checkBoxRememberMe.TabIndex = 73;
+            this.checkBoxRememberMe.Text = "Remember Me";
+            this.checkBoxRememberMe.UseVisualStyleBackColor = true;
+            // 
             // buttonCancelPost
             // 
             this.buttonCancelPost.BackColor = System.Drawing.Color.LightSkyBlue;
             this.buttonCancelPost.Enabled = false;
-            this.buttonCancelPost.Location = new System.Drawing.Point(864, 331);
+            this.buttonCancelPost.Location = new System.Drawing.Point(864, 337);
             this.buttonCancelPost.Name = "buttonCancelPost";
             this.buttonCancelPost.Size = new System.Drawing.Size(114, 38);
             this.buttonCancelPost.TabIndex = 72;
@@ -100,7 +135,7 @@
             // 
             this.buttonAddPicture.BackColor = System.Drawing.Color.LightSkyBlue;
             this.buttonAddPicture.Enabled = false;
-            this.buttonAddPicture.Location = new System.Drawing.Point(716, 331);
+            this.buttonAddPicture.Location = new System.Drawing.Point(716, 337);
             this.buttonAddPicture.Name = "buttonAddPicture";
             this.buttonAddPicture.Size = new System.Drawing.Size(142, 38);
             this.buttonAddPicture.TabIndex = 71;
@@ -112,7 +147,7 @@
             // 
             this.buttonPost.BackColor = System.Drawing.Color.LightSkyBlue;
             this.buttonPost.Enabled = false;
-            this.buttonPost.Location = new System.Drawing.Point(596, 331);
+            this.buttonPost.Location = new System.Drawing.Point(596, 337);
             this.buttonPost.Name = "buttonPost";
             this.buttonPost.Size = new System.Drawing.Size(114, 38);
             this.buttonPost.TabIndex = 70;
@@ -193,7 +228,7 @@
             // 
             // textBoxPost
             // 
-            this.textBoxPost.Location = new System.Drawing.Point(8, 168);
+            this.textBoxPost.Location = new System.Drawing.Point(8, 174);
             this.textBoxPost.Name = "textBoxPost";
             this.textBoxPost.Size = new System.Drawing.Size(970, 159);
             this.textBoxPost.TabIndex = 57;
@@ -203,7 +238,7 @@
             // labelAddPost
             // 
             this.labelAddPost.AutoSize = true;
-            this.labelAddPost.Location = new System.Drawing.Point(8, 147);
+            this.labelAddPost.Location = new System.Drawing.Point(8, 151);
             this.labelAddPost.Name = "labelAddPost";
             this.labelAddPost.Size = new System.Drawing.Size(122, 26);
             this.labelAddPost.TabIndex = 56;
@@ -252,9 +287,9 @@
             // 
             // pictureBoxCover
             // 
-            this.pictureBoxCover.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxCover.Location = new System.Drawing.Point(0, 4);
             this.pictureBoxCover.Name = "pictureBoxCover";
-            this.pictureBoxCover.Size = new System.Drawing.Size(1044, 136);
+            this.pictureBoxCover.Size = new System.Drawing.Size(1044, 144);
             this.pictureBoxCover.TabIndex = 69;
             this.pictureBoxCover.TabStop = false;
             // 
@@ -272,16 +307,6 @@
             // 
             this.openFileDialogPostPicture.FileName = "openFileDialog1";
             this.openFileDialogPostPicture.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialogPostPicture_FileOk);
-            // 
-            // checkBoxRememberMe
-            // 
-            this.checkBoxRememberMe.AutoSize = true;
-            this.checkBoxRememberMe.Location = new System.Drawing.Point(287, 22);
-            this.checkBoxRememberMe.Name = "checkBoxRememberMe";
-            this.checkBoxRememberMe.Size = new System.Drawing.Size(183, 30);
-            this.checkBoxRememberMe.TabIndex = 73;
-            this.checkBoxRememberMe.Text = "Remember Me";
-            this.checkBoxRememberMe.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -327,6 +352,8 @@
         private System.Windows.Forms.Button buttonPost;
         private System.Windows.Forms.OpenFileDialog openFileDialogPostPicture;
         private System.Windows.Forms.CheckBox checkBoxRememberMe;
+        private System.Windows.Forms.Button buttonProfilePictureFilter;
+        private System.Windows.Forms.ComboBox comboBoxFilters;
     }
 }
 
