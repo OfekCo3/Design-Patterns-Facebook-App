@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using static BasicFacebookFeatures.ProfilePictureFilter;
+using static BasicFacebookFeatures.ProfileMood;
 
 namespace BasicFacebookFeatures
 {
@@ -19,6 +15,7 @@ namespace BasicFacebookFeatures
         private LoginResult m_LoginResult;
         private readonly AppSettings r_AppSettings;
         private ProfilePictureFilter m_ProfilePictureFilter;
+        private ProfileMood m_ProfileMood;
 
         private enum eComboboxMainOptions
         {
@@ -35,28 +32,47 @@ namespace BasicFacebookFeatures
             this.StartPosition = FormStartPosition.Manual;
             r_AppSettings = AppSettings.LoadFromFile();
             initializeFilterComponents();
+            initializeMoodComponents();
             m_ProfilePictureFilter = new ProfilePictureFilter();
+            m_ProfileMood = new ProfileMood();
 
         }
 
         private void initializeFilterComponents()
         {
-            comboBoxFilters.DataSource = Enum.GetValues(typeof(ProfileFilters));
+            comboBoxFilters.DataSource = Enum.GetValues(typeof(eProfileFilters));
             comboBoxFilters.SelectedIndex = 0;
             comboBoxFilters.DropDownStyle = ComboBoxStyle.DropDownList;
             
-            if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out ProfileFilters savedFilter))
+            if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilters o_SavedFilter))
             {
-                comboBoxFilters.SelectedItem = savedFilter;
+                comboBoxFilters.SelectedItem = o_SavedFilter;
             }
             else
             {
                 comboBoxFilters.SelectedIndex = 0; // Default to "None"
             }
 
-            buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((ProfileFilters)comboBoxFilters.SelectedIndex);
+            buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((eProfileFilters)comboBoxFilters.SelectedIndex);
         }
 
+        private void initializeMoodComponents()
+        {
+            comboBoxMood.DataSource = Enum.GetValues(typeof(eProfileMoodType));
+            comboBoxMood.SelectedIndex = 0;
+            comboBoxMood.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
+            {
+                comboBoxMood.SelectedItem = o_SavedMood;
+            }
+            else
+            {
+                comboBoxMood.SelectedIndex = 0;
+            }
+
+            buttonApplyMood.Click += (sender, e) => applySelectedMood((eProfileMoodType)comboBoxMood.SelectedIndex);
+        }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -65,7 +81,8 @@ namespace BasicFacebookFeatures
             r_AppSettings.LastWindowLocation = this.Location;
             r_AppSettings.LastWindowSize = this.Size;
             r_AppSettings.LastSelectedFilter = comboBoxFilters.SelectedItem.ToString();
-
+            r_AppSettings.LastSelectedMood = comboBoxMood.SelectedItem.ToString();
+            
             if (checkBoxRememberMe.Checked && m_LoginResult != null)
             {
                 r_AppSettings.RememberLoggedInUser = true;
@@ -102,8 +119,8 @@ namespace BasicFacebookFeatures
                 }
             }
 
-            ProfileFilters savedFilter = (ProfileFilters)comboBoxFilters.SelectedItem;
-            if (savedFilter != ProfileFilters.None)
+            eProfileFilters savedFilter = (eProfileFilters)comboBoxFilters.SelectedItem;
+            if (savedFilter != eProfileFilters.None)
             {
                 applySelectedFilter(savedFilter);
             }
@@ -122,29 +139,35 @@ namespace BasicFacebookFeatures
 
         private void login()
         {
-            m_LoginResult = FacebookService.Login(
-                textBoxAppID.Text,
-                "email",
-                "public_profile",
-                "user_hometown",
-                "user_birthday",
-                "user_link",
-                "user_friends",
-                "user_location",
-                "user_likes",
-                "user_photos",
-                "user_videos",
-                "user_posts"
-            );
-
-            if (!string.IsNullOrEmpty(m_LoginResult.AccessToken))
+            if (!string.IsNullOrEmpty(textBoxAppID.Text))
             {
-                loadUserDataToUI();
+                m_LoginResult = FacebookService.Login(
+                    textBoxAppID.Text,
+                    "email",
+                    "public_profile",
+                    "user_hometown",
+                    "user_birthday",
+                    "user_link",
+                    "user_friends",
+                    "user_location",
+                    "user_likes",
+                    "user_photos",
+                    "user_videos",
+                    "user_posts"
+                );
+
+                if (!string.IsNullOrEmpty(m_LoginResult.AccessToken))
+                {
+                    loadUserDataToUI();
+                }
+                else
+                {
+                    m_LoginResult = null;
+                }
             }
             else
             {
-                MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
-                m_LoginResult = null;
+                MessageBox.Show("Please put an App ID", "");
             }
         }
 
@@ -167,21 +190,29 @@ namespace BasicFacebookFeatures
             comboBoxMain.Enabled = i_IsLoggedIn;
             textBoxPost.Enabled = i_IsLoggedIn;
             buttonProfilePictureFilter.Enabled = i_IsLoggedIn;
+            buttonApplyMood.Enabled = i_IsLoggedIn;
+            comboBoxFilters.Enabled = i_IsLoggedIn;
+            comboBoxMood.Enabled = i_IsLoggedIn;
+            textBoxPost.Enabled = i_IsLoggedIn;
         }
 
         private void loadUserInformation()
         {
             try
             {
-                pictureBoxProfile.ImageLocation = !string.IsNullOrEmpty(m_ActiveUser.PictureNormalURL)
-                    ? m_ActiveUser.PictureNormalURL
-                    : null;
+                if (!string.IsNullOrEmpty(m_ActiveUser.PictureNormalURL))
+                {
+                    pictureBoxProfile.ImageLocation = m_ActiveUser.PictureNormalURL;
+                }
 
-                pictureBoxCover.ImageLocation = m_ActiveUser.Cover?.SourceURL;
+                if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
+                {
+                    pictureBoxCover.ImageLocation = m_ActiveUser.Cover.SourceURL;
+                }
             }
             catch (Exception)
             {
-                //pictureBoxCover.Image = Properties.Resources.DefaultCoverImage;
+                pictureBoxCover.Image = Properties.Resources.gray_background;
             }
 
             loadUserFeed();
@@ -347,26 +378,6 @@ namespace BasicFacebookFeatures
             buttonLogout.Enabled = false;
         }
 
-        private void textBoxAppID_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBoxProfile_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             eComboboxMainOptions selectedFeature = (eComboboxMainOptions)comboBoxMain.SelectedIndex;
@@ -386,7 +397,6 @@ namespace BasicFacebookFeatures
                     loadUserGroups();
                     break;
             }
-
         }
 
         private void textBoxPost_TextChanged(object sender, EventArgs e)
@@ -394,8 +404,8 @@ namespace BasicFacebookFeatures
             const bool v_PostButtonsEnabled = true;
 
             changePostButtonsState(v_PostButtonsEnabled);
-
         }
+
         private void changePostButtonsState(bool i_ButtonsState)
         {
             buttonPost.Enabled = i_ButtonsState;
@@ -447,7 +457,6 @@ namespace BasicFacebookFeatures
             {
                 textBoxPost.Text = string.Empty;
             }
-
         }
 
         private void buttonAddPicture_Click(object sender, EventArgs e)
@@ -478,15 +487,8 @@ namespace BasicFacebookFeatures
                     {
                         MessageBox.Show("Picture post failed");
                     }
-
                 }
             }
-
-        }
-
-        private void openFileDialogPostPicture_FileOk(object sender, CancelEventArgs e)
-        {
-
         }
 
         private void buttonCancelPost_Click(object sender, EventArgs e)
@@ -497,28 +499,23 @@ namespace BasicFacebookFeatures
             changePostButtonsState(!v_PostButtonsEnabled);
         }
 
-        private void buttonProfilePictureFilter_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void applySelectedFilter(ProfileFilters filter)
+        private void applySelectedFilter(eProfileFilters i_Filter)
         {
             if (pictureBoxProfile.Image == null)
             {
-                MessageBox.Show("No profile picture loaded.");
                 return;
             }
 
             try
             {
-                if (filter == ProfileFilters.None)
+                if (i_Filter == eProfileFilters.None)
                 {
                     pictureBoxProfile.ImageLocation = m_ActiveUser?.PictureNormalURL;
                 }
 
-                Image filteredImage = m_ProfilePictureFilter.ApplyFilter(pictureBoxProfile.Image, filter);
+                Image filteredImage = m_ProfilePictureFilter.ApplyFilter(pictureBoxProfile.Image, i_Filter);
                 pictureBoxProfile.Image = filteredImage;
-                MessageBox.Show($"Filter '{filter}' applied successfully!");
+                MessageBox.Show($"Filter '{i_Filter}' applied successfully!");
             }
             catch (Exception ex)
             {
@@ -526,9 +523,11 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void comboBoxFiltersSelect_SelectedIndexChanged(object sender, EventArgs e)
+        private void applySelectedMood(eProfileMoodType i_Mood)
         {
-
+            Image moodImage = m_ProfileMood.ApplyMood(pictureBoxCover.Image, i_Mood);
+            pictureBoxCover.Image = moodImage;
+            pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
         }
     }
 }
