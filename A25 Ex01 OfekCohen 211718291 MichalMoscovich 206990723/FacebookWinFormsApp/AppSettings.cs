@@ -2,8 +2,6 @@
 using System.IO;
 using System.Xml.Serialization;
 using System.Drawing;
-using static BasicFacebookFeatures.ProfilePictureFilter;
-using static BasicFacebookFeatures.ProfileMood;
 
 namespace BasicFacebookFeatures
 {
@@ -23,6 +21,7 @@ namespace BasicFacebookFeatures
         {
             LastWindowLocation = new Point(0, 0);
             LastWindowSize = new Size(1100, 670);
+
             if (!File.Exists(sr_SaveSettingsFilePath))
             {
                 File.Create(sr_SaveSettingsFilePath).Dispose();

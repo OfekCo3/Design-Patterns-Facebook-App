@@ -1,5 +1,4 @@
 ﻿using BasicFacebookFeatures.Properties;
-using System;
 using System.Drawing;
 
 namespace BasicFacebookFeatures
@@ -22,7 +21,14 @@ namespace BasicFacebookFeatures
 
             using (Graphics g = Graphics.FromImage(filteredImage))
             {
-                g.DrawImage(filterImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
+                if (filterImage != null)
+                {
+                    g.DrawImage(filterImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
+                }
+                else
+                {
+                    g.Clear(Color.Transparent);
+                }
             }
 
             return filteredImage;
@@ -41,7 +47,7 @@ namespace BasicFacebookFeatures
                 case eProfileFilter.GreenFilter:
                     return Resources.green_filter;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(i_Filter), "Unknown filter");
+                    return null;
             }
         }
     }

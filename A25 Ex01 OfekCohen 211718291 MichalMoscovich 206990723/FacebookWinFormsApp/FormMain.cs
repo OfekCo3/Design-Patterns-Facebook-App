@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
@@ -44,13 +43,14 @@ namespace BasicFacebookFeatures
             comboBoxFilters.DataSource = Enum.GetValues(typeof(eProfileFilter));
             comboBoxFilters.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilter o_SavedFilter))
-            {
-                comboBoxFilters.SelectedItem = o_SavedFilter;
-            }
-            else
+            if (r_AppSettings.AccessToken == null)
             {
                 comboBoxFilters.SelectedIndex = 0;
+                comboBoxFilters.SelectedItem = eProfileFilter.None;
+            }
+            else if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilter o_SavedFilter))
+            {
+                comboBoxFilters.SelectedItem = o_SavedFilter;
             }
 
             buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((eProfileFilter)comboBoxFilters.SelectedIndex);
@@ -59,16 +59,16 @@ namespace BasicFacebookFeatures
         private void initializeMoodComponents()
         {
             comboBoxMood.DataSource = Enum.GetValues(typeof(eProfileMoodType));
-            comboBoxMood.SelectedIndex = 0;
             comboBoxMood.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
-            {
-                comboBoxMood.SelectedItem = o_SavedMood;
-            }
-            else
+            if (r_AppSettings.AccessToken == null)
             {
                 comboBoxMood.SelectedIndex = 0;
+                pictureBoxCover.Image = Properties.Resources.gray_background;
+            }
+            else if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
+            {
+                comboBoxMood.SelectedItem = o_SavedMood;
             }
 
             buttonApplyMood.Click += (sender, e) => applySelectedMood((eProfileMoodType)comboBoxMood.SelectedIndex);
