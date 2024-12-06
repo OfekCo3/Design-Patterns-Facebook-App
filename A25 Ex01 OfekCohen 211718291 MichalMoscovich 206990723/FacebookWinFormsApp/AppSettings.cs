@@ -2,8 +2,6 @@
 using System.IO;
 using System.Xml.Serialization;
 using System.Drawing;
-using static BasicFacebookFeatures.ProfilePictureFilter;
-using static BasicFacebookFeatures.ProfileMood;
 
 namespace BasicFacebookFeatures
 {
