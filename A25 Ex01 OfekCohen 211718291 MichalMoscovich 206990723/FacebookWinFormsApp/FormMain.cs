@@ -41,9 +41,8 @@ namespace BasicFacebookFeatures
         private void initializeFilterComponents()
         {
             comboBoxFilters.DataSource = Enum.GetValues(typeof(eProfileFilters));
-            comboBoxFilters.SelectedIndex = 0;
             comboBoxFilters.DropDownStyle = ComboBoxStyle.DropDownList;
-            
+
             if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilters o_SavedFilter))
             {
                 comboBoxFilters.SelectedItem = o_SavedFilter;
@@ -120,9 +119,16 @@ namespace BasicFacebookFeatures
             }
 
             eProfileFilters savedFilter = (eProfileFilters)comboBoxFilters.SelectedItem;
+            eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
+            
             if (savedFilter != eProfileFilters.None)
             {
                 applySelectedFilter(savedFilter);
+            }
+            
+            if (savedMood != eProfileMoodType.None)
+            {
+                applySelectedMood(savedMood);
             }
 
         }
@@ -205,10 +211,10 @@ namespace BasicFacebookFeatures
                     pictureBoxProfile.ImageLocation = m_ActiveUser.PictureNormalURL;
                 }
 
-                if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
-                {
-                    pictureBoxCover.ImageLocation = m_ActiveUser.Cover.SourceURL;
-                }
+                //if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
+                //{
+                //    pictureBoxCover.ImageLocation = m_ActiveUser.Cover.SourceURL;
+                //}
             }
             catch (Exception)
             {

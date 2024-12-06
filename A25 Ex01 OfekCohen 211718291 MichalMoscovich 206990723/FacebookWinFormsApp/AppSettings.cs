@@ -12,8 +12,8 @@ namespace BasicFacebookFeatures
         private const string k_AppSettingsFileName = "appConfig.xml";
         private static readonly string sr_SaveSettingsFilePath = string.Format($"{AppDomain.CurrentDomain.BaseDirectory}//{k_AppSettingsFileName}");
 
-        public string LastSelectedFilter { get; set; } = eProfileFilters.None.ToString();
-        public string LastSelectedMood { get; set; } = eProfileMoodType.None.ToString();
+        public string LastSelectedFilter { get; set; } 
+        public string LastSelectedMood { get; set; }
         public bool RememberLoggedInUser { get; set; }
         public string AccessToken { get; set; }
         public Point LastWindowLocation { get; set; }
