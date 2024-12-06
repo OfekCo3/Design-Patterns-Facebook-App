@@ -118,19 +118,12 @@ namespace BasicFacebookFeatures
                 }
             }
 
-            eProfileFilters savedFilter = (eProfileFilters)comboBoxFilters.SelectedItem;
             eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
-            
-            if (savedFilter != eProfileFilters.None)
-            {
-                applySelectedFilter(savedFilter);
-            }
-            
+             
             if (savedMood != eProfileMoodType.None)
             {
                 applySelectedMood(savedMood);
             }
-
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -209,7 +202,6 @@ namespace BasicFacebookFeatures
                 if (!string.IsNullOrEmpty(m_ActiveUser.PictureNormalURL))
                 {
                     pictureBoxProfile.ImageLocation = m_ActiveUser.PictureNormalURL;
-                    //m_OriginalProfilePicture = pictureBoxProfile.Image; its getting null
                 }
 
                 if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
