@@ -16,7 +16,7 @@ namespace BasicFacebookFeatures
         private readonly AppSettings r_AppSettings;
         private ProfilePictureFilter m_ProfilePictureFilter;
         private ProfileMood m_ProfileMood;
-
+        private Image m_OriginalProfilePicture;
         private enum eComboboxMainOptions
         {
             Feed,
@@ -49,7 +49,7 @@ namespace BasicFacebookFeatures
             }
             else
             {
-                comboBoxFilters.SelectedIndex = 0; // Default to "None"
+                comboBoxFilters.SelectedIndex = 0;
             }
 
             buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((eProfileFilters)comboBoxFilters.SelectedIndex);
@@ -209,12 +209,13 @@ namespace BasicFacebookFeatures
                 if (!string.IsNullOrEmpty(m_ActiveUser.PictureNormalURL))
                 {
                     pictureBoxProfile.ImageLocation = m_ActiveUser.PictureNormalURL;
+                    //m_OriginalProfilePicture = pictureBoxProfile.Image; its getting null
                 }
 
-                //if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
-                //{
-                //    pictureBoxCover.ImageLocation = m_ActiveUser.Cover.SourceURL;
-                //}
+                if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
+                {
+                    pictureBoxCover.ImageLocation = m_ActiveUser.Cover.SourceURL;
+                }
             }
             catch (Exception)
             {
@@ -507,25 +508,29 @@ namespace BasicFacebookFeatures
 
         private void applySelectedFilter(eProfileFilters i_Filter)
         {
-            if (pictureBoxProfile.Image == null)
+            if (pictureBoxProfile.Image != null)
             {
-                return;
-            }
-
-            try
-            {
-                if (i_Filter == eProfileFilters.None)
+                try
                 {
-                    pictureBoxProfile.ImageLocation = m_ActiveUser?.PictureNormalURL;
-                }
+                    if (m_OriginalProfilePicture == null)
+                    {
+                        m_OriginalProfilePicture = (Image)pictureBoxProfile.Image.Clone();
+                    }
 
-                Image filteredImage = m_ProfilePictureFilter.ApplyFilter(pictureBoxProfile.Image, i_Filter);
-                pictureBoxProfile.Image = filteredImage;
-                MessageBox.Show($"Filter '{i_Filter}' applied successfully!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to apply filter: {ex.Message}");
+                    if (i_Filter == eProfileFilters.None)
+                    {
+                        pictureBoxProfile.Image = (Image)m_OriginalProfilePicture.Clone();
+                    }
+                    else
+                    {
+                        Image filteredImage = m_ProfilePictureFilter.ApplyFilter(m_OriginalProfilePicture, i_Filter);
+                        pictureBoxProfile.Image = filteredImage;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to apply filter: {ex.Message}");
+                }
             }
         }
 

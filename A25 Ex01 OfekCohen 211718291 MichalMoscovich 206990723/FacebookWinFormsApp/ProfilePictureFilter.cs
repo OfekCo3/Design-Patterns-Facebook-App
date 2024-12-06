@@ -38,8 +38,8 @@ namespace BasicFacebookFeatures
                     return Resources.orange_filter;
                 case eProfileFilters.BlueFilter:
                     return Resources.blue_filter;
-                //case ProfileFilters.GreenFilter:
-                //    return Resources.green_filter;
+                case eProfileFilters.GreenFilter:
+                    return Resources.green_filter;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i_Filter), "Unknown filter");
             }
