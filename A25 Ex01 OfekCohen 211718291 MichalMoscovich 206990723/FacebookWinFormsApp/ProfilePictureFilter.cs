@@ -1,5 +1,4 @@
 ﻿using BasicFacebookFeatures.Properties;
-using System;
 using System.Drawing;
 
 namespace BasicFacebookFeatures
@@ -11,8 +10,7 @@ namespace BasicFacebookFeatures
             None = 0,
             PinkFilter,
             OrangeFilter,
-            BlueFilter,
-            GreenFilter
+            BlueFilter
         }
 
         public Image ApplyFilter(Image i_OriginalImage, eProfileFilters i_Filter)
@@ -22,7 +20,14 @@ namespace BasicFacebookFeatures
             Bitmap filteredImage = new Bitmap(i_OriginalImage);
             using (Graphics g = Graphics.FromImage(filteredImage))
             {
-                g.DrawImage(filterImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
+                if (filterImage != null)
+                {
+                    g.DrawImage(filterImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
+                }
+                else
+                {
+                    g.Clear(Color.Transparent);
+                }
             }
 
             return filteredImage;
@@ -38,10 +43,8 @@ namespace BasicFacebookFeatures
                     return Resources.orange_filter;
                 case eProfileFilters.BlueFilter:
                     return Resources.blue_filter;
-                //case ProfileFilters.GreenFilter:
-                //    return Resources.green_filter;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(i_Filter), "Unknown filter");
+                    return null;
             }
         }
     }

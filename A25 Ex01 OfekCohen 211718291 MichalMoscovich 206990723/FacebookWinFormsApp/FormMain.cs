@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using FacebookWrapper.ObjectModel;
@@ -35,7 +34,6 @@ namespace BasicFacebookFeatures
             initializeMoodComponents();
             m_ProfilePictureFilter = new ProfilePictureFilter();
             m_ProfileMood = new ProfileMood();
-
         }
 
         private void initializeFilterComponents()
@@ -43,13 +41,14 @@ namespace BasicFacebookFeatures
             comboBoxFilters.DataSource = Enum.GetValues(typeof(eProfileFilters));
             comboBoxFilters.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilters o_SavedFilter))
+            if (r_AppSettings.AccessToken == null)
+            {
+                comboBoxFilters.SelectedIndex = 0;
+                comboBoxFilters.SelectedItem = eProfileFilters.None;
+            }
+            else if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilters o_SavedFilter))
             {
                 comboBoxFilters.SelectedItem = o_SavedFilter;
-            }
-            else
-            {
-                comboBoxFilters.SelectedIndex = 0; // Default to "None"
             }
 
             buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((eProfileFilters)comboBoxFilters.SelectedIndex);
@@ -58,16 +57,16 @@ namespace BasicFacebookFeatures
         private void initializeMoodComponents()
         {
             comboBoxMood.DataSource = Enum.GetValues(typeof(eProfileMoodType));
-            comboBoxMood.SelectedIndex = 0;
             comboBoxMood.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
-            {
-                comboBoxMood.SelectedItem = o_SavedMood;
-            }
-            else
+            if (r_AppSettings.AccessToken == null)
             {
                 comboBoxMood.SelectedIndex = 0;
+                pictureBoxCover.Image = Properties.Resources.gray_background;
+            }
+            else if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
+            {
+                comboBoxMood.SelectedItem = o_SavedMood;
             }
 
             buttonApplyMood.Click += (sender, e) => applySelectedMood((eProfileMoodType)comboBoxMood.SelectedIndex);
@@ -210,11 +209,6 @@ namespace BasicFacebookFeatures
                 {
                     pictureBoxProfile.ImageLocation = m_ActiveUser.PictureNormalURL;
                 }
-
-                //if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
-                //{
-                //    pictureBoxCover.ImageLocation = m_ActiveUser.Cover.SourceURL;
-                //}
             }
             catch (Exception)
             {
@@ -382,6 +376,7 @@ namespace BasicFacebookFeatures
             m_LoginResult = null;
             buttonLogin.Enabled = true;
             buttonLogout.Enabled = false;
+            pictureBoxCover.Image = Properties.Resources.gray_background;
         }
 
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -507,12 +502,7 @@ namespace BasicFacebookFeatures
 
         private void applySelectedFilter(eProfileFilters i_Filter)
         {
-            if (pictureBoxProfile.Image == null)
-            {
-                return;
-            }
-
-            try
+            if (pictureBoxProfile.Image != null)
             {
                 if (i_Filter == eProfileFilters.None)
                 {
@@ -521,11 +511,6 @@ namespace BasicFacebookFeatures
 
                 Image filteredImage = m_ProfilePictureFilter.ApplyFilter(pictureBoxProfile.Image, i_Filter);
                 pictureBoxProfile.Image = filteredImage;
-                MessageBox.Show($"Filter '{i_Filter}' applied successfully!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to apply filter: {ex.Message}");
             }
         }
 
