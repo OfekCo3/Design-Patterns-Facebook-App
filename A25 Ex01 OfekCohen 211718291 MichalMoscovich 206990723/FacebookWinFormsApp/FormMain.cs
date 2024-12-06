@@ -17,7 +17,8 @@ namespace BasicFacebookFeatures
         private ProfilePictureFilter m_ProfilePictureFilter;
         private ProfileMood m_ProfileMood;
         private Image m_OriginalProfilePicture;
-        private enum eComboboxMainOptions
+        private const int k_CollectionLimit = 25;
+        private enum eComboboxMainOption
         {
             Feed,
             Likes,
@@ -28,22 +29,22 @@ namespace BasicFacebookFeatures
         public FormMain()
         {
             InitializeComponent();
-            FacebookService.s_CollectionLimit = 25;
+            FacebookService.s_CollectionLimit = k_CollectionLimit;
             this.StartPosition = FormStartPosition.Manual;
             r_AppSettings = AppSettings.LoadFromFile();
             initializeFilterComponents();
             initializeMoodComponents();
             m_ProfilePictureFilter = new ProfilePictureFilter();
             m_ProfileMood = new ProfileMood();
-
         }
 
+        // the next 2 functions are too smiliar
         private void initializeFilterComponents()
         {
-            comboBoxFilters.DataSource = Enum.GetValues(typeof(eProfileFilters));
+            comboBoxFilters.DataSource = Enum.GetValues(typeof(eProfileFilter));
             comboBoxFilters.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilters o_SavedFilter))
+            if (Enum.TryParse(r_AppSettings.LastSelectedFilter, out eProfileFilter o_SavedFilter))
             {
                 comboBoxFilters.SelectedItem = o_SavedFilter;
             }
@@ -52,7 +53,7 @@ namespace BasicFacebookFeatures
                 comboBoxFilters.SelectedIndex = 0;
             }
 
-            buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((eProfileFilters)comboBoxFilters.SelectedIndex);
+            buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((eProfileFilter)comboBoxFilters.SelectedIndex);
         }
 
         private void initializeMoodComponents()
@@ -81,7 +82,7 @@ namespace BasicFacebookFeatures
             r_AppSettings.LastWindowSize = this.Size;
             r_AppSettings.LastSelectedFilter = comboBoxFilters.SelectedItem.ToString();
             r_AppSettings.LastSelectedMood = comboBoxMood.SelectedItem.ToString();
-            
+
             if (checkBoxRememberMe.Checked && m_LoginResult != null)
             {
                 r_AppSettings.RememberLoggedInUser = true;
@@ -101,7 +102,6 @@ namespace BasicFacebookFeatures
             checkBoxRememberMe.Checked = r_AppSettings.RememberLoggedInUser;
             this.Size = r_AppSettings.LastWindowSize;
             this.Location = r_AppSettings.LastWindowLocation;
-
             base.OnShown(e);
 
             if (r_AppSettings.RememberLoggedInUser && !string.IsNullOrEmpty(r_AppSettings.AccessToken))
@@ -172,13 +172,12 @@ namespace BasicFacebookFeatures
 
         private void loadUserDataToUI()
         {
-            const bool isLoggingIn = true;
-
+            const bool v_IsLoggingIn = true;
             m_ActiveUser = m_LoginResult.LoggedInUser;
             buttonLogin.Text = $"Logged in as {m_ActiveUser.Name}";
             buttonLogin.BackColor = Color.LightGreen;
             tabMainApp.Text = $"{m_ActiveUser.Name}";
-            updateUIBasedOnLoginStatus(isLoggingIn);
+            updateUIBasedOnLoginStatus(v_IsLoggingIn);
             loadUserInformation();
         }
 
@@ -305,6 +304,7 @@ namespace BasicFacebookFeatures
         {
             listBoxMain.Items.Clear();
             listBoxMain.DisplayMember = "Name";
+
             try
             {
                 foreach (Page page in m_ActiveUser.LikedPages)
@@ -327,6 +327,7 @@ namespace BasicFacebookFeatures
         {
             listBoxMain.Items.Clear();
             listBoxMain.DisplayMember = "Name";
+
             try
             {
                 foreach (Group group in m_ActiveUser.Groups)
@@ -349,6 +350,7 @@ namespace BasicFacebookFeatures
         {
             listBoxMain.Items.Clear();
             listBoxMain.DisplayMember = "Name";
+
             try
             {
                 foreach (Album album in m_ActiveUser.Albums)
@@ -369,30 +371,31 @@ namespace BasicFacebookFeatures
 
         private void buttonLogout_Click(object sender, EventArgs e)
         {
+            const bool v_LoginEnable = true;
             FacebookService.LogoutWithUI();
             buttonLogin.Text = "Login";
             buttonLogin.BackColor = buttonLogout.BackColor;
             m_LoginResult = null;
-            buttonLogin.Enabled = true;
-            buttonLogout.Enabled = false;
+            buttonLogin.Enabled = v_LoginEnable;
+            buttonLogout.Enabled = !v_LoginEnable;
         }
 
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
         {
-            eComboboxMainOptions selectedFeature = (eComboboxMainOptions)comboBoxMain.SelectedIndex;
+            eComboboxMainOption selectedFeature = (eComboboxMainOption)comboBoxMain.SelectedIndex;
 
             switch (selectedFeature)
             {
-                case eComboboxMainOptions.Feed:
+                case eComboboxMainOption.Feed:
                     loadUserFeed();
                     break;
-                case eComboboxMainOptions.Likes:
+                case eComboboxMainOption.Likes:
                     loadUserLikedPages();
                     break;
-                case eComboboxMainOptions.Albums:
+                case eComboboxMainOption.Albums:
                     loadUserAlbums();
                     break;
-                case eComboboxMainOptions.Groups:
+                case eComboboxMainOption.Groups:
                     loadUserGroups();
                     break;
             }
@@ -445,6 +448,7 @@ namespace BasicFacebookFeatures
                 {
                     throw new Exception("Please Login first!");
                 }
+
                 changePostButtonsState(!v_PostButtonsEnabled);
                 MessageBox.Show("Posted!");
             }
@@ -498,7 +502,7 @@ namespace BasicFacebookFeatures
             changePostButtonsState(!v_PostButtonsEnabled);
         }
 
-        private void applySelectedFilter(eProfileFilters i_Filter)
+        private void applySelectedFilter(eProfileFilter i_Filter)
         {
             if (pictureBoxProfile.Image != null)
             {
@@ -509,7 +513,7 @@ namespace BasicFacebookFeatures
                         m_OriginalProfilePicture = (Image)pictureBoxProfile.Image.Clone();
                     }
 
-                    if (i_Filter == eProfileFilters.None)
+                    if (i_Filter == eProfileFilter.None)
                     {
                         pictureBoxProfile.Image = (Image)m_OriginalProfilePicture.Clone();
                     }
