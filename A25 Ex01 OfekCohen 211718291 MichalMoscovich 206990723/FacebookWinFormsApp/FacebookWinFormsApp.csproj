@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="ProfileMood.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -123,6 +125,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\blue_filter.png" />
+    <Content Include="Resources\gray_background.png" />
+    <Content Include="Resources\hungry_mood.png" />
+    <Content Include="Resources\inLove_mood.png" />
+    <Content Include="Resources\sad_mood.png" />
+    <EmbeddedResource Include="Resources\happy_mood.png" />
     <Content Include="Resources\orange_filter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

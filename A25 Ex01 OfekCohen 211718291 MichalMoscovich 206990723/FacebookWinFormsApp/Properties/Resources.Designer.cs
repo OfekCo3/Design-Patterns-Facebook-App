@@ -73,6 +73,46 @@ namespace BasicFacebookFeatures.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap gray_background {
+            get {
+                object obj = ResourceManager.GetObject("gray_background", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap happy_mood {
+            get {
+                object obj = ResourceManager.GetObject("happy_mood", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap hungry_mood {
+            get {
+                object obj = ResourceManager.GetObject("hungry_mood", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap inLove_mood {
+            get {
+                object obj = ResourceManager.GetObject("inLove_mood", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap orange_filter {
             get {
                 object obj = ResourceManager.GetObject("orange_filter", resourceCulture);
@@ -86,6 +126,16 @@ namespace BasicFacebookFeatures.Properties {
         internal static System.Drawing.Bitmap pink_filter {
             get {
                 object obj = ResourceManager.GetObject("pink_filter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sad_mood {
+            get {
+                object obj = ResourceManager.GetObject("sad_mood", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

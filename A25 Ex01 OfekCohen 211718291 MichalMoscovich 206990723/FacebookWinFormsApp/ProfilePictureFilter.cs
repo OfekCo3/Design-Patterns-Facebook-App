@@ -1,16 +1,12 @@
 ﻿using BasicFacebookFeatures.Properties;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BasicFacebookFeatures
 {
     internal class ProfilePictureFilter
     {            
-        public enum ProfileFilters
+        public enum eProfileFilters
         {
             None = 0,
             PinkFilter,
@@ -19,35 +15,34 @@ namespace BasicFacebookFeatures
             GreenFilter
         }
 
-        public Image ApplyFilter(Image originalImage, ProfileFilters filter)
+        public Image ApplyFilter(Image i_OriginalImage, eProfileFilters i_Filter)
         {
-            Image filterImage = getFilterImage(filter);
+            Image filterImage = getFilterImage(i_Filter);
 
-            Bitmap filteredImage = new Bitmap(originalImage);
+            Bitmap filteredImage = new Bitmap(i_OriginalImage);
             using (Graphics g = Graphics.FromImage(filteredImage))
             {
-                g.DrawImage(filterImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height));
+                g.DrawImage(filterImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
             }
 
             return filteredImage;
         }
 
-        private Image getFilterImage(ProfileFilters filter)
+        private Image getFilterImage(eProfileFilters i_Filter)
         {
-            switch (filter)
+            switch (i_Filter)
             {
-                case ProfileFilters.PinkFilter:
+                case eProfileFilters.PinkFilter:
                     return Resources.pink_filter;
-                case ProfileFilters.OrangeFilter:
+                case eProfileFilters.OrangeFilter:
                     return Resources.orange_filter;
-                case ProfileFilters.BlueFilter:
+                case eProfileFilters.BlueFilter:
                     return Resources.blue_filter;
                 //case ProfileFilters.GreenFilter:
                 //    return Resources.green_filter;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(filter), "Unknown filter");
+                    throw new ArgumentOutOfRangeException(nameof(i_Filter), "Unknown filter");
             }
         }
-
     }
 }

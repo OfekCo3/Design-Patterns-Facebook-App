@@ -121,10 +121,25 @@
   <data name="blue_filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\blue_filter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="gray_background" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gray_background.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="happy_mood" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\happy_mood.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hungry_mood" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hungry_mood.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="inLove_mood" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\inLove_mood.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="orange_filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\orange_filter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pink_filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pink_filter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sad_mood" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sad_mood.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
