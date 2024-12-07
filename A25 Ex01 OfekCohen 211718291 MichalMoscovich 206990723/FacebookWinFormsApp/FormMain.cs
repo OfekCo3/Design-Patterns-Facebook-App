@@ -328,7 +328,6 @@ namespace BasicFacebookFeatures
             listBoxMain.Items.Clear();
             listBoxMain.DisplayMember = "Name";
 
-
             try
             {
                 foreach (Group group in m_ActiveUser.Groups)
