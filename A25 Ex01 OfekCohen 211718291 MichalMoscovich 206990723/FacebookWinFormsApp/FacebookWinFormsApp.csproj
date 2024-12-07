@@ -78,6 +78,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="FormFriendsWithSameMood.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormFriendsWithSameMood.Designer.cs">
+      <DependentUpon>FormFriendsWithSameMood.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProfileMood.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
@@ -88,6 +94,9 @@
     <Compile Include="ProfilePictureFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormFriendsWithSameMood.resx">
+      <DependentUpon>FormFriendsWithSameMood.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>
