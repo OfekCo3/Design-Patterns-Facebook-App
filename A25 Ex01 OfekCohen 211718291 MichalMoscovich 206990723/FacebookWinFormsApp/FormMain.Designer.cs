@@ -86,7 +86,7 @@
             this.tabMainPage.Location = new System.Drawing.Point(4, 35);
             this.tabMainPage.Name = "tabMainPage";
             this.tabMainPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMainPage.Size = new System.Drawing.Size(1044, 742);
+            this.tabMainPage.Size = new System.Drawing.Size(1074, 742);
             this.tabMainPage.TabIndex = 0;
             this.tabMainPage.Text = "tabPage1";
             this.tabMainPage.UseVisualStyleBackColor = true;
@@ -188,38 +188,44 @@
             "My Likes",
             "My Albums",
             "My Groups"});
-            this.comboBoxMain.Location = new System.Drawing.Point(3, 475);
+            this.comboBoxMain.Location = new System.Drawing.Point(7, 475);
             this.comboBoxMain.Name = "comboBoxMain";
-            this.comboBoxMain.Size = new System.Drawing.Size(142, 40);
+            this.comboBoxMain.Size = new System.Drawing.Size(172, 40);
             this.comboBoxMain.TabIndex = 67;
             this.comboBoxMain.Text = "My Feed:";
             this.comboBoxMain.SelectedIndexChanged += new System.EventHandler(this.comboBoxMain_SelectedIndexChanged);
             // 
             // listBoxMain
             // 
+            this.listBoxMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxMain.FormattingEnabled = true;
             this.listBoxMain.ItemHeight = 26;
-            this.listBoxMain.Location = new System.Drawing.Point(5, 513);
+            this.listBoxMain.Location = new System.Drawing.Point(7, 513);
             this.listBoxMain.Name = "listBoxMain";
-            this.listBoxMain.Size = new System.Drawing.Size(332, 160);
+            this.listBoxMain.Size = new System.Drawing.Size(342, 212);
             this.listBoxMain.TabIndex = 55;
             // 
             // listBoxFriends
             // 
+            this.listBoxFriends.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxFriends.FormattingEnabled = true;
             this.listBoxFriends.ItemHeight = 26;
             this.listBoxFriends.Location = new System.Drawing.Point(704, 513);
             this.listBoxFriends.Name = "listBoxFriends";
-            this.listBoxFriends.Size = new System.Drawing.Size(331, 160);
+            this.listBoxFriends.Size = new System.Drawing.Size(361, 212);
             this.listBoxFriends.TabIndex = 66;
             // 
             // listBoxEvents
             // 
+            this.listBoxEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxEvents.FormattingEnabled = true;
             this.listBoxEvents.ItemHeight = 26;
             this.listBoxEvents.Location = new System.Drawing.Point(355, 513);
             this.listBoxEvents.Name = "listBoxEvents";
-            this.listBoxEvents.Size = new System.Drawing.Size(331, 160);
+            this.listBoxEvents.Size = new System.Drawing.Size(344, 212);
             this.listBoxEvents.TabIndex = 65;
             // 
             // pictureBoxProfile
@@ -243,7 +249,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(356, 489);
+            this.label1.Location = new System.Drawing.Point(365, 489);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(133, 26);
             this.label1.TabIndex = 62;
@@ -324,7 +330,7 @@
             this.tabMainApp.Location = new System.Drawing.Point(0, 0);
             this.tabMainApp.Name = "tabMainApp";
             this.tabMainApp.SelectedIndex = 0;
-            this.tabMainApp.Size = new System.Drawing.Size(1052, 781);
+            this.tabMainApp.Size = new System.Drawing.Size(1082, 781);
             this.tabMainApp.TabIndex = 54;
             // 
             // openFileDialogPostPicture
@@ -335,7 +341,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1052, 781);
+            this.ClientSize = new System.Drawing.Size(1082, 781);
             this.Controls.Add(this.tabMainApp);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);

@@ -18,6 +18,7 @@ namespace BasicFacebookFeatures
         {
             Image moodImage = getMoodImage(i_MoodType);
             Bitmap moodedImage = new Bitmap(i_OriginalImage);
+
             using (Graphics g = Graphics.FromImage(moodedImage))
             {
                 g.DrawImage(moodImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));

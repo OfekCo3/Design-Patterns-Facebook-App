@@ -121,13 +121,12 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\pink_filter.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\blue_filter.png" />
     <Content Include="Resources\gray_background.png" />
+    <Content Include="Resources\green_filter.png" />
     <Content Include="Resources\hungry_mood.png" />
     <Content Include="Resources\inLove_mood.png" />
+    <Content Include="Resources\pink_filter.png" />
     <Content Include="Resources\sad_mood.png" />
     <EmbeddedResource Include="Resources\happy_mood.png" />
     <Content Include="Resources\orange_filter.png" />

@@ -18,7 +18,10 @@ namespace BasicFacebookFeatures
         public Size LastWindowSize { get; set; }
 
         private AppSettings()
-        {            
+        {
+            LastWindowLocation = new Point(0, 0);
+            LastWindowSize = new Size(1100, 670);
+
             if (!File.Exists(sr_SaveSettingsFilePath))
             {
                 File.Create(sr_SaveSettingsFilePath).Dispose();
