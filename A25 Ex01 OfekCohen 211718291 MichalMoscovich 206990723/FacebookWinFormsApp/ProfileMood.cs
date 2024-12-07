@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace BasicFacebookFeatures
 {
-    internal class ProfileMood
+    public class ProfileMood
     {
         public enum eProfileMoodType
         {

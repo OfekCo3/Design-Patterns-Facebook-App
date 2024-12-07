@@ -15,6 +15,7 @@ namespace BasicFacebookFeatures
         private readonly AppSettings r_AppSettings;
         private ProfilePictureFilter m_ProfilePictureFilter;
         private ProfileMood m_ProfileMood;
+        private FormFriendsWithSameMood m_FormFriendsWithSameMood;
         private Image m_OriginalProfilePicture;
         private const int k_CollectionLimit = 25;
         private enum eComboboxMainOption
@@ -28,17 +29,17 @@ namespace BasicFacebookFeatures
         public FormMain()
         {
             InitializeComponent();
+            tabMainApp.TabPages[0].Text = "Welcome";
             FacebookService.s_CollectionLimit = k_CollectionLimit;
             this.StartPosition = FormStartPosition.Manual;
             r_AppSettings = AppSettings.LoadFromFile();
-            initializeFilterComponents();
-            initializeMoodComponents();
+            initializeFilterComboBox();
+            initializeMoodComboBox();
             m_ProfilePictureFilter = new ProfilePictureFilter();
             m_ProfileMood = new ProfileMood();
         }
 
-        // the next 2 functions are too smiliar
-        private void initializeFilterComponents()
+        private void initializeFilterComboBox()
         {
             comboBoxFilters.DataSource = Enum.GetValues(typeof(eProfileFilter));
             comboBoxFilters.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -56,7 +57,7 @@ namespace BasicFacebookFeatures
             buttonProfilePictureFilter.Click += (sender, e) => applySelectedFilter((eProfileFilter)comboBoxFilters.SelectedIndex);
         }
 
-        private void initializeMoodComponents()
+        private void initializeMoodComboBox()
         {
             comboBoxMood.DataSource = Enum.GetValues(typeof(eProfileMoodType));
             comboBoxMood.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -109,6 +110,7 @@ namespace BasicFacebookFeatures
                 try
                 {
                     m_LoginResult = FacebookService.Connect(r_AppSettings.AccessToken);
+                    m_ActiveUser = m_LoginResult.LoggedInUser;
                     loadUserDataToUI();
                 }
                 catch (Exception)
@@ -462,6 +464,32 @@ namespace BasicFacebookFeatures
             }
         }
 
+        public void PostPicture(Image i_PostPicture)
+        {
+            try
+            {
+                byte[] imageData = new ImageConverter().ConvertTo(i_PostPicture, typeof(byte[])) as byte[];
+
+                if (imageData != null)
+                {
+                    Post postedPicture = m_ActiveUser.PostPhoto(imageData);
+
+                    if (postedPicture == null)
+                    {
+                        throw new Exception("Failed to post the picture");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error converting the picture");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("This action is not supported by Facebook");
+            }
+        }
+
         private void buttonAddPicture_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = openFileDialogPostPicture.ShowDialog();
@@ -535,6 +563,54 @@ namespace BasicFacebookFeatures
             Image moodImage = m_ProfileMood.ApplyMood(pictureBoxCover.Image, i_Mood);
             pictureBoxCover.Image = moodImage;
             pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
+        private void buttonUploadPicture_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                PostPicture(pictureBoxProfile.Image);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void buttonSaveToFile_Click(object sender, EventArgs e)
+        {
+            if (pictureBoxProfile.Image != null)
+            {
+                saveFileDialogSaveProfilePicture.Filter = "PNG Image (*.png)|*.png|JPEG Image (*.jpg)|*.jpg|Bitmap Image (*.bmp)|*.bmp";
+                saveFileDialogSaveProfilePicture.Title = "Save Image";
+
+                if (saveFileDialogSaveProfilePicture.ShowDialog() == DialogResult.OK)
+                {
+                    pictureBoxProfile.Image.Save(saveFileDialogSaveProfilePicture.FileName);
+                    MessageBox.Show("Profile picture was saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("You have no profile picture", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonProfilePictureFilter_Click(object sender, EventArgs e)
+        {
+            buttonUploadPicture.Visible = true;
+            buttonSaveToFile.Visible = true;
+        }
+
+        private void buttonApplyMood_Click(object sender, EventArgs e)
+        {
+            buttonWhoInTheMood.Visible = true;
+        }
+
+        private void buttonWhoInTheMood_Click(object sender, EventArgs e)
+        {
+            m_FormFriendsWithSameMood = new FormFriendsWithSameMood(m_ActiveUser, (eProfileMoodType)comboBoxMood.SelectedIndex);
+            m_FormFriendsWithSameMood.ShowDialog();
         }
     }
 }
