@@ -464,7 +464,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        public void PostPicture(Image i_PostPicture)
+        private void postPicture(Image i_PostPicture)
         {
             try
             {
@@ -569,7 +569,7 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                PostPicture(pictureBoxProfile.Image);
+                postPicture(pictureBoxProfile.Image);
             }
             catch (Exception exception)
             {
