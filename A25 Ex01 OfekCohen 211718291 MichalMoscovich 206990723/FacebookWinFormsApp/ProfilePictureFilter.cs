@@ -8,10 +8,10 @@ namespace BasicFacebookFeatures
         public enum eProfileFilter
         {
             None = 0,
-            PinkFilter,
-            OrangeFilter,
-            BlueFilter,
-            GreenFilter
+            Pink,
+            Orange,
+            Blue,
+            Green
         }
 
         public Image ApplyFilter(Image i_OriginalImage, eProfileFilter i_Filter)
@@ -38,13 +38,13 @@ namespace BasicFacebookFeatures
         {
             switch (i_Filter)
             {
-                case eProfileFilter.PinkFilter:
+                case eProfileFilter.Pink:
                     return Resources.pink_filter;
-                case eProfileFilter.OrangeFilter:
+                case eProfileFilter.Orange:
                     return Resources.orange_filter;
-                case eProfileFilter.BlueFilter:
+                case eProfileFilter.Blue:
                     return Resources.blue_filter;
-                case eProfileFilter.GreenFilter:
+                case eProfileFilter.Green:
                     return Resources.green_filter;
                 default:
                     return null;
