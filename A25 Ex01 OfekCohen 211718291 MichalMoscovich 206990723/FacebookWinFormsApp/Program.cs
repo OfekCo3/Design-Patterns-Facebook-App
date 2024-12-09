@@ -12,7 +12,7 @@ namespace BasicFacebookFeatures
         [STAThread]
         static void Main()
         {
-            Clipboard.SetText("956179119892382");
+            Clipboard.SetText("design.patterns20cc");
             FacebookService.s_UseForamttedToStrings = true;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
