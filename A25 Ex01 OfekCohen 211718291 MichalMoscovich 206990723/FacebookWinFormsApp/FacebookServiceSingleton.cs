@@ -29,9 +29,9 @@ public sealed class FacebookServiceSingleton
         }
     }
 
-    public void SetCollectionLimit(int collectionLimit)
+    public void SetCollectionLimit(int i_CollectionLimit)
     {
-        FacebookService.s_CollectionLimit = collectionLimit;
+        FacebookService.s_CollectionLimit = i_CollectionLimit;
     }
 
     public LoginResult Login(string i_AppId, params string[] i_Permissions)
