@@ -5,6 +5,7 @@ using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 using static BasicFacebookFeatures.ProfilePictureFilter;
 using static BasicFacebookFeatures.ProfileMood;
+using BasicFacebookFeatures.Moods;
 
 namespace BasicFacebookFeatures
 {
@@ -560,9 +561,50 @@ namespace BasicFacebookFeatures
 
         private void applySelectedMood(eProfileMoodType i_Mood)
         {
-            Image moodImage = m_ProfileMood.ApplyMood(pictureBoxCover.Image, i_Mood);
-            pictureBoxCover.Image = moodImage;
-            pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
+            if (pictureBoxCover.Image != null)
+            {
+                try
+                {
+                    MoodCreator creator = m_ProfileMood.getMoodCreator(i_Mood);
+                    IMood mood = creator.CreateMood();
+                    
+                    // Apply mood effect to cover photo
+                    pictureBoxCover.Image = creator.ApplyMood(pictureBoxCover.Image);
+                    pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                    // Update UI with mood details
+                    if (i_Mood != eProfileMoodType.None)
+                    {
+                        labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
+                        labelMoodName.ForeColor = mood.GetMoodColor();
+                        labelMoodName.Visible = true;
+
+                        // Create fade-in effect
+                        Timer fadeTimer = new Timer();
+                        fadeTimer.Interval = 50;
+                        int opacity = 0;
+                        fadeTimer.Tick += (s, e) =>
+                        {
+                            opacity += 5;
+                            if (opacity >= 100)
+                            {
+                                fadeTimer.Stop();
+                                fadeTimer.Dispose();
+                            }
+                            labelMoodName.BackColor = Color.FromArgb(opacity, mood.GetMoodColor());
+                        };
+                        fadeTimer.Start();
+                    }
+                    else
+                    {
+                        labelMoodName.Visible = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to apply mood: {ex.Message}");
+                }
+            }
         }
 
         private void buttonUploadPicture_Click(object sender, EventArgs e)

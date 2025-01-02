@@ -1,5 +1,6 @@
 ﻿using BasicFacebookFeatures.Properties;
 using System.Drawing;
+using BasicFacebookFeatures.Moods;
 
 namespace BasicFacebookFeatures
 {
@@ -9,39 +10,32 @@ namespace BasicFacebookFeatures
         {
             None = 0,
             Happy,
-            Loving,
             Sad,
+            InLove,
             Hungry
         }
 
-        public Image ApplyMood(Image i_OriginalImage, eProfileMoodType i_MoodType)
-        {
-            Image moodImage = getMoodImage(i_MoodType);
-            Bitmap moodedImage = new Bitmap(i_OriginalImage);
-
-            using (Graphics g = Graphics.FromImage(moodedImage))
-            {
-                g.DrawImage(moodImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
-            }
-
-            return moodImage;
-        }
-
-        private Image getMoodImage(eProfileMoodType i_MoodType)
+        private MoodCreator getMoodCreator(eProfileMoodType i_MoodType)
         {
             switch (i_MoodType)
             {
                 case eProfileMoodType.Happy:
-                    return Resources.happy_mood;
+                    return new HappyMoodCreator();
                 case eProfileMoodType.Sad:
-                    return Resources.sad_mood;
-                case eProfileMoodType.Loving:
-                    return Resources.inLove_mood;
+                    return new SadMoodCreator();
+                case eProfileMoodType.InLove:
+                    return new InLoveMoodCreator();
                 case eProfileMoodType.Hungry:
-                    return Resources.hungry_mood;
+                    return new HungryMoodCreator();
                 default:
-                    return Resources.gray_background;
+                    return new NoneMoodCreator();
             }
+        }
+
+        public Image ApplyMood(Image i_OriginalImage, eProfileMoodType i_MoodType)
+        {
+            MoodCreator creator = getMoodCreator(i_MoodType);
+            return creator.ApplyMood(i_OriginalImage);
         }
     }
 }
