@@ -30,7 +30,7 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             tabMainApp.TabPages[0].Text = "Welcome";
-            FacebookService.s_CollectionLimit = k_CollectionLimit;
+            FacebookServiceSingleton.Instance.SetCollectionLimit(k_CollectionLimit);
             this.StartPosition = FormStartPosition.Manual;
             r_AppSettings = AppSettings.LoadFromFile();
             initializeFilterComboBox();
@@ -109,7 +109,7 @@ namespace BasicFacebookFeatures
             {
                 try
                 {
-                    m_LoginResult = FacebookService.Connect(r_AppSettings.AccessToken);
+                    m_LoginResult = FacebookServiceSingleton.Instance.Login(r_AppSettings.AccessToken);
                     m_ActiveUser = m_LoginResult.LoggedInUser;
                     loadUserDataToUI();
                 }
@@ -121,7 +121,7 @@ namespace BasicFacebookFeatures
             }
 
             eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
-             
+
             if (savedMood != eProfileMoodType.None)
             {
                 applySelectedMood(savedMood);
@@ -142,7 +142,7 @@ namespace BasicFacebookFeatures
         {
             if (!string.IsNullOrEmpty(textBoxAppID.Text))
             {
-                m_LoginResult = FacebookService.Login(
+                m_LoginResult = FacebookServiceSingleton.Instance.Login(
                     textBoxAppID.Text,
                     "email",
                     "public_profile",
@@ -374,7 +374,7 @@ namespace BasicFacebookFeatures
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             const bool v_LoginEnable = true;
-            FacebookService.LogoutWithUI();
+            FacebookServiceSingleton.Instance.Logout();
             buttonLogin.Text = "Login";
             buttonLogin.BackColor = buttonLogout.BackColor;
             m_LoginResult = null;

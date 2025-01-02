@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="FacebookServiceSingleton.cs" />
     <Compile Include="FormFriendsWithSameMood.cs">
       <SubType>Form</SubType>
     </Compile>
