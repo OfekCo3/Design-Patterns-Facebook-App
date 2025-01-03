@@ -259,7 +259,7 @@
             // 
             // listBoxMain
             // 
-            this.listBoxMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listBoxMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxMain.FormattingEnabled = true;
             this.listBoxMain.ItemHeight = 18;
@@ -270,7 +270,7 @@
             // 
             // listBoxFriends
             // 
-            this.listBoxFriends.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listBoxFriends.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxFriends.FormattingEnabled = true;
             this.listBoxFriends.ItemHeight = 18;
@@ -281,7 +281,7 @@
             // 
             // listBoxEvents
             // 
-            this.listBoxEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listBoxEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxEvents.FormattingEnabled = true;
             this.listBoxEvents.ItemHeight = 18;
@@ -398,7 +398,7 @@
             // 
             this.labelMoodName.AutoSize = true;
             this.labelMoodName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelMoodName.Location = new System.Drawing.Point(pictureBoxCover.Left + 10, pictureBoxCover.Bottom - 40);
+            this.labelMoodName.Location = new System.Drawing.Point(10, 250);
             this.labelMoodName.Name = "labelMoodName";
             this.labelMoodName.Size = new System.Drawing.Size(0, 20);
             this.labelMoodName.Visible = false;
@@ -457,4 +457,3 @@
         private System.Windows.Forms.Label labelMoodName;
     }
 }
-

@@ -1,10 +1,13 @@
-namespace BasicFacebookFeatures.Moods
+using System.Drawing;
+using BasicFacebookFeatures.Properties;
+
+namespace BasicFacebookFeatures.Moods.MoodObjects
 {
     public class NoneMood : BaseMood
     {
         protected override Image GetMoodOverlay()
         {
-            return Properties.Resources.gray_background;
+            return Resources.gray_background;
         }
 
         public override string GetMoodName()
@@ -19,7 +22,7 @@ namespace BasicFacebookFeatures.Moods
 
         public override string GetMoodEmoji()
         {
-            return "";
+            return string.Empty;
         }
     }
 } 

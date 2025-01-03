@@ -1,12 +1,15 @@
 using System.Drawing;
 
-namespace BasicFacebookFeatures.Moods
+namespace BasicFacebookFeatures.Moods.Interfaces
 {
     public interface IMood
     {
-        Image ApplyPicture(Image i_OriginalImage);
+        Image ApplyMood(Image i_OriginalImage);
+
         string GetMoodName();
+
         Color GetMoodColor();
+
         string GetMoodEmoji();
     }
-}
+} 

@@ -1,6 +1,5 @@
-﻿using BasicFacebookFeatures.Properties;
-using System.Drawing;
-using BasicFacebookFeatures.Moods;
+﻿using System.Drawing;
+using BasicFacebookFeatures.Moods.MoodCreators;
 
 namespace BasicFacebookFeatures
 {
@@ -15,7 +14,7 @@ namespace BasicFacebookFeatures
             Hungry
         }
 
-        private MoodCreator getMoodCreator(eProfileMoodType i_MoodType)
+        public MoodCreator GetMoodCreator(eProfileMoodType i_MoodType)
         {
             switch (i_MoodType)
             {
@@ -34,7 +33,7 @@ namespace BasicFacebookFeatures
 
         public Image ApplyMood(Image i_OriginalImage, eProfileMoodType i_MoodType)
         {
-            MoodCreator creator = getMoodCreator(i_MoodType);
+            MoodCreator creator = GetMoodCreator(i_MoodType);
             return creator.ApplyMood(i_OriginalImage);
         }
     }

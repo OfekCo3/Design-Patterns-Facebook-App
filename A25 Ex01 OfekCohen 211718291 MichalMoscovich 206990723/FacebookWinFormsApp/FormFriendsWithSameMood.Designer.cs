@@ -28,45 +28,48 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelFriendInMood = new System.Windows.Forms.Label();
-            this.listBoxFriendsWithMood = new System.Windows.Forms.ListBox();
+            this.flowLayoutPanelFriends = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonRefresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // labelFriendInMood
+            // flowLayoutPanelFriends
             // 
-            this.labelFriendInMood.AutoSize = true;
-            this.labelFriendInMood.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFriendInMood.Location = new System.Drawing.Point(165, 35);
-            this.labelFriendInMood.Name = "labelFriendInMood";
-            this.labelFriendInMood.Size = new System.Drawing.Size(432, 42);
-            this.labelFriendInMood.TabIndex = 0;
-            this.labelFriendInMood.Text = "Friend with mood: Happy";
+            this.flowLayoutPanelFriends.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanelFriends.AutoScroll = true;
+            this.flowLayoutPanelFriends.Location = new System.Drawing.Point(12, 41);
+            this.flowLayoutPanelFriends.Name = "flowLayoutPanelFriends";
+            this.flowLayoutPanelFriends.Size = new System.Drawing.Size(560, 408);
+            this.flowLayoutPanelFriends.TabIndex = 0;
             // 
-            // listBoxFriendsWithMood
+            // buttonRefresh
             // 
-            this.listBoxFriendsWithMood.FormattingEnabled = true;
-            this.listBoxFriendsWithMood.Location = new System.Drawing.Point(172, 112);
-            this.listBoxFriendsWithMood.Name = "listBoxFriendsWithMood";
-            this.listBoxFriendsWithMood.Size = new System.Drawing.Size(413, 290);
-            this.listBoxFriendsWithMood.TabIndex = 17;
+            this.buttonRefresh.Location = new System.Drawing.Point(12, 12);
+            this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
+            this.buttonRefresh.TabIndex = 1;
+            this.buttonRefresh.Text = "Refresh";
+            this.buttonRefresh.UseVisualStyleBackColor = true;
+            this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
             // 
             // FormFriendsWithSameMood
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(836, 450);
-            this.Controls.Add(this.listBoxFriendsWithMood);
-            this.Controls.Add(this.labelFriendInMood);
+            this.ClientSize = new System.Drawing.Size(584, 461);
+            this.Controls.Add(this.buttonRefresh);
+            this.Controls.Add(this.flowLayoutPanelFriends);
+            this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "FormFriendsWithSameMood";
-            this.Text = "Friends With The Same Mood";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Friends With Same Mood";
             this.ResumeLayout(false);
-            this.PerformLayout();
-
         }
 
         #endregion
 
-        private System.Windows.Forms.Label labelFriendInMood;
-        private System.Windows.Forms.ListBox listBoxFriendsWithMood;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelFriends;
+        private System.Windows.Forms.Button buttonRefresh;
     }
 }

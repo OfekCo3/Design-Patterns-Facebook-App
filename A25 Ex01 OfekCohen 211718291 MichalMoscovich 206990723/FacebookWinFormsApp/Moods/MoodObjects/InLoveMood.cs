@@ -1,10 +1,13 @@
-namespace BasicFacebookFeatures.Moods
+using System.Drawing;
+using BasicFacebookFeatures.Properties;
+
+namespace BasicFacebookFeatures.Moods.MoodObjects
 {
     public class InLoveMood : BaseMood
     {
         protected override Image GetMoodOverlay()
         {
-            return Properties.Resources.inLove_mood;
+            return Resources.inLove_mood;
         }
 
         public override string GetMoodName()

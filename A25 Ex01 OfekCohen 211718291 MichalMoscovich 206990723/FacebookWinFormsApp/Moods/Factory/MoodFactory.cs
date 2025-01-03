@@ -1,6 +1,8 @@
+using BasicFacebookFeatures.Moods.Interfaces;
+using BasicFacebookFeatures.Moods.MoodObjects;
 using static BasicFacebookFeatures.ProfileMood;
 
-namespace BasicFacebookFeatures.Moods
+namespace BasicFacebookFeatures.Moods.Factory
 {
     public class MoodFactory
     {
@@ -22,4 +24,4 @@ namespace BasicFacebookFeatures.Moods
             }
         }
     }
-}
+} 

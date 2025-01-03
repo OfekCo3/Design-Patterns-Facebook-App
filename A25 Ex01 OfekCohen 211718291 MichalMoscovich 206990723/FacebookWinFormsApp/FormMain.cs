@@ -6,6 +6,8 @@ using FacebookWrapper;
 using static BasicFacebookFeatures.ProfilePictureFilter;
 using static BasicFacebookFeatures.ProfileMood;
 using BasicFacebookFeatures.Moods;
+using BasicFacebookFeatures.Moods.MoodCreators;
+using BasicFacebookFeatures.Moods.Interfaces;
 
 namespace BasicFacebookFeatures
 {
@@ -18,6 +20,7 @@ namespace BasicFacebookFeatures
         private ProfileMood m_ProfileMood;
         private FormFriendsWithSameMood m_FormFriendsWithSameMood;
         private Image m_OriginalProfilePicture;
+        private Image m_OriginalCoverImage;
         private const int k_CollectionLimit = 25;
         private enum eComboboxMainOption
         {
@@ -38,6 +41,12 @@ namespace BasicFacebookFeatures
             initializeMoodComboBox();
             m_ProfilePictureFilter = new ProfilePictureFilter();
             m_ProfileMood = new ProfileMood();
+
+            // Update position relative to pictureBoxCover
+            labelMoodName.BringToFront(); // Make sure label is visible above other controls
+            labelMoodName.Location = new Point(
+                10,  // X position relative to tabMainPage
+                pictureBoxCover.Bottom - 40); // Y position relative to pictureBoxCover
         }
 
         private void initializeFilterComboBox()
@@ -122,7 +131,7 @@ namespace BasicFacebookFeatures
             }
 
             eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
-             
+
             if (savedMood != eProfileMoodType.None)
             {
                 applySelectedMood(savedMood);
@@ -208,7 +217,18 @@ namespace BasicFacebookFeatures
 
                 if (m_ActiveUser.Cover != null && !string.IsNullOrEmpty(m_ActiveUser.Cover.SourceURL))
                 {
+                    // Store the initial cover image
+                    m_OriginalCoverImage = Properties.Resources.gray_background;
                     pictureBoxCover.ImageLocation = m_ActiveUser.Cover.SourceURL;
+                    pictureBoxCover.LoadCompleted += (sender, e) =>
+                    {
+                        m_OriginalCoverImage = (Image)pictureBoxCover.Image.Clone();
+                    };
+                }
+                else
+                {
+                    m_OriginalCoverImage = Properties.Resources.gray_background;
+                    pictureBoxCover.Image = Properties.Resources.gray_background;
                 }
             }
             catch (Exception)
@@ -320,7 +340,7 @@ namespace BasicFacebookFeatures
                     listBoxMain.Items.Add("No liked pages to display");
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 MessageBox.Show("failed to retrive liked pages");
             }
@@ -343,7 +363,7 @@ namespace BasicFacebookFeatures
                     listBoxMain.Items.Add("No groups to display");
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 MessageBox.Show("failed to retrive groups");
             }
@@ -366,7 +386,7 @@ namespace BasicFacebookFeatures
                     listBoxMain.Items.Add("No Albums to display");
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 MessageBox.Show("falied to retrive albums");
             }
@@ -441,7 +461,7 @@ namespace BasicFacebookFeatures
                                 throw new Exception("Post failed");
                             }
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
                             throw new Exception("Post failed");
                         }
@@ -485,7 +505,7 @@ namespace BasicFacebookFeatures
                     throw new Exception("Error converting the picture");
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 throw new Exception("This action is not supported by Facebook");
             }
@@ -508,14 +528,14 @@ namespace BasicFacebookFeatures
                     try
                     {
                         Status postedStatus = m_ActiveUser.PostStatus(i_StatusText: textBoxPost.Text, i_PictureURL: picturePath);
-                        
+
                         if (postedStatus == null)
                         {
                             throw new Exception("Picture post failed");
                         }
                     }
-                    
-                    catch (Exception exception)
+
+                    catch (Exception)
                     {
                         MessageBox.Show("Picture post failed");
                     }
@@ -561,49 +581,62 @@ namespace BasicFacebookFeatures
 
         private void applySelectedMood(eProfileMoodType i_Mood)
         {
-            if (pictureBoxCover.Image != null)
+            try
             {
-                try
+                // Store original image if not already stored
+                if (m_OriginalCoverImage == null)
                 {
-                    MoodCreator creator = m_ProfileMood.getMoodCreator(i_Mood);
-                    IMood mood = creator.CreateMood();
-                    
-                    // Apply mood effect to cover photo
-                    pictureBoxCover.Image = creator.ApplyMood(pictureBoxCover.Image);
-                    pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
+                    m_OriginalCoverImage = pictureBoxCover.Image;
+                }
 
-                    // Update UI with mood details
-                    if (i_Mood != eProfileMoodType.None)
+                // Reset to original image before applying new mood
+                if (m_OriginalCoverImage != null)
+                {
+                    pictureBoxCover.Image = (Image)m_OriginalCoverImage.Clone();
+                }
+                else
+                {
+                    pictureBoxCover.Image = Properties.Resources.gray_background;
+                }
+
+                MoodCreator creator = m_ProfileMood.GetMoodCreator(i_Mood);
+                IMood mood = creator.CreateMood();
+                
+                // Apply mood effect to cover photo
+                pictureBoxCover.Image = creator.ApplyMood(pictureBoxCover.Image);
+                pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                // Update UI with mood details
+                if (i_Mood != eProfileMoodType.None)
+                {
+                    labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
+                    labelMoodName.ForeColor = mood.GetMoodColor();
+                    labelMoodName.Visible = true;
+
+                    // Create fade-in effect
+                    Timer fadeTimer = new Timer();
+                    fadeTimer.Interval = 50;
+                    int opacity = 0;
+                    fadeTimer.Tick += (s, e) =>
                     {
-                        labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
-                        labelMoodName.ForeColor = mood.GetMoodColor();
-                        labelMoodName.Visible = true;
-
-                        // Create fade-in effect
-                        Timer fadeTimer = new Timer();
-                        fadeTimer.Interval = 50;
-                        int opacity = 0;
-                        fadeTimer.Tick += (s, e) =>
+                        opacity += 5;
+                        if (opacity >= 100)
                         {
-                            opacity += 5;
-                            if (opacity >= 100)
-                            {
-                                fadeTimer.Stop();
-                                fadeTimer.Dispose();
-                            }
-                            labelMoodName.BackColor = Color.FromArgb(opacity, mood.GetMoodColor());
-                        };
-                        fadeTimer.Start();
-                    }
-                    else
-                    {
-                        labelMoodName.Visible = false;
-                    }
+                            fadeTimer.Stop();
+                            fadeTimer.Dispose();
+                        }
+                        labelMoodName.BackColor = Color.FromArgb(opacity, mood.GetMoodColor());
+                    };
+                    fadeTimer.Start();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Failed to apply mood: {ex.Message}");
+                    labelMoodName.Visible = false;
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to apply mood: {ex.Message}");
             }
         }
 

@@ -1,4 +1,7 @@
-namespace BasicFacebookFeatures.Moods
+using BasicFacebookFeatures.Moods.Interfaces;
+using BasicFacebookFeatures.Moods.MoodObjects;
+
+namespace BasicFacebookFeatures.Moods.MoodCreators
 {
     public class HappyMoodCreator : MoodCreator
     {
@@ -7,4 +10,4 @@ namespace BasicFacebookFeatures.Moods
             return new HappyMood();
         }
     }
-} 
+}

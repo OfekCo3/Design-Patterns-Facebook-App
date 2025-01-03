@@ -1,25 +1,28 @@
-namespace BasicFacebookFeatures.Moods
+using System.Drawing;
+using BasicFacebookFeatures.Properties;
+
+namespace BasicFacebookFeatures.Moods.MoodObjects
 {
-    public class SadMood : BaseMood
+    public class HungryMood : BaseMood
     {
         protected override Image GetMoodOverlay()
         {
-            return Properties.Resources.sad_mood;
+            return Resources.hungry_mood;
         }
 
         public override string GetMoodName()
         {
-            return "Sad";
+            return "Hungry";
         }
 
         public override Color GetMoodColor()
         {
-            return Color.Blue;
+            return Color.Orange;
         }
 
         public override string GetMoodEmoji()
         {
-            return "😢";
+            return "😋";
         }
     }
 } 
