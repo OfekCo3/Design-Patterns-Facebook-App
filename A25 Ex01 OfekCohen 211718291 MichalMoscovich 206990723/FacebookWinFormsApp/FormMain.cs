@@ -6,7 +6,7 @@ using FacebookWrapper;
 using static BasicFacebookFeatures.ProfilePictureFilter;
 using static BasicFacebookFeatures.ProfileMood;
 using BasicFacebookFeatures.Moods;
-using BasicFacebookFeatures.Moods.MoodCreators;
+using BasicFacebookFeatures.Moods.Factory;
 using BasicFacebookFeatures.Moods.Interfaces;
 
 namespace BasicFacebookFeatures
@@ -583,13 +583,11 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                // Store original image if not already stored
                 if (m_OriginalCoverImage == null)
                 {
                     m_OriginalCoverImage = pictureBoxCover.Image;
                 }
 
-                // Reset to original image before applying new mood
                 if (m_OriginalCoverImage != null)
                 {
                     pictureBoxCover.Image = (Image)m_OriginalCoverImage.Clone();
@@ -599,28 +597,24 @@ namespace BasicFacebookFeatures
                     pictureBoxCover.Image = Properties.Resources.gray_background;
                 }
 
-                MoodCreator creator = m_ProfileMood.GetMoodCreator(i_Mood);
-                IMood mood = creator.CreateMood();
-                
-                // Apply mood effect to cover photo
-                pictureBoxCover.Image = creator.ApplyMood(pictureBoxCover.Image);
+                IMood mood = MoodFactory.CreateMood(i_Mood);
+                pictureBoxCover.Image = mood.ApplyMood(pictureBoxCover.Image);
                 pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
 
-                // Update UI with mood details
                 if (i_Mood != eProfileMoodType.None)
                 {
                     labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
-                    labelMoodName.ForeColor = mood.GetMoodColor();
+                    labelMoodName.ForeColor = Color.White;
                     labelMoodName.Visible = true;
+                    labelMoodName.BackColor = Color.Transparent;
 
-                    // Create fade-in effect
                     Timer fadeTimer = new Timer();
                     fadeTimer.Interval = 50;
                     int opacity = 0;
                     fadeTimer.Tick += (s, e) =>
                     {
                         opacity += 5;
-                        if (opacity >= 100)
+                        if (opacity >= 255)
                         {
                             fadeTimer.Stop();
                             fadeTimer.Dispose();

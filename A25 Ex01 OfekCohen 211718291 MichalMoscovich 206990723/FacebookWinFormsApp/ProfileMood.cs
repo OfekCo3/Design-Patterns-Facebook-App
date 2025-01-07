@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
-using BasicFacebookFeatures.Moods.MoodCreators;
+using BasicFacebookFeatures.Moods.Factory;
+using BasicFacebookFeatures.Moods.Interfaces;
 
 namespace BasicFacebookFeatures
 {
@@ -14,27 +15,10 @@ namespace BasicFacebookFeatures
             Hungry
         }
 
-        public MoodCreator GetMoodCreator(eProfileMoodType i_MoodType)
-        {
-            switch (i_MoodType)
-            {
-                case eProfileMoodType.Happy:
-                    return new HappyMoodCreator();
-                case eProfileMoodType.Sad:
-                    return new SadMoodCreator();
-                case eProfileMoodType.InLove:
-                    return new InLoveMoodCreator();
-                case eProfileMoodType.Hungry:
-                    return new HungryMoodCreator();
-                default:
-                    return new NoneMoodCreator();
-            }
-        }
-
         public Image ApplyMood(Image i_OriginalImage, eProfileMoodType i_MoodType)
         {
-            MoodCreator creator = GetMoodCreator(i_MoodType);
-            return creator.ApplyMood(i_OriginalImage);
+            IMood mood = MoodFactory.CreateMood(i_MoodType);
+            return mood.ApplyMood(i_OriginalImage);
         }
     }
 }

@@ -91,12 +91,6 @@
     <Compile Include="Moods\MoodObjects\InLoveMood.cs" />
     <Compile Include="Moods\MoodObjects\HungryMood.cs" />
     <Compile Include="Moods\MoodObjects\NoneMood.cs" />
-    <Compile Include="Moods\Creators\MoodCreator.cs" />
-    <Compile Include="Moods\Creators\HappyMoodCreator.cs" />
-    <Compile Include="Moods\Creators\SadMoodCreator.cs" />
-    <Compile Include="Moods\Creators\InLoveMoodCreator.cs" />
-    <Compile Include="Moods\Creators\HungryMoodCreator.cs" />
-    <Compile Include="Moods\Creators\NoneMoodCreator.cs" />
     <Compile Include="Moods\Factory\MoodFactory.cs" />
     <Compile Include="ProfileMood.cs" />
     <Compile Include="FormMain.cs">

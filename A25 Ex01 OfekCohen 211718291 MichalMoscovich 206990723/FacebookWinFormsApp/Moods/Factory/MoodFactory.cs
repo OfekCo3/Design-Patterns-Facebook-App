@@ -24,4 +24,4 @@ namespace BasicFacebookFeatures.Moods.Factory
             }
         }
     }
-} 
+}
