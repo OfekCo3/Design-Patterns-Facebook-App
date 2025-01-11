@@ -1,50 +1,134 @@
-﻿using FacebookWrapper.ObjectModel;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
+using FacebookWrapper.ObjectModel;
 using static BasicFacebookFeatures.ProfileMood;
 
 namespace BasicFacebookFeatures
 {
     public partial class FormFriendsWithSameMood : Form
     {
-        private readonly User r_ActiveUser;
-        private readonly eProfileMoodType r_UserMood;
+        private readonly User r_LoggedInUser;
+        private readonly eProfileMoodType r_CurrentMood;
+        private readonly Dictionary<string, PictureBox> r_FriendPictureBoxes;
+        private const int k_PanelWidth = 150;
+        private const int k_PanelHeight = 200;
+        private const int k_PictureWidth = 130;
+        private const int k_PictureHeight = 130;
+        private const int k_Padding = 10;
+        private const int k_RandomFactor = 5;
 
-        public FormFriendsWithSameMood(User i_ActiveUser, eProfileMoodType i_Mood)
+        public FormFriendsWithSameMood(User i_LoggedInUser, eProfileMoodType i_CurrentMood)
         {
-            r_ActiveUser = i_ActiveUser;
-            r_UserMood = i_Mood;
             InitializeComponent();
-            labelFriendInMood.Text = "Friends in the mood: " + i_Mood;
+            r_LoggedInUser = i_LoggedInUser;
+            r_CurrentMood = i_CurrentMood;
+            r_FriendPictureBoxes = new Dictionary<string, PictureBox>();
+            Text = $"Friends in {i_CurrentMood} Mood";
+            initializeFriendsPanel();
         }
 
-        protected override void OnShown(EventArgs e)
+        private void initializeFriendsPanel()
         {
-            base.OnShown(e);
-            showFriendsInTheSameMood();
-        }
-
-        private void showFriendsInTheSameMood()
-        {
-            listBoxFriendsWithMood.Items.Clear();
-
             try
             {
-                foreach (User friend in r_ActiveUser.Friends)
+                flowLayoutPanelFriends.Controls.Clear();
+                r_FriendPictureBoxes.Clear();
+
+                foreach (User friend in r_LoggedInUser.Friends)
                 {
-                    string displayText = $"{friend.Name} is {r_UserMood}";
-                    listBoxFriendsWithMood.Items.Add(displayText);
+                    if (isFriendInSameMood(friend))
+                    {
+                        addFriendToPanel(friend);
+                    }
                 }
 
-                if (listBoxFriendsWithMood.Items.Count == 0)
+                if (flowLayoutPanelFriends.Controls.Count == 0)
                 {
-                    listBoxFriendsWithMood.Items.Add("No one is " + r_UserMood.ToString());
+                    addNoFriendsLabel();
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Failed to fetch friends");
+                MessageBox.Show($"Error loading friends: {ex.Message}");
             }
+        }
+
+        private void addNoFriendsLabel()
+        {
+            Label noFriendsLabel = new Label
+            {
+                Text = $"No friends are in {r_CurrentMood} mood right now",
+                AutoSize = true,
+                Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
+            };
+
+            flowLayoutPanelFriends.Controls.Add(noFriendsLabel);
+        }
+
+        private bool isFriendInSameMood(User i_Friend)
+        {
+            Random random = new Random();
+            return random.Next(0, k_RandomFactor) == 0;
+        }
+
+        private void addFriendToPanel(User i_Friend)
+        {
+            Panel friendPanel = createFriendPanel();
+            PictureBox pictureBox = createPictureBox();
+            Label nameLabel = createNameLabel(i_Friend.Name);
+
+            if (!string.IsNullOrEmpty(i_Friend.PictureNormalURL))
+            {
+                pictureBox.LoadAsync(i_Friend.PictureNormalURL);
+                r_FriendPictureBoxes.Add(i_Friend.Id, pictureBox);
+            }
+            else
+            {
+                pictureBox.Image = Properties.Resources.gray_background;
+            }
+
+            friendPanel.Controls.Add(pictureBox);
+            friendPanel.Controls.Add(nameLabel);
+            flowLayoutPanelFriends.Controls.Add(friendPanel);
+        }
+
+        private Panel createFriendPanel()
+        {
+            return new Panel
+            {
+                Width = k_PanelWidth,
+                Height = k_PanelHeight,
+                Margin = new Padding(k_Padding),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+        }
+
+        private PictureBox createPictureBox()
+        {
+            return new PictureBox
+            {
+                Width = k_PictureWidth,
+                Height = k_PictureHeight,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Location = new Point(k_Padding, k_Padding)
+            };
+        }
+
+        private Label createNameLabel(string i_FriendName)
+        {
+            return new Label
+            {
+                Text = i_FriendName,
+                AutoSize = true,
+                Location = new Point(k_Padding, k_PanelHeight - 50)
+            };
+        }
+
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            initializeFriendsPanel();
         }
     }
 }

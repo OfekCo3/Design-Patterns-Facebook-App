@@ -57,6 +57,7 @@
             this.buttonLogin = new System.Windows.Forms.Button();
             this.pictureBoxCover = new System.Windows.Forms.PictureBox();
             this.tabMainApp = new System.Windows.Forms.TabControl();
+            this.labelMoodName = new System.Windows.Forms.Label();
             this.tabMainPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCover)).BeginInit();
@@ -258,7 +259,7 @@
             // 
             // listBoxMain
             // 
-            this.listBoxMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listBoxMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxMain.FormattingEnabled = true;
             this.listBoxMain.ItemHeight = 18;
@@ -269,7 +270,7 @@
             // 
             // listBoxFriends
             // 
-            this.listBoxFriends.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listBoxFriends.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxFriends.FormattingEnabled = true;
             this.listBoxFriends.ItemHeight = 18;
@@ -280,7 +281,7 @@
             // 
             // listBoxEvents
             // 
-            this.listBoxEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listBoxEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxEvents.FormattingEnabled = true;
             this.listBoxEvents.ItemHeight = 18;
@@ -393,12 +394,22 @@
             this.tabMainApp.Size = new System.Drawing.Size(1082, 781);
             this.tabMainApp.TabIndex = 54;
             // 
+            // labelMoodName
+            // 
+            this.labelMoodName.AutoSize = true;
+            this.labelMoodName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelMoodName.Location = new System.Drawing.Point(10, 250);
+            this.labelMoodName.Name = "labelMoodName";
+            this.labelMoodName.Size = new System.Drawing.Size(0, 20);
+            this.labelMoodName.Visible = false;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1082, 781);
             this.Controls.Add(this.tabMainApp);
+            this.Controls.Add(this.labelMoodName);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
@@ -443,6 +454,6 @@
         private System.Windows.Forms.Button buttonLogin;
         private System.Windows.Forms.PictureBox pictureBoxCover;
         private System.Windows.Forms.TabControl tabMainApp;
+        private System.Windows.Forms.Label labelMoodName;
     }
 }
-

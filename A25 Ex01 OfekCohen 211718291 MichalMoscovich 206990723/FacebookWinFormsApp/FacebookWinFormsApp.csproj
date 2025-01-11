@@ -84,6 +84,14 @@
     <Compile Include="FormFriendsWithSameMood.Designer.cs">
       <DependentUpon>FormFriendsWithSameMood.cs</DependentUpon>
     </Compile>
+    <Compile Include="Moods\Interfaces\IMood.cs" />
+    <Compile Include="Moods\MoodObjects\BaseMood.cs" />
+    <Compile Include="Moods\MoodObjects\HappyMood.cs" />
+    <Compile Include="Moods\MoodObjects\SadMood.cs" />
+    <Compile Include="Moods\MoodObjects\InLoveMood.cs" />
+    <Compile Include="Moods\MoodObjects\HungryMood.cs" />
+    <Compile Include="Moods\MoodObjects\NoneMood.cs" />
+    <Compile Include="Moods\Factory\MoodFactory.cs" />
     <Compile Include="ProfileMood.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
@@ -124,6 +132,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="CefSharp.WinForms">
       <Version>87.1.132</Version>
