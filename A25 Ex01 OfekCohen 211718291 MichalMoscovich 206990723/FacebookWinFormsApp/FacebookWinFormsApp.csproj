@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="Filters\FilterComposer.cs" />
     <Compile Include="Filters\IFilterBuilder.cs" />
     <Compile Include="Filters\ProfileFilterBuilder.cs" />
     <Compile Include="FormFriendsWithSameMood.cs">

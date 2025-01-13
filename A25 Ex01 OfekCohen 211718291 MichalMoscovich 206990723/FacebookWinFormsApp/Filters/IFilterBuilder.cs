@@ -10,7 +10,6 @@ namespace BasicFacebookFeatures.Filters
         IFilterBuilder ApplyGrayscale();
         IFilterBuilder ApplySepia();
         IFilterBuilder ApplyBlur(int i_Radius);
-        IFilterBuilder AddSticker(Image i_Sticker, Point i_Position, float i_Scale);
         Image Build();
     }
 } 

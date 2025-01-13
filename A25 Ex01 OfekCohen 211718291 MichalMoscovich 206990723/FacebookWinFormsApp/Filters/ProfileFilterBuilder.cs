@@ -13,14 +13,12 @@ namespace BasicFacebookFeatures.Filters
         private bool m_IsGrayscale;
         private bool m_IsSepia;
         private int m_BlurRadius;
-        private List<(Image Sticker, Point Position, float Scale)> m_Stickers;
 
         public ProfileFilterBuilder(Image i_OriginalImage)
         {
             r_OriginalImage = i_OriginalImage;
             m_TransparencyFactor = 1.0f;
             m_TintColor = Color.Transparent;
-            m_Stickers = new List<(Image, Point, float)>();
         }
 
         public IFilterBuilder ApplyColorTint(Color i_Color)
@@ -59,12 +57,6 @@ namespace BasicFacebookFeatures.Filters
             return this;
         }
 
-        public IFilterBuilder AddSticker(Image i_Sticker, Point i_Position, float i_Scale)
-        {
-            m_Stickers.Add((i_Sticker, i_Position, i_Scale));
-            return this;
-        }
-
         public Image Build()
         {
             if (r_OriginalImage == null)
@@ -83,14 +75,17 @@ namespace BasicFacebookFeatures.Filters
                 {
                     applyGrayscaleEffect(resultImage);
                 }
+
                 if (m_IsSepia)
                 {
                     applySepiaEffect(resultImage);
                 }
+
                 if (m_BlurRadius > 0)
                 {
                     applyBlurEffect(resultImage, m_BlurRadius);
                 }
+
                 if (m_TintColor != Color.Transparent)
                 {
                     using (SolidBrush tintBrush = new SolidBrush(Color.FromArgb(30, m_TintColor)))
@@ -98,17 +93,10 @@ namespace BasicFacebookFeatures.Filters
                         g.FillRectangle(tintBrush, 0, 0, resultImage.Width, resultImage.Height);
                     }
                 }
+
                 if (m_Overlay != null)
                 {
                     applyOverlayImage(g, resultImage);
-                }
-
-                // Apply stickers
-                foreach (var (sticker, position, scale) in m_Stickers)
-                {
-                    int width = (int)(sticker.Width * scale);
-                    int height = (int)(sticker.Height * scale);
-                    g.DrawImage(sticker, position.X, position.Y, width, height);
                 }
             }
 
@@ -158,7 +146,6 @@ namespace BasicFacebookFeatures.Filters
 
         private void applyBlurEffect(Bitmap i_Image, int i_Radius)
         {
-            // Simple box blur implementation
             Bitmap blurred = new Bitmap(i_Image);
             for (int x = i_Radius; x < i_Image.Width - i_Radius; x++)
             {
