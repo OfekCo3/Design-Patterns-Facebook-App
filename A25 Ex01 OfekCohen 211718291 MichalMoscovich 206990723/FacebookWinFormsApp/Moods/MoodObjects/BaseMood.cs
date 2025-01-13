@@ -76,5 +76,10 @@ namespace BasicFacebookFeatures.Moods.MoodObjects
         public abstract Color GetMoodColor();
 
         public abstract string GetMoodEmoji();
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
-} 
+}

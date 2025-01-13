@@ -1,5 +1,6 @@
 ﻿using BasicFacebookFeatures.Properties;
 using System.Drawing;
+using BasicFacebookFeatures.Filters;
 
 namespace BasicFacebookFeatures
 {
@@ -14,40 +15,42 @@ namespace BasicFacebookFeatures
             Green
         }
 
-        public Image ApplyFilter(Image i_OriginalImage, eProfileFilter i_Filter)
+        public Image ApplyFilter(Image i_OriginalImage, eProfileFilter i_FilterType)
         {
-            Image filterImage = getFilterImage(i_Filter);
-            Bitmap filteredImage = new Bitmap(i_OriginalImage);
+            IFilterBuilder builder = new ProfileFilterBuilder(i_OriginalImage);
 
-            using (Graphics g = Graphics.FromImage(filteredImage))
+            switch (i_FilterType)
             {
-                if (filterImage != null)
-                {
-                    g.DrawImage(filterImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
-                }
-                else
-                {
-                    g.Clear(Color.Transparent);
-                }
-            }
-
-            return filteredImage;
-        }
-
-        private Image getFilterImage(eProfileFilter i_Filter)
-        {
-            switch (i_Filter)
-            {
-                case eProfileFilter.Pink:
-                    return Resources.pink_filter;
-                case eProfileFilter.Orange:
-                    return Resources.orange_filter;
                 case eProfileFilter.Blue:
-                    return Resources.blue_filter;
+                    return builder
+                        .ApplyColorTint(Color.Blue)
+                        .ApplyOverlay(Properties.Resources.blue_filter)
+                        .ApplyTransparency(0.8f)
+                        .Build();
+                case eProfileFilter.Pink:
+                    return builder
+                        .ApplyColorTint(Color.Pink)
+                        .ApplyOverlay(Properties.Resources.pink_filter)
+                        .ApplyTransparency(0.7f)
+                        .ApplySepia()
+                        .Build();
+                case eProfileFilter.Orange:
+                    return builder
+                        .ApplyColorTint(Color.Orange)
+                        .ApplyOverlay(Properties.Resources.orange_filter)
+                        .ApplyTransparency(0.75f)
+                        .ApplyBlur(2)
+                        .Build();
                 case eProfileFilter.Green:
-                    return Resources.green_filter;
+                    return builder
+                        .ApplyColorTint(Color.Green)
+                        .ApplyOverlay(Properties.Resources.green_filter)
+                        .ApplyTransparency(0.85f)
+                        .ApplyGrayscale()
+                        .Build();
+                case eProfileFilter.None:
                 default:
-                    return null;
+                    return i_OriginalImage;
             }
         }
     }
