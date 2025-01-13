@@ -24,79 +24,84 @@ namespace BasicFacebookFeatures.Filters
         public IFilterBuilder ApplyColorTint(Color i_Color)
         {
             m_TintColor = i_Color;
+
             return this;
         }
 
         public IFilterBuilder ApplyOverlay(Image i_Overlay)
         {
             m_Overlay = i_Overlay;
+
             return this;
         }
 
         public IFilterBuilder ApplyTransparency(float i_Factor)
         {
             m_TransparencyFactor = i_Factor;
+
             return this;
         }
 
         public IFilterBuilder ApplyGrayscale()
         {
             m_IsGrayscale = true;
+
             return this;
         }
 
         public IFilterBuilder ApplySepia()
         {
             m_IsSepia = true;
+
             return this;
         }
 
         public IFilterBuilder ApplyBlur(int i_Radius)
         {
             m_BlurRadius = i_Radius;
+
             return this;
         }
 
         public Image Build()
         {
-            if (r_OriginalImage == null)
+            Bitmap resultImage = null;
+
+            if (r_OriginalImage != null)
             {
-                return null;
-            }
+                resultImage = new Bitmap(r_OriginalImage.Width, r_OriginalImage.Height);
 
-            Bitmap resultImage = new Bitmap(r_OriginalImage.Width, r_OriginalImage.Height);
-            using (Graphics g = Graphics.FromImage(resultImage))
-            {
-                // Draw original image
-                g.DrawImage(r_OriginalImage, 0, 0);
-
-                // Apply effects in order
-                if (m_IsGrayscale)
+                using (Graphics g = Graphics.FromImage(resultImage))
                 {
-                    applyGrayscaleEffect(resultImage);
-                }
+                    g.DrawImage(r_OriginalImage, 0, 0);
 
-                if (m_IsSepia)
-                {
-                    applySepiaEffect(resultImage);
-                }
-
-                if (m_BlurRadius > 0)
-                {
-                    applyBlurEffect(resultImage, m_BlurRadius);
-                }
-
-                if (m_TintColor != Color.Transparent)
-                {
-                    using (SolidBrush tintBrush = new SolidBrush(Color.FromArgb(30, m_TintColor)))
+                    if (m_IsGrayscale)
                     {
-                        g.FillRectangle(tintBrush, 0, 0, resultImage.Width, resultImage.Height);
+                        applyGrayscaleEffect(resultImage);
                     }
-                }
 
-                if (m_Overlay != null)
-                {
-                    applyOverlayImage(g, resultImage);
+                    if (m_IsSepia)
+                    {
+                        applySepiaEffect(resultImage);
+                    }
+
+                    if (m_BlurRadius > 0)
+                    {
+                        applyBlurEffect(resultImage, m_BlurRadius);
+                    }
+
+                    if (m_TintColor != Color.Transparent)
+                    {
+                        using (SolidBrush tintBrush = new SolidBrush(Color.FromArgb(30, m_TintColor)))
+                        {
+                            g.FillRectangle(tintBrush, 0, 0, resultImage.Width, resultImage.Height);
+                        }
+                    }
+
+                    if (m_Overlay != null)
+                    {
+                        applyOverlayImage(g, resultImage);
+                    }
                 }
             }
 
@@ -179,9 +184,9 @@ namespace BasicFacebookFeatures.Filters
         private void applyOverlayImage(Graphics i_Graphics, Bitmap i_ResultImage)
         {
             ColorMatrix colorMatrix = new ColorMatrix();
-            colorMatrix.Matrix33 = m_TransparencyFactor;
-            
             ImageAttributes imageAttributes = new ImageAttributes();
+
+            colorMatrix.Matrix33 = m_TransparencyFactor;
             imageAttributes.SetColorMatrix(colorMatrix);
 
             i_Graphics.DrawImage(

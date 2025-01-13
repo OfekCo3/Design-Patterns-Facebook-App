@@ -17,7 +17,6 @@ namespace BasicFacebookFeatures
         private LoginResult m_LoginResult;
         private readonly AppSettings r_AppSettings;
         private ProfilePictureFilter m_ProfilePictureFilter;
-        private ProfileMood m_ProfileMood;
         private FormFriendsWithSameMood m_FormFriendsWithSameMood;
         private Image m_OriginalProfilePicture;
         private Image m_OriginalCoverImage;
@@ -40,7 +39,6 @@ namespace BasicFacebookFeatures
             initializeFilterComboBox();
             initializeMoodComboBox();
             m_ProfilePictureFilter = new ProfilePictureFilter();
-            m_ProfileMood = new ProfileMood();
 
             // Update position relative to pictureBoxCover
             labelMoodName.BringToFront(); // Make sure label is visible above other controls
