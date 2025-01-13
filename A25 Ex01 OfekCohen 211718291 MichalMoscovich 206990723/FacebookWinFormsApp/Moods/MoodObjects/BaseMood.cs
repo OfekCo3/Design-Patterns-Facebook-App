@@ -77,4 +77,4 @@ namespace BasicFacebookFeatures.Moods.MoodObjects
 
         public abstract string GetMoodEmoji();
     }
-} 
+}

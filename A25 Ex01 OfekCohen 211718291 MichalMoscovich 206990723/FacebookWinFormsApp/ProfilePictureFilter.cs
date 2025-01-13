@@ -1,5 +1,6 @@
 ﻿using BasicFacebookFeatures.Properties;
 using System.Drawing;
+using BasicFacebookFeatures.Filters;
 
 namespace BasicFacebookFeatures
 {
@@ -14,40 +15,24 @@ namespace BasicFacebookFeatures
             Green
         }
 
-        public Image ApplyFilter(Image i_OriginalImage, eProfileFilter i_Filter)
+        public Image ApplyFilter(Image i_OriginalImage, eProfileFilter i_FilterType)
         {
-            Image filterImage = getFilterImage(i_Filter);
-            Bitmap filteredImage = new Bitmap(i_OriginalImage);
+            IFilterBuilder builder = new ProfileFilterBuilder(i_OriginalImage);
+            FilterComposer composer = new FilterComposer(builder);
 
-            using (Graphics g = Graphics.FromImage(filteredImage))
+            switch (i_FilterType)
             {
-                if (filterImage != null)
-                {
-                    g.DrawImage(filterImage, new Rectangle(0, 0, i_OriginalImage.Width, i_OriginalImage.Height));
-                }
-                else
-                {
-                    g.Clear(Color.Transparent);
-                }
-            }
-
-            return filteredImage;
-        }
-
-        private Image getFilterImage(eProfileFilter i_Filter)
-        {
-            switch (i_Filter)
-            {
-                case eProfileFilter.Pink:
-                    return Resources.pink_filter;
-                case eProfileFilter.Orange:
-                    return Resources.orange_filter;
                 case eProfileFilter.Blue:
-                    return Resources.blue_filter;
+                    return composer.CreateBlueFilter();
+                case eProfileFilter.Pink:
+                    return composer.CreatePinkFilter();
+                case eProfileFilter.Orange:
+                    return composer.CreateOrangeFilter();
                 case eProfileFilter.Green:
-                    return Resources.green_filter;
+                    return composer.CreateGreenFilter();
+                case eProfileFilter.None:
                 default:
-                    return null;
+                    return i_OriginalImage;
             }
         }
     }

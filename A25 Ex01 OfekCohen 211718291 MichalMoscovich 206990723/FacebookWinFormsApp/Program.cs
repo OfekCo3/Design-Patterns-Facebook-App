@@ -8,8 +8,6 @@ namespace BasicFacebookFeatures
     {
         /// <summary>
         /// The main entry point for the application.
-        /// Features description + UML diagrams:
-        /// https://docs.google.com/document/d/1JbcL19Ocogqeg9kWPLgeQC8ZNlj9XJ6htP016hQlz5c/edit?usp=sharing
         /// </summary>
         [STAThread]
         static void Main()
