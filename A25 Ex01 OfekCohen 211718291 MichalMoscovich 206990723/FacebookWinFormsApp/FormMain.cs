@@ -363,11 +363,6 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void postPicture(Image i_PostPicture)
-        {
-            r_FacebookSystem.PostPicture(m_ActiveUser, i_PostPicture);
-        }
-
         private void buttonAddPicture_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = openFileDialogPostPicture.ShowDialog();
@@ -460,7 +455,7 @@ namespace BasicFacebookFeatures
                     labelMoodName.Visible = true;
                     labelMoodName.BackColor = Color.Transparent;
 
-                    Timer fadeTimer = new Timer();
+                    System.Windows.Forms.Timer fadeTimer = new System.Windows.Forms.Timer();
                     fadeTimer.Interval = 50;
                     int opacity = 0;
                     fadeTimer.Tick += (s, e) =>
@@ -490,7 +485,7 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                postPicture(pictureBoxProfile.Image);
+                r_FacebookSystem.PostPicture(m_ActiveUser, pictureBoxProfile.Image);
             }
             catch (Exception exception)
             {
