@@ -72,57 +72,57 @@ namespace BasicFacebookFeatures.Subsystems
             }
         }
 
-        public void LoadUserEvents(User i_User, ListBox i_ListBox)
+        public void LoadUserEvents(User i_User, ListBox io_ListBox)
         {
             foreach (Event userEvent in i_User.Events)
             {
                 if (userEvent.Name != null)
                 {
-                    i_ListBox.Items.Add($"{userEvent.Name} [{userEvent.TimeString}]");
+                    io_ListBox.Items.Add($"{userEvent.Name} [{userEvent.TimeString}]");
                 }
             }
-            if (i_ListBox.Items.Count == 0)
+            if (io_ListBox.Items.Count == 0)
             {
-                i_ListBox.Items.Add("No upcoming events.");
+                io_ListBox.Items.Add("No upcoming events.");
             }
         }
 
-        public void LoadUserFriends(User i_User, ListBox i_ListBox)
+        public void LoadUserFriends(User i_User, ListBox io_ListBox)
         {
             foreach (User friend in i_User.Friends)
             {
-                i_ListBox.Items.Add(friend);
+                io_ListBox.Items.Add(friend);
             }
-            if (i_ListBox.Items.Count == 0)
+            if (io_ListBox.Items.Count == 0)
             {
-                i_ListBox.Enabled = false;
-                i_ListBox.Items.Add("No friends found.");
+                io_ListBox.Enabled = false;
+                io_ListBox.Items.Add("No friends found.");
             }
         }
 
-        public void LoadUserLikedPages(User i_User, ListBox i_ListBox)
+        public void LoadUserLikedPages(User i_User, ListBox io_ListBox)
         {
             foreach (Page page in i_User.LikedPages)
             {
-                i_ListBox.Items.Add(page);
+                io_ListBox.Items.Add(page);
             }
 
-            if (i_ListBox.Items.Count == 0)
+            if (io_ListBox.Items.Count == 0)
             {
-                i_ListBox.Items.Add("No liked pages to display");
+                io_ListBox.Items.Add("No liked pages to display");
             }
         }
 
-        public void LoadUserGroups(User i_User, ListBox i_ListBox)
+        public void LoadUserGroups(User i_User, ListBox io_ListBox)
         {
             foreach (Group group in i_User.Groups)
             {
-                i_ListBox.Items.Add(group);
+                io_ListBox.Items.Add(group);
             }
 
-            if (i_ListBox.Items.Count == 0)
+            if (io_ListBox.Items.Count == 0)
             {
-                i_ListBox.Items.Add("No groups to display");
+                io_ListBox.Items.Add("No groups to display");
             }
         }
 
