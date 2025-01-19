@@ -91,9 +91,9 @@ namespace BasicFacebookFeatures.Facade
             r_UserSystem.LoadUserAlbums(i_User, i_ListBox);
         }
 
-        public void LoadUserInformation(User i_User, PictureBox i_ProfilePicture, PictureBox i_CoverPicture)
+        public void LoadUserInformation(User i_User, PictureBox i_ProfilePicture)
         {
-            r_UserSystem.LoadUserInformation(i_User, i_ProfilePicture, i_CoverPicture);
+            r_UserSystem.LoadUserInformation(i_User, i_ProfilePicture);
         }
 
         public void PostPicture(User i_User, Image i_Picture)

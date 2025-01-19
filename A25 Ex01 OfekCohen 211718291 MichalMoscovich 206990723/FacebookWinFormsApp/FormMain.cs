@@ -8,6 +8,7 @@ using static BasicFacebookFeatures.ProfileMood;
 using BasicFacebookFeatures.Moods.Factory;
 using BasicFacebookFeatures.Moods.Interfaces;
 using BasicFacebookFeatures.Facade;
+using System.Threading;
 
 namespace BasicFacebookFeatures
 {
@@ -117,9 +118,7 @@ namespace BasicFacebookFeatures
             {
                 try
                 {
-                    m_LoginResult = FacebookService.Connect(r_AppSettings.AccessToken);
-                    m_ActiveUser = m_LoginResult.LoggedInUser;
-                    loadUserDataToUI();
+                    new Thread(loginAndUpdateUI).Start();
                 }
                 catch (Exception)
                 {
@@ -136,31 +135,11 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void buttonLogin_Click(object sender, EventArgs e)
+        private void loginAndUpdateUI()
         {
-            Clipboard.SetText("design.patterns");
-
-            if (!string.IsNullOrEmpty(textBoxAppID.Text))
-            {
-
-                if (m_LoginResult == null)
-                {
-                    m_LoginResult = r_FacebookSystem.Login(textBoxAppID.Text);
-                }
-
-                if (!string.IsNullOrEmpty(m_LoginResult.AccessToken))
-                {
-                    loadUserDataToUI();
-                }
-                else
-                {
-                    m_LoginResult = null;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please put an App ID", "");
-            }
+            m_LoginResult = FacebookService.Connect(r_AppSettings.AccessToken);
+            m_ActiveUser = m_LoginResult.LoggedInUser;
+            loadUserDataToUI();
         }
 
         private void loadUserDataToUI()
@@ -193,7 +172,7 @@ namespace BasicFacebookFeatures
             {
                 if (!string.IsNullOrEmpty(m_ActiveUser.PictureNormalURL))
                 {
-                    r_FacebookSystem.LoadUserInformation(m_ActiveUser, pictureBoxProfile, pictureBoxCover);
+                    r_FacebookSystem.LoadUserInformation(m_ActiveUser, pictureBoxProfile);
                     pictureBoxCover.LoadCompleted += (sender, e) =>
                     {
                         m_OriginalCoverImage = (Image)pictureBoxCover.Image.Clone();
@@ -210,9 +189,9 @@ namespace BasicFacebookFeatures
                 pictureBoxCover.Image = Properties.Resources.gray_background;
             }
 
-            loadUserFeed();
-            loadUserEvents();
-            loadUserFriends();
+            new Thread(loadUserFeed).Start();
+            new Thread(loadUserEvents).Start();
+            new Thread(loadUserFriends).Start();
         }
 
         private void loadUserEvents()
@@ -294,16 +273,16 @@ namespace BasicFacebookFeatures
             switch (selectedFeature)
             {
                 case eComboboxMainOption.Feed:
-                    loadUserFeed();
+                    new Thread(loadUserFeed).Start();
                     break;
                 case eComboboxMainOption.Likes:
-                    loadUserLikedPages();
+                    new Thread(loadUserLikedPages).Start();
                     break;
                 case eComboboxMainOption.Albums:
-                    loadUserAlbums();
+                    new Thread(loadUserAlbums).Start();
                     break;
                 case eComboboxMainOption.Groups:
-                    loadUserGroups();
+                    new Thread(loadUserGroups).Start();
                     break;
             }
         }
@@ -527,6 +506,37 @@ namespace BasicFacebookFeatures
         {
             m_FormFriendsWithSameMood = new FormFriendsWithSameMood(m_ActiveUser, (eProfileMoodType)comboBoxMood.SelectedIndex);
             m_FormFriendsWithSameMood.ShowDialog();
+        }
+
+        private void buttonLogin_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText("design.patterns");
+
+            if (!string.IsNullOrEmpty(textBoxAppID.Text))
+            {
+                if (m_LoginResult == null)
+                {
+                    new Thread(login).Start();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please put an App ID", "");
+            }
+        }
+
+        private void login()
+        {
+            m_LoginResult = r_FacebookSystem.Login(textBoxAppID.Text);
+
+            if (!string.IsNullOrEmpty(m_LoginResult.AccessToken))
+            {
+                loadUserDataToUI();
+            }
+            else
+            {
+                m_LoginResult = null;
+            }
         }
     }
 }
