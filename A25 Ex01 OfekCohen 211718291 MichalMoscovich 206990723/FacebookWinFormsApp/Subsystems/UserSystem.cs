@@ -36,16 +36,11 @@ namespace BasicFacebookFeatures.Subsystems
             FacebookService.LogoutWithUI();
         }
 
-        public void LoadUserInformation(User i_User, PictureBox i_ProfilePicture, PictureBox i_CoverPicture)
+        public void LoadUserInformation(User i_User, PictureBox i_ProfilePicture)
         {
             if (!string.IsNullOrEmpty(i_User.PictureNormalURL))
             {
                 i_ProfilePicture.ImageLocation = i_User.PictureNormalURL;
-            }
-
-            if (i_User.Cover != null && !string.IsNullOrEmpty(i_User.Cover.SourceURL))
-            {
-                i_CoverPicture.ImageLocation = i_User.Cover.SourceURL;
             }
         }
 
