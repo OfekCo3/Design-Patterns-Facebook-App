@@ -4,7 +4,7 @@ using BasicFacebookFeatures.Filters;
 
 namespace BasicFacebookFeatures
 {
-    internal class ProfilePictureFilter
+    public class ProfilePictureFilter
     {            
         public enum eProfileFilter
         {

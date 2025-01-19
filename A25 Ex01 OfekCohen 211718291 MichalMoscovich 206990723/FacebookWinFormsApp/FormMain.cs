@@ -8,6 +8,7 @@ using static BasicFacebookFeatures.ProfileMood;
 using BasicFacebookFeatures.Moods;
 using BasicFacebookFeatures.Moods.Factory;
 using BasicFacebookFeatures.Moods.Interfaces;
+using BasicFacebookFeatures.Facade;
 
 namespace BasicFacebookFeatures
 {
@@ -28,6 +29,7 @@ namespace BasicFacebookFeatures
             Albums,
             Groups
         }
+        private readonly FacebookSystemFacade r_FacebookSystem;
 
         public FormMain()
         {
@@ -39,6 +41,7 @@ namespace BasicFacebookFeatures
             initializeFilterComboBox();
             initializeMoodComboBox();
             m_ProfilePictureFilter = new ProfilePictureFilter();
+            r_FacebookSystem = new FacebookSystemFacade();
 
             // Update position relative to pictureBoxCover
             labelMoodName.BringToFront(); // Make sure label is visible above other controls
@@ -142,41 +145,8 @@ namespace BasicFacebookFeatures
 
             if (m_LoginResult == null)
             {
-                login();
-            }
-        }
-
-        private void login()
-        {
-            if (!string.IsNullOrEmpty(textBoxAppID.Text))
-            {
-                m_LoginResult = FacebookService.Login(
-                    textBoxAppID.Text,
-                    "email",
-                    "public_profile",
-                    "user_hometown",
-                    "user_birthday",
-                    "user_link",
-                    "user_friends",
-                    "user_location",
-                    "user_likes",
-                    "user_photos",
-                    "user_videos",
-                    "user_posts"
-                );
-
-                if (!string.IsNullOrEmpty(m_LoginResult.AccessToken))
-                {
-                    loadUserDataToUI();
-                }
-                else
-                {
-                    m_LoginResult = null;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please put an App ID", "");
+                m_LoginResult = r_FacebookSystem.Login(textBoxAppID.Text);
+                loadUserDataToUI();
             }
         }
 
@@ -553,82 +523,15 @@ namespace BasicFacebookFeatures
         {
             if (pictureBoxProfile.Image != null)
             {
-                try
-                {
-                    if (m_OriginalProfilePicture == null)
-                    {
-                        m_OriginalProfilePicture = (Image)pictureBoxProfile.Image.Clone();
-                    }
-
-                    if (i_Filter == eProfileFilter.None)
-                    {
-                        pictureBoxProfile.Image = (Image)m_OriginalProfilePicture.Clone();
-                    }
-                    else
-                    {
-                        Image filteredImage = m_ProfilePictureFilter.ApplyFilter(m_OriginalProfilePicture, i_Filter);
-                        pictureBoxProfile.Image = filteredImage;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to apply filter: {ex.Message}");
-                }
+                pictureBoxProfile.Image = r_FacebookSystem.ApplyProfileFilter(pictureBoxProfile.Image, i_Filter);
             }
         }
 
         private void applySelectedMood(eProfileMoodType i_Mood)
         {
-            try
+            if (pictureBoxCover.Image != null)
             {
-                if (m_OriginalCoverImage == null)
-                {
-                    m_OriginalCoverImage = pictureBoxCover.Image;
-                }
-
-                if (m_OriginalCoverImage != null)
-                {
-                    pictureBoxCover.Image = (Image)m_OriginalCoverImage.Clone();
-                }
-                else
-                {
-                    pictureBoxCover.Image = Properties.Resources.gray_background;
-                }
-
-                IMood mood = MoodFactory.CreateMood(i_Mood);
-                pictureBoxCover.Image = mood.ApplyMood(pictureBoxCover.Image);
-                pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
-
-                if (i_Mood != eProfileMoodType.None)
-                {
-                    labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
-                    labelMoodName.ForeColor = Color.White;
-                    labelMoodName.Visible = true;
-                    labelMoodName.BackColor = Color.Transparent;
-
-                    Timer fadeTimer = new Timer();
-                    fadeTimer.Interval = 50;
-                    int opacity = 0;
-                    fadeTimer.Tick += (s, e) =>
-                    {
-                        opacity += 5;
-                        if (opacity >= 255)
-                        {
-                            fadeTimer.Stop();
-                            fadeTimer.Dispose();
-                        }
-                        labelMoodName.BackColor = Color.FromArgb(opacity, mood.GetMoodColor());
-                    };
-                    fadeTimer.Start();
-                }
-                else
-                {
-                    labelMoodName.Visible = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to apply mood: {ex.Message}");
+                pictureBoxCover.Image = r_FacebookSystem.ApplyMood(pictureBoxCover.Image, i_Mood);
             }
         }
 
