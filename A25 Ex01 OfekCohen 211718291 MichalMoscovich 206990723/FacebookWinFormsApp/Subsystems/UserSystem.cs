@@ -1,6 +1,8 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
-using System.Windows.Forms;
 
 namespace BasicFacebookFeatures.Subsystems
 {
@@ -8,18 +10,25 @@ namespace BasicFacebookFeatures.Subsystems
     {
         public LoginResult Login(string i_AppID)
         {
-            return FacebookService.Login(i_AppID,
+            LoginResult loginResult = FacebookService.Login(
+                i_AppID,
                 "email",
                 "public_profile",
-                "user_hometown",
+                "user_age_range",
                 "user_birthday",
-                "user_link",
+                "user_events",
                 "user_friends",
-                "user_location",
+                "user_gender",
+                "user_hometown",
                 "user_likes",
+                "user_link",
+                "user_location",
                 "user_photos",
-                "user_videos",
-                "user_posts");
+                "user_posts",
+                "user_videos"
+            );
+
+            return loginResult;
         }
 
         public void Logout()
@@ -27,23 +36,21 @@ namespace BasicFacebookFeatures.Subsystems
             FacebookService.LogoutWithUI();
         }
 
-        public void PostStatus(User i_User, string i_Text)
+        public void LoadUserInformation(User i_User, PictureBox i_ProfilePicture, PictureBox i_CoverPicture)
         {
-            if (string.IsNullOrWhiteSpace(i_Text))
+            if (!string.IsNullOrEmpty(i_User.PictureNormalURL))
             {
-                throw new System.Exception("Please enter your post first!");
+                i_ProfilePicture.ImageLocation = i_User.PictureNormalURL;
             }
 
-            Status postedStatus = i_User.PostStatus(i_Text);
-            if (postedStatus == null)
+            if (i_User.Cover != null && !string.IsNullOrEmpty(i_User.Cover.SourceURL))
             {
-                throw new System.Exception("Post failed");
+                i_CoverPicture.ImageLocation = i_User.Cover.SourceURL;
             }
         }
 
         public void LoadUserFeed(User i_User, ListBox i_ListBox)
         {
-            i_ListBox.Items.Clear();
             foreach (Post post in i_User.NewsFeed)
             {
                 if (!string.IsNullOrEmpty(post.Message))
@@ -59,27 +66,119 @@ namespace BasicFacebookFeatures.Subsystems
                     i_ListBox.Items.Add($"[{post.CreatedTime}]");
                 }
             }
-
             if (i_ListBox.Items.Count == 0)
             {
                 i_ListBox.Items.Add("No feed to display.");
             }
         }
 
+        public void LoadUserEvents(User i_User, ListBox i_ListBox)
+        {
+            foreach (Event userEvent in i_User.Events)
+            {
+                if (userEvent.Name != null)
+                {
+                    i_ListBox.Items.Add($"{userEvent.Name} [{userEvent.TimeString}]");
+                }
+            }
+            if (i_ListBox.Items.Count == 0)
+            {
+                i_ListBox.Items.Add("No upcoming events.");
+            }
+        }
+
         public void LoadUserFriends(User i_User, ListBox i_ListBox)
         {
-            i_ListBox.Items.Clear();
-            i_ListBox.DisplayMember = "Name";
-
             foreach (User friend in i_User.Friends)
             {
                 i_ListBox.Items.Add(friend);
             }
-
             if (i_ListBox.Items.Count == 0)
             {
                 i_ListBox.Enabled = false;
                 i_ListBox.Items.Add("No friends found.");
+            }
+        }
+
+        public void LoadUserLikedPages(User i_User, ListBox i_ListBox)
+        {
+            foreach (Page page in i_User.LikedPages)
+            {
+                i_ListBox.Items.Add(page);
+            }
+
+            if (i_ListBox.Items.Count == 0)
+            {
+                i_ListBox.Items.Add("No liked pages to display");
+            }
+        }
+
+        public void LoadUserGroups(User i_User, ListBox i_ListBox)
+        {
+            foreach (Group group in i_User.Groups)
+            {
+                i_ListBox.Items.Add(group);
+            }
+
+            if (i_ListBox.Items.Count == 0)
+            {
+                i_ListBox.Items.Add("No groups to display");
+            }
+        }
+
+        public void LoadUserAlbums(User i_User, ListBox i_ListBox)
+        {
+            foreach (Album album in i_User.Albums)
+            {
+                i_ListBox.Items.Add(album);
+            }
+
+            if (i_ListBox.Items.Count == 0)
+            {
+                i_ListBox.Items.Add("No Albums to display");
+            }
+        }
+
+        public void PostStatus(User i_User, string i_Text)
+        {
+            Status postedStatus = i_User.PostStatus(i_Text);
+            if (postedStatus == null)
+            {
+                throw new Exception("Post failed");
+            }
+        }
+
+        public void PostPicture(User i_User, Image i_Picture)
+        {
+            try
+            {
+                byte[] imageData = new ImageConverter().ConvertTo(i_Picture, typeof(byte[])) as byte[];
+
+                if (imageData != null)
+                {
+                    Post postedPicture = i_User.PostPhoto(imageData);
+                    if (postedPicture == null)
+                    {
+                        throw new Exception("Failed to post the picture");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error converting the picture");
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("This action is not supported by Facebook");
+            }
+        }
+
+        public void PostStatusWithPicture(User i_User, string i_StatusText, string i_PicturePath)
+        {
+            Status postedStatus = i_User.PostStatus(i_StatusText, i_PicturePath);
+            if (postedStatus == null)
+            {
+                throw new Exception("Picture post failed");
             }
         }
     }
