@@ -4,7 +4,7 @@ using static BasicFacebookFeatures.ProfileMood;
 
 namespace BasicFacebookFeatures.Moods.Factory
 {
-    public class MoodFactory
+    public static class MoodFactory
     {
         public static IMood CreateMood(eProfileMoodType i_MoodType)
         {

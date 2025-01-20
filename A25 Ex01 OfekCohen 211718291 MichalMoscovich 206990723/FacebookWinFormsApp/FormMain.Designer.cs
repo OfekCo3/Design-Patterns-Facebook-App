@@ -369,6 +369,7 @@
             // buttonWhoInTheMood
             // 
             this.buttonWhoInTheMood.BackColor = System.Drawing.Color.LightCoral;
+            this.buttonWhoInTheMood.Enabled = false;
             this.buttonWhoInTheMood.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonWhoInTheMood.Location = new System.Drawing.Point(708, 445);
             this.buttonWhoInTheMood.Name = "buttonWhoInTheMood";
@@ -376,12 +377,12 @@
             this.buttonWhoInTheMood.TabIndex = 81;
             this.buttonWhoInTheMood.Text = "Show who is in the mood";
             this.buttonWhoInTheMood.UseVisualStyleBackColor = false;
-            this.buttonWhoInTheMood.Visible = false;
             this.buttonWhoInTheMood.Click += new System.EventHandler(this.buttonWhoInTheMood_Click);
             // 
             // buttonSaveToFile
             // 
             this.buttonSaveToFile.BackColor = System.Drawing.Color.LightCoral;
+            this.buttonSaveToFile.Enabled = false;
             this.buttonSaveToFile.FlatAppearance.MouseDownBackColor = System.Drawing.Color.SteelBlue;
             this.buttonSaveToFile.FlatAppearance.MouseOverBackColor = System.Drawing.Color.SteelBlue;
             this.buttonSaveToFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -392,12 +393,12 @@
             this.buttonSaveToFile.TabIndex = 80;
             this.buttonSaveToFile.Text = "Save Picture";
             this.buttonSaveToFile.UseVisualStyleBackColor = false;
-            this.buttonSaveToFile.Visible = false;
             this.buttonSaveToFile.Click += new System.EventHandler(this.buttonSaveToFile_Click);
             // 
             // buttonUploadPicture
             // 
             this.buttonUploadPicture.BackColor = System.Drawing.Color.LightCoral;
+            this.buttonUploadPicture.Enabled = false;
             this.buttonUploadPicture.FlatAppearance.MouseDownBackColor = System.Drawing.Color.SteelBlue;
             this.buttonUploadPicture.FlatAppearance.MouseOverBackColor = System.Drawing.Color.SteelBlue;
             this.buttonUploadPicture.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -408,7 +409,6 @@
             this.buttonUploadPicture.TabIndex = 79;
             this.buttonUploadPicture.Text = "Upload Profile Picture";
             this.buttonUploadPicture.UseVisualStyleBackColor = false;
-            this.buttonUploadPicture.Visible = false;
             this.buttonUploadPicture.Click += new System.EventHandler(this.buttonUploadPicture_Click);
             // 
             // buttonApplyMood
@@ -661,7 +661,9 @@
             this.labelMoodName.Name = "labelMoodName";
             this.labelMoodName.Size = new System.Drawing.Size(0, 29);
             this.labelMoodName.TabIndex = 55;
-            this.labelMoodName.Visible = false;
+            this.labelMoodName.Visible = true;
+            this.labelMoodName.BringToFront();
+            this.labelMoodName.Parent = this;
             // 
             // membersBindingSource1
             // 
@@ -729,7 +731,6 @@
         private System.Windows.Forms.Button buttonLogin;
         private System.Windows.Forms.PictureBox pictureBoxCover;
         private System.Windows.Forms.TabControl tabMainApp;
-        private System.Windows.Forms.Label labelMoodName;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.BindingSource friendListBindingSource;
@@ -747,5 +748,6 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.DateTimePicker startTimeDateTimePicker;
         private System.Windows.Forms.BindingSource membersBindingSource1;
+        private System.Windows.Forms.Label labelMoodName;
     }
 }

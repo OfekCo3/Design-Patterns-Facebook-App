@@ -11,7 +11,6 @@ using BasicFacebookFeatures.Facade;
 using System.Threading;
 using System.Collections.Generic;
 using System.ComponentModel;
-using BasicFacebookFeatures.Moods.MoodObjects;
 
 namespace BasicFacebookFeatures
 {
@@ -44,15 +43,6 @@ namespace BasicFacebookFeatures
             r_FacebookSystemFacade = new FacebookSystemFacade();
             initializeFilterFeature();
             initializeMoodFeature();
-            initializeDataBinding();
-        }
-
-        private void initializeDataBinding()
-        {
-            listBoxFriends.DataSource = friendListBindingSource;
-            listBoxFriends.DisplayMember = "Name";
-            listBoxEvents.DataSource = eventBindingSource;
-            listBoxEvents.DisplayMember = "Name";
         }
 
         private void initializeFilterFeature()
@@ -209,8 +199,6 @@ namespace BasicFacebookFeatures
 
         private void loadUserEvents()
         {
-            //listBoxEvents.Invoke(new Action(() => listBoxEvents.Items.Clear()));
-
             try
             {
                 BindingList<Event> eventsList = r_FacebookSystemFacade.GetUserEvents(m_ActiveUser);
@@ -236,7 +224,7 @@ namespace BasicFacebookFeatures
             }
             catch
             {
-                MessageBox.Show("Error retrieving events.");
+                this.Invoke(new Action(() => MessageBox.Show("Error retrieving events.")));
             }
         }
 
@@ -257,7 +245,6 @@ namespace BasicFacebookFeatures
         {
             try
             {
-
                 if (m_ActiveUser.Friends != null && m_ActiveUser.Friends.Count > 0)
                 {
                     BindingList<User> friendsList = r_FacebookSystemFacade.GetUserFriends(m_ActiveUser);
@@ -526,7 +513,6 @@ namespace BasicFacebookFeatures
                     {
                         labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
                         labelMoodName.ForeColor = Color.White;
-                        labelMoodName.Visible = true;
                         labelMoodName.BackColor = Color.Transparent;
                     }));
 
@@ -589,13 +575,13 @@ namespace BasicFacebookFeatures
 
         private void buttonProfilePictureFilter_Click(object sender, EventArgs e)
         {
-            buttonUploadPicture.Visible = true;
-            buttonSaveToFile.Visible = true;
+            buttonUploadPicture.Enabled = true;
+            buttonSaveToFile.Enabled = true;
         }
 
         private void buttonApplyMood_Click(object sender, EventArgs e)
         {
-            buttonWhoInTheMood.Visible = true;
+            buttonWhoInTheMood.Enabled = true;
         }
 
         private void buttonWhoInTheMood_Click(object sender, EventArgs e)
