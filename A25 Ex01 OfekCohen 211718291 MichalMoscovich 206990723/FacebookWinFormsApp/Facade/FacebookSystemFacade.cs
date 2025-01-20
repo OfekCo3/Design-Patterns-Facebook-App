@@ -1,6 +1,7 @@
 using BasicFacebookFeatures.Subsystems;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using static BasicFacebookFeatures.ProfileMood;
@@ -66,14 +67,14 @@ namespace BasicFacebookFeatures.Facade
             r_UserSystem.LoadUserFeed(i_User, i_ListBox);
         }
 
-        public void LoadUserFriends(User i_User, ListBox i_ListBox)
+        public BindingList<User> GetUserFriends(User i_User)
         {
-            r_UserSystem.LoadUserFriends(i_User, i_ListBox);
+            return r_UserSystem.GetUserFriends(i_User);
         }
 
-        public void LoadUserEvents(User i_User, ListBox i_ListBox)
+        public BindingList<Event> GetUserEvents(User i_User)
         {
-            r_UserSystem.LoadUserEvents(i_User, i_ListBox);
+            return r_UserSystem.GetUserEvents(i_User);
         }
 
         public void LoadUserLikedPages(User i_User, ListBox i_ListBox)
