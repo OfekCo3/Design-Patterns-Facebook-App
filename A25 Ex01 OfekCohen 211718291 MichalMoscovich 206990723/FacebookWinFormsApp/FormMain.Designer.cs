@@ -529,8 +529,6 @@
             // 
             // listBoxFriends
             // 
-            this.listBoxFriends.DataSource = this.friendListBindingSource;
-            this.listBoxFriends.DisplayMember = "Name";
             this.listBoxFriends.FormattingEnabled = true;
             this.listBoxFriends.ItemHeight = 26;
             this.listBoxFriends.Location = new System.Drawing.Point(704, 513);
@@ -540,7 +538,6 @@
             // 
             // listBoxEvents
             // 
-            this.listBoxEvents.DataSource = this.eventBindingSource;
             this.listBoxEvents.FormattingEnabled = true;
             this.listBoxEvents.ItemHeight = 26;
             this.listBoxEvents.Location = new System.Drawing.Point(355, 513);
@@ -560,7 +557,7 @@
             // labelFriends
             // 
             this.labelFriends.AutoSize = true;
-            this.labelFriends.Location = new System.Drawing.Point(705, 489);
+            this.labelFriends.Location = new System.Drawing.Point(706, 489);
             this.labelFriends.Name = "labelFriends";
             this.labelFriends.Size = new System.Drawing.Size(90, 26);
             this.labelFriends.TabIndex = 63;
@@ -595,7 +592,7 @@
             // labelAddPost
             // 
             this.labelAddPost.AutoSize = true;
-            this.labelAddPost.Location = new System.Drawing.Point(3, 293);
+            this.labelAddPost.Location = new System.Drawing.Point(4, 293);
             this.labelAddPost.Name = "labelAddPost";
             this.labelAddPost.Size = new System.Drawing.Size(122, 26);
             this.labelAddPost.TabIndex = 56;

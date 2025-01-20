@@ -21,7 +21,6 @@ namespace BasicFacebookFeatures
         private Image m_OriginalProfilePicture;
         private Image m_OriginalCoverImage;
         private const int k_CollectionLimit = 25;
-        BindingSource feedBindingSource = new BindingSource();
         private enum eComboboxMainOption
         {
             Feed,
@@ -38,9 +37,9 @@ namespace BasicFacebookFeatures
             FacebookService.s_CollectionLimit = k_CollectionLimit;
             this.StartPosition = FormStartPosition.Manual;
             r_AppSettings = AppSettings.LoadFromFile();
+            r_FacebookSystem = new FacebookSystemFacade();
             initializeFilterFeature();
             initializeMoodFeature();
-            r_FacebookSystem = new FacebookSystemFacade();
         }
 
         private void initializeFilterFeature()
@@ -80,6 +79,14 @@ namespace BasicFacebookFeatures
             else if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
             {
                 comboBoxMood.SelectedItem = o_SavedMood;
+
+                eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
+
+                if (savedMood != eProfileMoodType.None)
+                {
+                    applySelectedMood(savedMood);
+                }
+
             }
 
             buttonApplyMood.Click += (sender, e) => applySelectedMood((eProfileMoodType)comboBoxMood.SelectedIndex);
@@ -119,21 +126,13 @@ namespace BasicFacebookFeatures
             {
                 try
                 {
-                    loginAndUpdateUI();
-                    //new Thread(loginAndUpdateUI).Start();
+                    new Thread(loginAndUpdateUI).Start();
                 }
                 catch (Exception)
                 {
                     MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
                     m_LoginResult = null;
                 }
-            }
-
-            eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
-
-            if (savedMood != eProfileMoodType.None)
-            {
-                applySelectedMood(savedMood);
             }
         }
 
