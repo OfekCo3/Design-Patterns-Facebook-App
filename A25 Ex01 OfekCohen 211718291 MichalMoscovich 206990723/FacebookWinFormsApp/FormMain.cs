@@ -21,6 +21,7 @@ namespace BasicFacebookFeatures
         private Image m_OriginalProfilePicture;
         private Image m_OriginalCoverImage;
         private const int k_CollectionLimit = 25;
+        BindingSource feedBindingSource = new BindingSource();
         private enum eComboboxMainOption
         {
             Feed,
@@ -118,7 +119,8 @@ namespace BasicFacebookFeatures
             {
                 try
                 {
-                    new Thread(loginAndUpdateUI).Start();
+                    loginAndUpdateUI();
+                    //new Thread(loginAndUpdateUI).Start();
                 }
                 catch (Exception)
                 {
@@ -199,7 +201,8 @@ namespace BasicFacebookFeatures
             listBoxEvents.Items.Clear();
             try
             {
-                r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
+                //r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
+                eventBindingSource.DataSource = m_ActiveUser.Events;
             }
             catch
             {
@@ -223,10 +226,10 @@ namespace BasicFacebookFeatures
         private void loadUserFriends()
         {
             listBoxFriends.Items.Clear();
-            listBoxFriends.DisplayMember = "Name";
             try
             {
-                r_FacebookSystem.LoadUserFriends(m_ActiveUser, listBoxFriends);
+                //r_FacebookSystem.LoadUserFriends(m_ActiveUser, listBoxFriends); 
+                friendListBindingSource.DataSource = m_ActiveUser.Friends;
             }
             catch
             {

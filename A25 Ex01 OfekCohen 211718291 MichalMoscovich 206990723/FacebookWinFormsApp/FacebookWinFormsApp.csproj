@@ -121,6 +121,13 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="FacebookWrapper.ObjectModel.Album.datasource" />
+    <None Include="FacebookWrapper.ObjectModel.Event.datasource" />
+    <None Include="FacebookWrapper.ObjectModel.FriendList.datasource" />
+    <None Include="FacebookWrapper.ObjectModel.Group.datasource" />
+    <None Include="FacebookWrapper.ObjectModel.Link.datasource" />
+    <None Include="FacebookWrapper.ObjectModel.Post.datasource" />
+    <None Include="FacebookWrapper.ObjectModel.User.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
