@@ -79,10 +79,7 @@ namespace BasicFacebookFeatures.Subsystems
                     eventsList.Add(userEvent);
                 }
             }
-            //if (io_ListBox.Items.Count == 0)
-            //{
-            //    io_ListBox.Items.Add("No upcoming events.");
-            //}
+
             return eventsList;
         }
 
@@ -94,11 +91,7 @@ namespace BasicFacebookFeatures.Subsystems
             {
                 friendsList.Add(friend);
             }
-            //if (io_ListBox.Items.Count == 0)
-            //{
-            //    io_ListBox.Enabled = false;
-            //    io_ListBox.Items.Add("No friends found.");
-            //}
+
             return friendsList;
         }
 
