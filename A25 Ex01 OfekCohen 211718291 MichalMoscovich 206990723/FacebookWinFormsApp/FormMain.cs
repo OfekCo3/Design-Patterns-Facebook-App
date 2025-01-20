@@ -206,7 +206,7 @@ namespace BasicFacebookFeatures
 
         private void loadUserEvents()
         {
-            listBoxEvents.Invoke(new Action(() => listBoxEvents.Items.Clear()));
+            //listBoxEvents.Invoke(new Action(() => listBoxEvents.Items.Clear()));
             try
             {
                 //r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
