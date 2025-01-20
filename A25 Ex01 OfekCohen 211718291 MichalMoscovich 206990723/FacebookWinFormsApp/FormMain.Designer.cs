@@ -84,6 +84,7 @@
             this.pictureBoxCover = new System.Windows.Forms.PictureBox();
             this.tabMainApp = new System.Windows.Forms.TabControl();
             this.labelMoodName = new System.Windows.Forms.Label();
+            this.membersBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             nameLabel = new System.Windows.Forms.Label();
             birthdayLabel = new System.Windows.Forms.Label();
             startTimeLabel = new System.Windows.Forms.Label();
@@ -103,6 +104,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCover)).BeginInit();
             this.tabMainApp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.membersBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -529,6 +531,8 @@
             // 
             // listBoxFriends
             // 
+            this.listBoxFriends.DataSource = this.friendListBindingSource;
+            this.listBoxFriends.DisplayMember = "Name";
             this.listBoxFriends.FormattingEnabled = true;
             this.listBoxFriends.ItemHeight = 26;
             this.listBoxFriends.Location = new System.Drawing.Point(704, 513);
@@ -659,6 +663,11 @@
             this.labelMoodName.TabIndex = 55;
             this.labelMoodName.Visible = false;
             // 
+            // membersBindingSource1
+            // 
+            this.membersBindingSource1.DataMember = "Members";
+            this.membersBindingSource1.DataSource = this.friendListBindingSource;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
@@ -684,6 +693,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCover)).EndInit();
             this.tabMainApp.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.membersBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -736,5 +746,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.DateTimePicker startTimeDateTimePicker;
+        private System.Windows.Forms.BindingSource membersBindingSource1;
     }
 }
