@@ -9,7 +9,6 @@ using BasicFacebookFeatures.Moods.Factory;
 using BasicFacebookFeatures.Moods.Interfaces;
 using BasicFacebookFeatures.Facade;
 using System.Threading;
-using System.Collections.Generic;
 
 namespace BasicFacebookFeatures
 {
@@ -66,6 +65,7 @@ namespace BasicFacebookFeatures
             // Update mood label position relative to pictureBoxCover
             labelMoodName.BringToFront(); // Make sure label is visible above other controls
             labelMoodName.Location = new Point(10, pictureBoxCover.Bottom - 40);
+            labelMoodName.Parent = pictureBoxCover;
             comboBoxMood.DataSource = Enum.GetValues(typeof(eProfileMoodType));
             comboBoxMood.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -196,21 +196,32 @@ namespace BasicFacebookFeatures
 
         private void loadUserEvents()
         {
-            listBoxEvents.Items.Clear();
             try
             {
                 if (m_ActiveUser.Events != null && m_ActiveUser.Events.Count > 0)
                 {
-                    listBoxEvents.DataSource = eventBindingSource.DataSource;
+                    this.Invoke(new Action(() =>
+                    {
+                        listBoxEvents.DataSource = null;
+                        r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
+                        eventBindingSource.DataSource = m_ActiveUser.Events;
+                        listBoxEvents.DataSource = eventBindingSource;
+                        listBoxEvents.DisplayMember = "Name";
+                    }));
                 }
                 else
                 {
-                    listBoxEvents.Items.Add("No Events");
+                    this.Invoke(new Action(() =>
+                    {
+                        listBoxEvents.DataSource = null;
+                        listBoxEvents.Items.Clear();
+                        listBoxEvents.Items.Add("No Events");
+                    }));
                 }
             }
             catch
             {
-                MessageBox.Show("Error retrieving events.");
+                this.Invoke(new Action(() => MessageBox.Show("Error retrieving events.")));
             }
         }
 
@@ -236,6 +247,7 @@ namespace BasicFacebookFeatures
                     this.Invoke(new Action(() =>
                     {
                         listBoxFriends.DataSource = null; // Clear the data source first
+                        r_FacebookSystem.LoadUserFriends(m_ActiveUser, listBoxFriends);
                         friendListBindingSource.DataSource = m_ActiveUser.Friends;
                         listBoxFriends.DataSource = friendListBindingSource;
                         listBoxFriends.DisplayMember = "Name";
@@ -493,7 +505,6 @@ namespace BasicFacebookFeatures
                     {
                         labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
                         labelMoodName.ForeColor = Color.White;
-                        labelMoodName.Visible = true;
                         labelMoodName.BackColor = Color.Transparent;
                     }));
 
@@ -556,13 +567,13 @@ namespace BasicFacebookFeatures
 
         private void buttonProfilePictureFilter_Click(object sender, EventArgs e)
         {
-            buttonUploadPicture.Visible = true;
-            buttonSaveToFile.Visible = true;
+            buttonUploadPicture.Enabled = true;
+            buttonSaveToFile.Enabled = true;
         }
 
         private void buttonApplyMood_Click(object sender, EventArgs e)
         {
-            buttonWhoInTheMood.Visible = true;
+            buttonWhoInTheMood.Enabled = true;
         }
 
         private void buttonWhoInTheMood_Click(object sender, EventArgs e)
