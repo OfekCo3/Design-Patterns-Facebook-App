@@ -35,8 +35,8 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             tabMainApp.TabPages[0].Text = "Welcome";
-            FacebookService.s_CollectionLimit = k_CollectionLimit;
             this.StartPosition = FormStartPosition.Manual;
+            FacebookService.s_CollectionLimit = k_CollectionLimit;
             r_AppSettings = AppSettings.LoadFromFile();
             r_FacebookSystem = new FacebookSystemFacade();
             initializeFilterFeature();
@@ -77,14 +77,6 @@ namespace BasicFacebookFeatures
             else if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
             {
                 comboBoxMood.SelectedItem = o_SavedMood;
-
-                eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
-
-                if (savedMood != eProfileMoodType.None)
-                {
-                    applySelectedMood(savedMood);
-                }
-
             }
 
             buttonApplyMood.Click += (sender, e) => applySelectedMood((eProfileMoodType)comboBoxMood.SelectedIndex);
@@ -115,10 +107,11 @@ namespace BasicFacebookFeatures
 
         protected override void OnShown(EventArgs e)
         {
+            base.OnShown(e);
+            
             checkBoxRememberMe.Checked = r_AppSettings.RememberLoggedInUser;
             this.Size = r_AppSettings.LastWindowSize;
             this.Location = r_AppSettings.LastWindowLocation;
-            base.OnShown(e);
 
             if (r_AppSettings.RememberLoggedInUser && !string.IsNullOrEmpty(r_AppSettings.AccessToken))
             {
@@ -146,13 +139,10 @@ namespace BasicFacebookFeatures
             const bool v_IsLoggingIn = true;
             m_ActiveUser = m_LoginResult.LoggedInUser;
             
-            buttonLogin.Invoke(new Action(() =>
-            {
-                buttonLogin.Text = $"Logged in as {m_ActiveUser.Name}";
-                buttonLogin.BackColor = Color.LightGreen;
-            }));
+            buttonLogin.Text = $"Logged in as {m_ActiveUser.Name}";
+            buttonLogin.BackColor = Color.LightGreen;
 
-            tabMainApp.Invoke(new Action(() => tabMainApp.Text = $"{m_ActiveUser.Name}"));
+            tabMainApp.Text = $"{m_ActiveUser.Name}";
 
             updateUIBasedOnLoginStatus(v_IsLoggingIn);
             loadUserInformation();
@@ -206,22 +196,21 @@ namespace BasicFacebookFeatures
 
         private void loadUserEvents()
         {
-            //listBoxEvents.Invoke(new Action(() => listBoxEvents.Items.Clear()));
+            listBoxEvents.Items.Clear();
             try
             {
-                //r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
                 if (m_ActiveUser.Events != null && m_ActiveUser.Events.Count > 0)
                 {
-                    listBoxEvents.Invoke(new Action(() => listBoxEvents.DataSource = eventBindingSource.DataSource));
+                    listBoxEvents.DataSource = eventBindingSource.DataSource;
                 }
                 else
                 {
-                    listBoxEvents.Invoke(new Action(() => listBoxEvents.DataSource = new List<string>() { "No Events" }));
+                    listBoxEvents.Items.Add("No Events");
                 }
             }
             catch
             {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving events.")));
+                MessageBox.Show("Error retrieving events.");
             }
         }
 
@@ -242,24 +231,29 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                //r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
-                if (m_ActiveUser.FriendLists != null && m_ActiveUser.FriendLists.Count > 0)
+                if (m_ActiveUser.Friends != null && m_ActiveUser.Friends.Count > 0)
                 {
-                    listBoxFriends.Invoke(new Action(() =>
+                    this.Invoke(new Action(() =>
                     {
+                        listBoxFriends.DataSource = null; // Clear the data source first
                         friendListBindingSource.DataSource = m_ActiveUser.Friends;
-                        listBoxFriends.DataSource = friendListBindingSource.DataSource;
+                        listBoxFriends.DataSource = friendListBindingSource;
                         listBoxFriends.DisplayMember = "Name";
                     }));
                 }
                 else
                 {
-                    listBoxEvents.Invoke(new Action(() => listBoxEvents.DataSource = new List<string>() { "No friends" }));
+                    this.Invoke(new Action(() =>
+                    {
+                        listBoxFriends.DataSource = null; // Clear the data source first
+                        listBoxFriends.Items.Clear();
+                        listBoxFriends.Items.Add("No friends");
+                    }));
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error retrieving friends.");
+                this.Invoke(new Action(() => MessageBox.Show($"Error retrieving friends: {ex.Message}")));
             }
         }
 
@@ -418,7 +412,7 @@ namespace BasicFacebookFeatures
 
                 if (string.IsNullOrWhiteSpace(picturePath))
                 {
-                    throw new Exception("Please choose a picture first!");
+                    MessageBox.Show("Please choose a picture first!");
                 }
                 else
                 {
@@ -456,12 +450,12 @@ namespace BasicFacebookFeatures
 
                     if (i_Filter == eProfileFilter.None)
                     {
-                        pictureBoxProfile.Invoke(new Action(() => pictureBoxProfile.Image = (Image)m_OriginalProfilePicture.Clone()));
+                        pictureBoxProfile.Image = (Image)m_OriginalProfilePicture.Clone();
                     }
                     else
                     {
                         Image filteredImage = r_FacebookSystem.ApplyProfileFilter(m_OriginalProfilePicture, i_Filter);
-                        pictureBoxProfile.Invoke(new Action(() => pictureBoxProfile.Image = filteredImage));
+                        pictureBoxProfile.Image = filteredImage;
                     }
                 }
                 catch (Exception ex)
