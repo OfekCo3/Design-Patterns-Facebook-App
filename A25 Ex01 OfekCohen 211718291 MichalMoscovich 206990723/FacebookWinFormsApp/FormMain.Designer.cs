@@ -112,7 +112,7 @@
             nameLabel.AutoSize = true;
             nameLabel.Location = new System.Drawing.Point(14, 14);
             nameLabel.Name = "nameLabel";
-            nameLabel.Size = new System.Drawing.Size(77, 26);
+            nameLabel.Size = new System.Drawing.Size(52, 18);
             nameLabel.TabIndex = 1;
             nameLabel.Text = "Name:";
             // 
@@ -121,7 +121,7 @@
             birthdayLabel.AutoSize = true;
             birthdayLabel.Location = new System.Drawing.Point(14, 56);
             birthdayLabel.Name = "birthdayLabel";
-            birthdayLabel.Size = new System.Drawing.Size(98, 26);
+            birthdayLabel.Size = new System.Drawing.Size(65, 18);
             birthdayLabel.TabIndex = 3;
             birthdayLabel.Text = "Birthday:";
             // 
@@ -130,7 +130,7 @@
             startTimeLabel.AutoSize = true;
             startTimeLabel.Location = new System.Drawing.Point(3, 184);
             startTimeLabel.Name = "startTimeLabel";
-            startTimeLabel.Size = new System.Drawing.Size(118, 26);
+            startTimeLabel.Size = new System.Drawing.Size(80, 18);
             startTimeLabel.TabIndex = 16;
             startTimeLabel.Text = "Start Time:";
             // 
@@ -139,7 +139,7 @@
             label4.AutoSize = true;
             label4.Location = new System.Drawing.Point(3, 12);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(77, 26);
+            label4.Size = new System.Drawing.Size(52, 18);
             label4.TabIndex = 12;
             label4.Text = "Name:";
             // 
@@ -148,7 +148,7 @@
             label3.AutoSize = true;
             label3.Location = new System.Drawing.Point(3, 85);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(100, 26);
+            label3.Size = new System.Drawing.Size(69, 18);
             label3.TabIndex = 10;
             label3.Text = "Location:";
             // 
@@ -157,7 +157,7 @@
             linkToFacebookLabel.AutoSize = true;
             linkToFacebookLabel.Location = new System.Drawing.Point(3, 150);
             linkToFacebookLabel.Name = "linkToFacebookLabel";
-            linkToFacebookLabel.Size = new System.Drawing.Size(189, 26);
+            linkToFacebookLabel.Size = new System.Drawing.Size(132, 18);
             linkToFacebookLabel.TabIndex = 8;
             linkToFacebookLabel.Text = "Link To Facebook:";
             // 
@@ -166,7 +166,7 @@
             isOnlineLabel.AutoSize = true;
             isOnlineLabel.Location = new System.Drawing.Point(3, 119);
             isOnlineLabel.Name = "isOnlineLabel";
-            isOnlineLabel.Size = new System.Drawing.Size(104, 26);
+            isOnlineLabel.Size = new System.Drawing.Size(69, 18);
             isOnlineLabel.TabIndex = 6;
             isOnlineLabel.Text = "Is Online:";
             // 
@@ -175,7 +175,7 @@
             label1.AutoSize = true;
             label1.Location = new System.Drawing.Point(3, 222);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(111, 26);
+            label1.Size = new System.Drawing.Size(75, 18);
             label1.TabIndex = 2;
             label1.Text = "End Time:";
             // 
@@ -184,7 +184,7 @@
             label6.AutoSize = true;
             label6.Location = new System.Drawing.Point(3, 50);
             label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(127, 26);
+            label6.Size = new System.Drawing.Size(87, 18);
             label6.TabIndex = 0;
             label6.Text = "Description:";
             // 
@@ -223,10 +223,10 @@
             this.tabMainPage.Controls.Add(this.buttonLogout);
             this.tabMainPage.Controls.Add(this.buttonLogin);
             this.tabMainPage.Controls.Add(this.pictureBoxCover);
-            this.tabMainPage.Location = new System.Drawing.Point(4, 35);
+            this.tabMainPage.Location = new System.Drawing.Point(4, 27);
             this.tabMainPage.Name = "tabMainPage";
             this.tabMainPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMainPage.Size = new System.Drawing.Size(1216, 1091);
+            this.tabMainPage.Size = new System.Drawing.Size(1216, 814);
             this.tabMainPage.TabIndex = 0;
             this.tabMainPage.Text = "tabPage1";
             this.tabMainPage.UseVisualStyleBackColor = true;
@@ -267,7 +267,7 @@
             this.birthdayTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.membersBindingSource, "Birthday", true));
             this.birthdayTextBox.Location = new System.Drawing.Point(134, 50);
             this.birthdayTextBox.Name = "birthdayTextBox";
-            this.birthdayTextBox.Size = new System.Drawing.Size(207, 32);
+            this.birthdayTextBox.Size = new System.Drawing.Size(207, 24);
             this.birthdayTextBox.TabIndex = 4;
             // 
             // nameTextBox
@@ -275,7 +275,7 @@
             this.nameTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.friendListBindingSource, "Name", true));
             this.nameTextBox.Location = new System.Drawing.Point(134, 11);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(207, 32);
+            this.nameTextBox.Size = new System.Drawing.Size(207, 24);
             this.nameTextBox.TabIndex = 2;
             // 
             // panel2
@@ -304,14 +304,14 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(132, 44);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(200, 32);
+            this.textBox1.Size = new System.Drawing.Size(200, 24);
             this.textBox1.TabIndex = 1;
             // 
             // dateTimePicker1
             // 
             this.dateTimePicker1.Location = new System.Drawing.Point(127, 222);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 32);
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 24);
             this.dateTimePicker1.TabIndex = 3;
             // 
             // isOnlineCheckBox
@@ -331,24 +331,24 @@
             // 
             this.linkToFacebookListBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.eventBindingSource, "LinkToFacebook", true));
             this.linkToFacebookListBox.FormattingEnabled = true;
-            this.linkToFacebookListBox.ItemHeight = 26;
+            this.linkToFacebookListBox.ItemHeight = 18;
             this.linkToFacebookListBox.Location = new System.Drawing.Point(193, 146);
             this.linkToFacebookListBox.Name = "linkToFacebookListBox";
-            this.linkToFacebookListBox.Size = new System.Drawing.Size(134, 30);
+            this.linkToFacebookListBox.Size = new System.Drawing.Size(134, 22);
             this.linkToFacebookListBox.TabIndex = 9;
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(132, 82);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(200, 32);
+            this.textBox2.Size = new System.Drawing.Size(200, 24);
             this.textBox2.TabIndex = 11;
             // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(132, 9);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(200, 32);
+            this.textBox3.Size = new System.Drawing.Size(200, 24);
             this.textBox3.TabIndex = 13;
             // 
             // startTimeDateTimePicker
@@ -356,7 +356,7 @@
             this.startTimeDateTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.eventBindingSource, "StartTime", true));
             this.startTimeDateTimePicker.Location = new System.Drawing.Point(127, 184);
             this.startTimeDateTimePicker.Name = "startTimeDateTimePicker";
-            this.startTimeDateTimePicker.Size = new System.Drawing.Size(200, 32);
+            this.startTimeDateTimePicker.Size = new System.Drawing.Size(200, 24);
             this.startTimeDateTimePicker.TabIndex = 17;
             // 
             // panel1
@@ -428,7 +428,7 @@
             this.comboBoxMood.FormattingEnabled = true;
             this.comboBoxMood.Location = new System.Drawing.Point(708, 413);
             this.comboBoxMood.Name = "comboBoxMood";
-            this.comboBoxMood.Size = new System.Drawing.Size(168, 34);
+            this.comboBoxMood.Size = new System.Drawing.Size(168, 26);
             this.comboBoxMood.TabIndex = 77;
             this.comboBoxMood.Text = "What is your mood?";
             // 
@@ -438,7 +438,7 @@
             this.comboBoxFilters.FormattingEnabled = true;
             this.comboBoxFilters.Location = new System.Drawing.Point(708, 310);
             this.comboBoxFilters.Name = "comboBoxFilters";
-            this.comboBoxFilters.Size = new System.Drawing.Size(167, 34);
+            this.comboBoxFilters.Size = new System.Drawing.Size(167, 26);
             this.comboBoxFilters.TabIndex = 75;
             this.comboBoxFilters.Text = "Profile Picture Frame";
             // 
@@ -459,7 +459,7 @@
             this.checkBoxRememberMe.AutoSize = true;
             this.checkBoxRememberMe.Location = new System.Drawing.Point(394, 22);
             this.checkBoxRememberMe.Name = "checkBoxRememberMe";
-            this.checkBoxRememberMe.Size = new System.Drawing.Size(183, 30);
+            this.checkBoxRememberMe.Size = new System.Drawing.Size(126, 22);
             this.checkBoxRememberMe.TabIndex = 73;
             this.checkBoxRememberMe.Text = "Remember Me";
             this.checkBoxRememberMe.UseVisualStyleBackColor = true;
@@ -515,7 +515,7 @@
             "My Groups"});
             this.comboBoxMain.Location = new System.Drawing.Point(7, 460);
             this.comboBoxMain.Name = "comboBoxMain";
-            this.comboBoxMain.Size = new System.Drawing.Size(172, 40);
+            this.comboBoxMain.Size = new System.Drawing.Size(172, 32);
             this.comboBoxMain.TabIndex = 67;
             this.comboBoxMain.Text = "My Feed:";
             this.comboBoxMain.SelectedIndexChanged += new System.EventHandler(this.comboBoxMain_SelectedIndexChanged);
@@ -523,10 +523,10 @@
             // listBoxMain
             // 
             this.listBoxMain.FormattingEnabled = true;
-            this.listBoxMain.ItemHeight = 26;
+            this.listBoxMain.ItemHeight = 18;
             this.listBoxMain.Location = new System.Drawing.Point(7, 513);
             this.listBoxMain.Name = "listBoxMain";
-            this.listBoxMain.Size = new System.Drawing.Size(342, 186);
+            this.listBoxMain.Size = new System.Drawing.Size(342, 184);
             this.listBoxMain.TabIndex = 55;
             // 
             // listBoxFriends
@@ -534,19 +534,19 @@
             this.listBoxFriends.DataSource = this.friendListBindingSource;
             this.listBoxFriends.DisplayMember = "Name";
             this.listBoxFriends.FormattingEnabled = true;
-            this.listBoxFriends.ItemHeight = 26;
+            this.listBoxFriends.ItemHeight = 18;
             this.listBoxFriends.Location = new System.Drawing.Point(704, 513);
             this.listBoxFriends.Name = "listBoxFriends";
-            this.listBoxFriends.Size = new System.Drawing.Size(361, 186);
+            this.listBoxFriends.Size = new System.Drawing.Size(361, 184);
             this.listBoxFriends.TabIndex = 66;
             // 
             // listBoxEvents
             // 
             this.listBoxEvents.FormattingEnabled = true;
-            this.listBoxEvents.ItemHeight = 26;
+            this.listBoxEvents.ItemHeight = 18;
             this.listBoxEvents.Location = new System.Drawing.Point(355, 513);
             this.listBoxEvents.Name = "listBoxEvents";
-            this.listBoxEvents.Size = new System.Drawing.Size(344, 186);
+            this.listBoxEvents.Size = new System.Drawing.Size(344, 184);
             this.listBoxEvents.TabIndex = 65;
             // 
             // pictureBoxProfile
@@ -563,7 +563,7 @@
             this.labelFriends.AutoSize = true;
             this.labelFriends.Location = new System.Drawing.Point(706, 489);
             this.labelFriends.Name = "labelFriends";
-            this.labelFriends.Size = new System.Drawing.Size(90, 26);
+            this.labelFriends.Size = new System.Drawing.Size(61, 18);
             this.labelFriends.TabIndex = 63;
             this.labelFriends.Text = "Friends:";
             // 
@@ -572,7 +572,7 @@
             this.labelNextEvents.AutoSize = true;
             this.labelNextEvents.Location = new System.Drawing.Point(352, 489);
             this.labelNextEvents.Name = "labelNextEvents";
-            this.labelNextEvents.Size = new System.Drawing.Size(133, 26);
+            this.labelNextEvents.Size = new System.Drawing.Size(89, 18);
             this.labelNextEvents.TabIndex = 62;
             this.labelNextEvents.Text = "Next events:";
             // 
@@ -590,7 +590,7 @@
             // 
             this.textBoxAppID.Location = new System.Drawing.Point(71, 75);
             this.textBoxAppID.Name = "textBoxAppID";
-            this.textBoxAppID.Size = new System.Drawing.Size(199, 32);
+            this.textBoxAppID.Size = new System.Drawing.Size(199, 24);
             this.textBoxAppID.TabIndex = 54;
             // 
             // labelAddPost
@@ -598,7 +598,7 @@
             this.labelAddPost.AutoSize = true;
             this.labelAddPost.Location = new System.Drawing.Point(4, 293);
             this.labelAddPost.Name = "labelAddPost";
-            this.labelAddPost.Size = new System.Drawing.Size(122, 26);
+            this.labelAddPost.Size = new System.Drawing.Size(82, 18);
             this.labelAddPost.TabIndex = 56;
             this.labelAddPost.Text = "Add a post:";
             // 
@@ -607,7 +607,7 @@
             this.labelAppId.AutoSize = true;
             this.labelAppId.Location = new System.Drawing.Point(10, 78);
             this.labelAppId.Name = "labelAppId";
-            this.labelAppId.Size = new System.Drawing.Size(85, 26);
+            this.labelAppId.Size = new System.Drawing.Size(55, 18);
             this.labelAppId.TabIndex = 55;
             this.labelAppId.Text = "App ID:";
             // 
@@ -650,7 +650,7 @@
             this.tabMainApp.Location = new System.Drawing.Point(0, 0);
             this.tabMainApp.Name = "tabMainApp";
             this.tabMainApp.SelectedIndex = 0;
-            this.tabMainApp.Size = new System.Drawing.Size(1224, 1130);
+            this.tabMainApp.Size = new System.Drawing.Size(1224, 845);
             this.tabMainApp.TabIndex = 54;
             // 
             // labelMoodName
@@ -659,7 +659,7 @@
             this.labelMoodName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.labelMoodName.Location = new System.Drawing.Point(10, 250);
             this.labelMoodName.Name = "labelMoodName";
-            this.labelMoodName.Size = new System.Drawing.Size(0, 29);
+            this.labelMoodName.Size = new System.Drawing.Size(0, 20);
             this.labelMoodName.TabIndex = 55;
             this.labelMoodName.Visible = false;
             // 
@@ -670,9 +670,9 @@
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1224, 1130);
+            this.ClientSize = new System.Drawing.Size(1224, 845);
             this.Controls.Add(this.tabMainApp);
             this.Controls.Add(this.labelMoodName);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

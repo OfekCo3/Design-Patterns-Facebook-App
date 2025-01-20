@@ -35,8 +35,8 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             tabMainApp.TabPages[0].Text = "Welcome";
-            FacebookService.s_CollectionLimit = k_CollectionLimit;
             this.StartPosition = FormStartPosition.Manual;
+            FacebookService.s_CollectionLimit = k_CollectionLimit;
             r_AppSettings = AppSettings.LoadFromFile();
             r_FacebookSystem = new FacebookSystemFacade();
             initializeFilterFeature();
@@ -77,14 +77,6 @@ namespace BasicFacebookFeatures
             else if (Enum.TryParse(r_AppSettings.LastSelectedMood, out eProfileMoodType o_SavedMood))
             {
                 comboBoxMood.SelectedItem = o_SavedMood;
-
-                eProfileMoodType savedMood = (eProfileMoodType)comboBoxMood.SelectedItem;
-
-                if (savedMood != eProfileMoodType.None)
-                {
-                    applySelectedMood(savedMood);
-                }
-
             }
 
             buttonApplyMood.Click += (sender, e) => applySelectedMood((eProfileMoodType)comboBoxMood.SelectedIndex);
@@ -115,10 +107,11 @@ namespace BasicFacebookFeatures
 
         protected override void OnShown(EventArgs e)
         {
+            base.OnShown(e);
+            
             checkBoxRememberMe.Checked = r_AppSettings.RememberLoggedInUser;
             this.Size = r_AppSettings.LastWindowSize;
             this.Location = r_AppSettings.LastWindowLocation;
-            base.OnShown(e);
 
             if (r_AppSettings.RememberLoggedInUser && !string.IsNullOrEmpty(r_AppSettings.AccessToken))
             {
@@ -128,7 +121,7 @@ namespace BasicFacebookFeatures
                 }
                 catch (Exception)
                 {
-                    this.Invoke(new Action(() => MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed")));
+                    MessageBox.Show(m_LoginResult.ErrorMessage, "Login Failed");
                     m_LoginResult = null;
                 }
             }
@@ -138,7 +131,7 @@ namespace BasicFacebookFeatures
         {
             m_LoginResult = FacebookService.Connect(r_AppSettings.AccessToken);
             m_ActiveUser = m_LoginResult.LoggedInUser;
-            this.Invoke(new Action(() => loadUserDataToUI()));
+            loadUserDataToUI();
         }
 
         private void loadUserDataToUI()
@@ -146,13 +139,10 @@ namespace BasicFacebookFeatures
             const bool v_IsLoggingIn = true;
             m_ActiveUser = m_LoginResult.LoggedInUser;
             
-            buttonLogin.Invoke(new Action(() =>
-            {
-                buttonLogin.Text = $"Logged in as {m_ActiveUser.Name}";
-                buttonLogin.BackColor = Color.LightGreen;
-            }));
+            buttonLogin.Text = $"Logged in as {m_ActiveUser.Name}";
+            buttonLogin.BackColor = Color.LightGreen;
 
-            tabMainApp.Invoke(new Action(() => tabMainApp.Text = $"{m_ActiveUser.Name}"));
+            tabMainApp.Text = $"{m_ActiveUser.Name}";
 
             updateUIBasedOnLoginStatus(v_IsLoggingIn);
             loadUserInformation();
@@ -160,14 +150,14 @@ namespace BasicFacebookFeatures
 
         private void updateUIBasedOnLoginStatus(bool i_IsLoggedIn)
         {
-            buttonLogin.Invoke(new Action(() => buttonLogin.Enabled = !i_IsLoggedIn));
-            buttonLogout.Invoke(new Action(() => buttonLogout.Enabled = i_IsLoggedIn));
-            comboBoxMain.Invoke(new Action(() => comboBoxMain.Enabled = i_IsLoggedIn));
-            textBoxPost.Invoke(new Action(() => textBoxPost.Enabled = i_IsLoggedIn));
-            buttonProfilePictureFilter.Invoke(new Action(() => buttonProfilePictureFilter.Enabled = i_IsLoggedIn));
-            buttonApplyMood.Invoke(new Action(() => buttonApplyMood.Enabled = i_IsLoggedIn));
-            comboBoxFilters.Invoke(new Action(() => comboBoxFilters.Enabled = i_IsLoggedIn));
-            comboBoxMood.Invoke(new Action(() => comboBoxMood.Enabled = i_IsLoggedIn));
+            buttonLogin.Enabled = !i_IsLoggedIn;
+            buttonLogout.Enabled = i_IsLoggedIn;
+            comboBoxMain.Enabled = i_IsLoggedIn;
+            textBoxPost.Enabled = i_IsLoggedIn;
+            buttonProfilePictureFilter.Enabled = i_IsLoggedIn;
+            buttonApplyMood.Enabled = i_IsLoggedIn;
+            comboBoxFilters.Enabled = i_IsLoggedIn;
+            comboBoxMood.Enabled = i_IsLoggedIn;
         }
 
         private void loadUserInformation()
@@ -177,26 +167,19 @@ namespace BasicFacebookFeatures
                 if (!string.IsNullOrEmpty(m_ActiveUser.PictureNormalURL))
                 {
                     r_FacebookSystem.LoadUserInformation(m_ActiveUser, pictureBoxProfile);
-                    pictureBoxCover.Invoke(new Action(() =>
+                    pictureBoxCover.LoadCompleted += (sender, e) =>
                     {
-                        pictureBoxCover.LoadCompleted += (sender, e) =>
-                        {
-                            m_OriginalCoverImage = (Image)pictureBoxCover.Image.Clone();
-                        };
-                    }));
+                        m_OriginalCoverImage = (Image)pictureBoxCover.Image.Clone();
+                    };
                 }
                 else
                 {
-                    pictureBoxCover.Invoke(new Action(() =>
-                    {
-                        m_OriginalCoverImage = Properties.Resources.gray_background;
-                        pictureBoxCover.Image = Properties.Resources.gray_background;
-                    }));
+                    pictureBoxCover.Image = Properties.Resources.gray_background;
                 }
             }
             catch (Exception)
             {
-                pictureBoxCover.Invoke(new Action(() => pictureBoxCover.Image = Properties.Resources.gray_background));
+                pictureBoxCover.Image = Properties.Resources.gray_background;
             }
 
             new Thread(loadUserFeed).Start();
@@ -206,35 +189,34 @@ namespace BasicFacebookFeatures
 
         private void loadUserEvents()
         {
-            listBoxEvents.Invoke(new Action(() => listBoxEvents.Items.Clear()));
+            listBoxEvents.Items.Clear();
             try
             {
-                //r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
                 if (m_ActiveUser.Events != null && m_ActiveUser.Events.Count > 0)
                 {
-                    listBoxEvents.Invoke(new Action(() => listBoxEvents.DataSource = eventBindingSource.DataSource));
+                    listBoxEvents.DataSource = eventBindingSource.DataSource;
                 }
                 else
                 {
-                    listBoxEvents.Invoke(new Action(() => listBoxEvents.DataSource = new List<string>() { "No Events" }));
+                    listBoxEvents.Items.Add("No Events");
                 }
             }
             catch
             {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving events.")));
+                MessageBox.Show("Error retrieving events.");
             }
         }
 
         private void loadUserFeed()
         {
-            this.Invoke(new Action(() => listBoxMain.Items.Clear()));
+            listBoxMain.Items.Clear();
             try
             {
-                this.Invoke(new Action(() => r_FacebookSystem.LoadUserFeed(m_ActiveUser, listBoxMain)));
+                r_FacebookSystem.LoadUserFeed(m_ActiveUser, listBoxMain);
             }
             catch
             {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving feed.")));
+                MessageBox.Show("Error retrieving feed.");
             }
         }
 
@@ -242,34 +224,36 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                //r_FacebookSystem.LoadUserEvents(m_ActiveUser, listBoxEvents);
-                if (m_ActiveUser.FriendLists != null && m_ActiveUser.FriendLists.Count > 0)
+                if (m_ActiveUser.Friends != null && m_ActiveUser.Friends.Count > 0)
                 {
-                    listBoxFriends.Invoke(new Action(() =>
+                    this.Invoke(new Action(() =>
                     {
+                        listBoxFriends.DataSource = null; // Clear the data source first
                         friendListBindingSource.DataSource = m_ActiveUser.Friends;
-                        listBoxFriends.DataSource = friendListBindingSource.DataSource;
+                        listBoxFriends.DataSource = friendListBindingSource;
                         listBoxFriends.DisplayMember = "Name";
                     }));
                 }
                 else
                 {
-                    listBoxEvents.Invoke(new Action(() => listBoxEvents.DataSource = new List<string>() { "No friends" }));
+                    this.Invoke(new Action(() =>
+                    {
+                        listBoxFriends.DataSource = null; // Clear the data source first
+                        listBoxFriends.Items.Clear();
+                        listBoxFriends.Items.Add("No friends");
+                    }));
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error retrieving friends.");
+                this.Invoke(new Action(() => MessageBox.Show($"Error retrieving friends: {ex.Message}")));
             }
         }
 
         private void loadUserLikedPages()
         {
-            listBoxMain.Invoke(new Action(() =>
-            {
-                listBoxMain.Items.Clear();
-                listBoxMain.DisplayMember = "Name";
-            }));
+            listBoxMain.Items.Clear();
+            listBoxMain.DisplayMember = "Name";
 
             try
             {
@@ -277,17 +261,14 @@ namespace BasicFacebookFeatures
             }
             catch
             {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving liked pages.")));
+                MessageBox.Show("Error retrieving liked pages.");
             }
         }
 
         private void loadUserGroups()
         {
-            listBoxMain.Invoke(new Action(() =>
-            {
-                listBoxMain.Items.Clear();
-                listBoxMain.DisplayMember = "Name";
-            }));
+            listBoxMain.Items.Clear();
+            listBoxMain.DisplayMember = "Name";
 
             try
             {
@@ -295,17 +276,14 @@ namespace BasicFacebookFeatures
             }
             catch
             {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving groups.")));
+                MessageBox.Show("Error retrieving groups.");
             }
         }
 
         private void loadUserAlbums()
         {
-            listBoxMain.Invoke(new Action(() =>
-            {
-                listBoxMain.Items.Clear();
-                listBoxMain.DisplayMember = "Name";
-            }));
+            listBoxMain.Items.Clear();
+            listBoxMain.DisplayMember = "Name";
 
             try
             {
@@ -313,7 +291,7 @@ namespace BasicFacebookFeatures
             }
             catch
             {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving albums.")));
+                MessageBox.Show("Error retrieving albums.");
             }
         }
 
@@ -321,15 +299,10 @@ namespace BasicFacebookFeatures
         {
             const bool v_LoginEnable = true;
             FacebookService.LogoutWithUI();
-            buttonLogin.Invoke(new Action(() =>
-            {
-                buttonLogin.Text = "Login";
-                buttonLogin.BackColor = buttonLogout.BackColor;
-                buttonLogin.Enabled = v_LoginEnable;
-            }));
-
-            buttonLogout.Invoke(new Action(() => buttonLogout.Enabled = !v_LoginEnable));
-
+            buttonLogin.Text = "Login";
+            buttonLogin.BackColor = buttonLogout.BackColor;
+            buttonLogin.Enabled = v_LoginEnable;
+            buttonLogout.Enabled = !v_LoginEnable;
         }
 
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -362,9 +335,9 @@ namespace BasicFacebookFeatures
 
         private void changePostButtonsState(bool i_ButtonsState)
         {
-            buttonPost.Invoke(new Action(() => buttonPost.Enabled = i_ButtonsState));
-            buttonAddPicture.Invoke(new Action(() => buttonAddPicture.Enabled = i_ButtonsState));
-            buttonCancelPost.Invoke(new Action(() => buttonCancelPost.Enabled = i_ButtonsState));
+            buttonPost.Enabled = i_ButtonsState;
+            buttonAddPicture.Enabled = i_ButtonsState;
+            buttonCancelPost.Enabled = i_ButtonsState;
         }
 
         private void buttonPost_Click(object sender, EventArgs e)
@@ -404,7 +377,7 @@ namespace BasicFacebookFeatures
             }
             finally
             {
-                textBoxPost.Invoke(new Action(() => Text = string.Empty));
+                textBoxPost.Text = string.Empty;
             }
         }
 
@@ -418,7 +391,7 @@ namespace BasicFacebookFeatures
 
                 if (string.IsNullOrWhiteSpace(picturePath))
                 {
-                    throw new Exception("Please choose a picture first!");
+                    MessageBox.Show("Please choose a picture first!");
                 }
                 else
                 {
@@ -456,12 +429,12 @@ namespace BasicFacebookFeatures
 
                     if (i_Filter == eProfileFilter.None)
                     {
-                        pictureBoxProfile.Invoke(new Action(() => pictureBoxProfile.Image = (Image)m_OriginalProfilePicture.Clone()));
+                        pictureBoxProfile.Image = (Image)m_OriginalProfilePicture.Clone();
                     }
                     else
                     {
                         Image filteredImage = r_FacebookSystem.ApplyProfileFilter(m_OriginalProfilePicture, i_Filter);
-                        pictureBoxProfile.Invoke(new Action(() => pictureBoxProfile.Image = filteredImage));
+                        pictureBoxProfile.Image = filteredImage;
                     }
                 }
                 catch (Exception ex)
@@ -482,26 +455,24 @@ namespace BasicFacebookFeatures
 
                 if (m_OriginalCoverImage != null)
                 {
-                    pictureBoxCover.Invoke(new Action(() => pictureBoxCover.Image = (Image)m_OriginalCoverImage.Clone()));
+                    pictureBoxCover.Image = (Image)m_OriginalCoverImage.Clone();
                 }
                 else
                 {
-                    pictureBoxCover.Invoke(new Action(() => pictureBoxCover.Image = Properties.Resources.gray_background));
+                    pictureBoxCover.Image = Properties.Resources.gray_background;
                 }
 
                 IMood mood = MoodFactory.CreateMood(i_Mood);
-                pictureBoxCover.Invoke(new Action(() => pictureBoxCover.Image = r_FacebookSystem.ApplyMood(pictureBoxCover.Image, i_Mood)));
-                pictureBoxCover.Invoke(new Action(() => pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage));
+                Image moodImage = r_FacebookSystem.ApplyMood(pictureBoxCover.Image, i_Mood);
+                pictureBoxCover.Image = moodImage;
+                pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage;
 
                 if (i_Mood != eProfileMoodType.None)
                 {
-                    labelMoodName.Invoke(new Action(() =>
-                    {
-                        labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
-                        labelMoodName.ForeColor = Color.White;
-                        labelMoodName.Visible = true;
-                        labelMoodName.BackColor = Color.Transparent;
-                    }));
+                    labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
+                    labelMoodName.ForeColor = Color.White;
+                    labelMoodName.Visible = true;
+                    labelMoodName.BackColor = Color.Transparent;
 
                     System.Windows.Forms.Timer fadeTimer = new System.Windows.Forms.Timer();
                     fadeTimer.Interval = 50;
@@ -534,6 +505,7 @@ namespace BasicFacebookFeatures
             try
             {
                 r_FacebookSystem.PostPicture(m_ActiveUser, pictureBoxProfile.Image);
+                MessageBox.Show("Profile picture was uploaded successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception exception)
             {
