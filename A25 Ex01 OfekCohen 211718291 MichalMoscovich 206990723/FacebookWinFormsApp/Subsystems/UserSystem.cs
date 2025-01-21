@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using FacebookWrapper;
@@ -67,32 +68,31 @@ namespace BasicFacebookFeatures.Subsystems
             }
         }
 
-        public void LoadUserEvents(User i_User, ListBox io_ListBox)
+        public BindingList<Event> GetUserEvents(User i_User)
         {
+            BindingList<Event> eventsList = new BindingList<Event>();
+
             foreach (Event userEvent in i_User.Events)
             {
                 if (userEvent.Name != null)
                 {
-                    io_ListBox.Items.Add($"{userEvent.Name} [{userEvent.TimeString}]");
+                    eventsList.Add(userEvent);
                 }
             }
-            if (io_ListBox.Items.Count == 0)
-            {
-                io_ListBox.Items.Add("No upcoming events.");
-            }
+
+            return eventsList;
         }
 
-        public void LoadUserFriends(User i_User, ListBox io_ListBox)
+        public BindingList<User> GetUserFriends(User i_User)
         {
+            BindingList<User> friendsList = new BindingList<User>();
+
             foreach (User friend in i_User.Friends)
             {
-                io_ListBox.Items.Add(friend);
+                friendsList.Add(friend);
             }
-            if (io_ListBox.Items.Count == 0)
-            {
-                io_ListBox.Enabled = false;
-                io_ListBox.Items.Add("No friends found.");
-            }
+
+            return friendsList;
         }
 
         public void LoadUserLikedPages(User i_User, ListBox io_ListBox)
