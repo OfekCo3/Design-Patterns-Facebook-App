@@ -9,7 +9,6 @@ using BasicFacebookFeatures.Moods.Factory;
 using BasicFacebookFeatures.Moods.Interfaces;
 using BasicFacebookFeatures.Facade;
 using System.Threading;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace BasicFacebookFeatures
@@ -210,7 +209,6 @@ namespace BasicFacebookFeatures
                         eventBindingSource.DataSource = eventsList;
                         listBoxEvents.DataSource = eventBindingSource.DataSource;
                     }));
-
                 }
                 else
                 {
