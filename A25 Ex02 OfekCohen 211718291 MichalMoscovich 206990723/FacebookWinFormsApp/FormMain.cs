@@ -390,7 +390,7 @@ namespace BasicFacebookFeatures
 
         private void buttonPost_Click(object sender, EventArgs e)
         {
-             const bool v_PostButtonsEnabled = true;
+            const bool v_PostButtonsEnabled = true;
 
             try
             {
