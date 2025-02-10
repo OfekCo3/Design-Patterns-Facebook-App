@@ -525,6 +525,7 @@ namespace BasicFacebookFeatures
 
                 if (i_Mood != eProfileMoodType.None)
                 {
+                    labelMoodName.Visible = true;
                     labelMoodName.Invoke(new Action(() =>
                     {
                         labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
