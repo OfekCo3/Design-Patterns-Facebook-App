@@ -390,7 +390,7 @@ namespace BasicFacebookFeatures
 
         private void buttonPost_Click(object sender, EventArgs e)
         {
-            // const bool v_PostButtonsEnabled = true;
+             const bool v_PostButtonsEnabled = true;
 
             try
             {
@@ -408,7 +408,7 @@ namespace BasicFacebookFeatures
                             ICommand postCommand = new PostStatusCommand(m_PostReceiver, textBoxPost.Text);
                             r_PostInvoker.SetCommand(postCommand);
                             r_PostInvoker.ExecuteCommand();
-                            changePostButtonsState(false);
+                            changePostButtonsState(!v_PostButtonsEnabled);
                         }
                         catch (Exception)
                         {
