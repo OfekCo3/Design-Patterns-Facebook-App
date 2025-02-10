@@ -11,6 +11,7 @@ using BasicFacebookFeatures.Facade;
 using System.Threading;
 using System.ComponentModel;
 using BasicFacebookFeatures.Strategy;
+using BasicFacebookFeatures.Command;
 
 namespace BasicFacebookFeatures
 {
@@ -25,6 +26,8 @@ namespace BasicFacebookFeatures
         private const int k_CollectionLimit = 25;
         private readonly FacebookSystemFacade r_FacebookSystemFacade;
         private readonly ContentLoader r_ContentLoader;
+        private readonly PostInvoker r_PostInvoker;
+        private PostReceiver m_PostReceiver;
 
         private enum eComboboxMainOption
         {
@@ -43,6 +46,7 @@ namespace BasicFacebookFeatures
             r_AppSettings = AppSettings.LoadFromFile();
             r_FacebookSystemFacade = new FacebookSystemFacade();
             r_ContentLoader = new ContentLoader(new FeedLoadStrategy());
+            r_PostInvoker = new PostInvoker();
             initializeFilterFeature();
             initializeMoodFeature();
             initializeContentComboBox();
@@ -386,7 +390,7 @@ namespace BasicFacebookFeatures
 
         private void buttonPost_Click(object sender, EventArgs e)
         {
-            const bool v_PostButtonsEnabled = true;
+            // const bool v_PostButtonsEnabled = true;
 
             try
             {
@@ -400,14 +404,17 @@ namespace BasicFacebookFeatures
                     {
                         try
                         {
-                            r_FacebookSystemFacade.PostStatus(m_ActiveUser, textBoxPost.Text);
-                            changePostButtonsState(!v_PostButtonsEnabled);
-                            MessageBox.Show("Posted!");
+                            m_PostReceiver = new PostReceiver(m_ActiveUser, r_FacebookSystemFacade);
+                            ICommand postCommand = new PostStatusCommand(m_PostReceiver, textBoxPost.Text);
+                            r_PostInvoker.SetCommand(postCommand);
+                            r_PostInvoker.ExecuteCommand();
+                            changePostButtonsState(false);
                         }
                         catch (Exception)
                         {
                             throw new Exception("Post failed");
                         }
+                        
                     }
                 }
                 else
@@ -421,7 +428,7 @@ namespace BasicFacebookFeatures
             }
             finally
             {
-                textBoxPost.Invoke(new Action(() => Text = string.Empty));
+                textBoxPost.Invoke(new Action(() => textBoxPost.Text = string.Empty));
             }
         }
 
@@ -441,8 +448,10 @@ namespace BasicFacebookFeatures
                 {
                     try
                     {
-                        r_FacebookSystemFacade.PostStatusWithPicture(m_ActiveUser, textBoxPost.Text, picturePath);
-                        MessageBox.Show("Posted successfully!");
+                        m_PostReceiver = new PostReceiver(m_ActiveUser, r_FacebookSystemFacade);
+                        ICommand postWithPictureCommand = new PostWithPictureCommand(m_PostReceiver, textBoxPost.Text, picturePath);
+                        r_PostInvoker.SetCommand(postWithPictureCommand);
+                        r_PostInvoker.ExecuteCommand();
                     }
                     catch (Exception)
                     {
