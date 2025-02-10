@@ -106,6 +106,13 @@
     <Compile Include="ProfilePictureFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategy\AlbumsLoadStrategy.cs" />
+    <Compile Include="Strategy\ContentLoader.cs" />
+    <Compile Include="Strategy\ContentStrategyFactory.cs" />
+    <Compile Include="Strategy\FeedLoadStrategy.cs" />
+    <Compile Include="Strategy\GroupsLoadStrategy.cs" />
+    <Compile Include="Strategy\IContentLoadStrategy.cs" />
+    <Compile Include="Strategy\LikesLoadStrategy.cs" />
     <Compile Include="Subsystems\MoodSystem.cs" />
     <Compile Include="Subsystems\ProfileSystem.cs" />
     <Compile Include="Subsystems\UserSystem.cs" />

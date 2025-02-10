@@ -10,6 +10,7 @@ using BasicFacebookFeatures.Moods.Interfaces;
 using BasicFacebookFeatures.Facade;
 using System.Threading;
 using System.ComponentModel;
+using BasicFacebookFeatures.Strategy;
 
 namespace BasicFacebookFeatures
 {
@@ -23,6 +24,7 @@ namespace BasicFacebookFeatures
         private Image m_OriginalCoverImage;
         private const int k_CollectionLimit = 25;
         private readonly FacebookSystemFacade r_FacebookSystemFacade;
+        private readonly ContentLoader r_ContentLoader;
 
         private enum eComboboxMainOption
         {
@@ -40,8 +42,10 @@ namespace BasicFacebookFeatures
             FacebookService.s_CollectionLimit = k_CollectionLimit;
             r_AppSettings = AppSettings.LoadFromFile();
             r_FacebookSystemFacade = new FacebookSystemFacade();
+            r_ContentLoader = new ContentLoader(new FeedLoadStrategy());
             initializeFilterFeature();
             initializeMoodFeature();
+            initializeContentComboBox();
         }
 
         private void initializeFilterFeature()
@@ -82,6 +86,12 @@ namespace BasicFacebookFeatures
             }
 
             buttonApplyMood.Click += (sender, e) => applySelectedMood((eProfileMoodType)comboBoxMood.SelectedIndex);
+        }
+
+        private void initializeContentComboBox()
+        {
+            comboBoxMain.DataSource = Enum.GetValues(typeof(ContentStrategyFactory.eContentType));
+            comboBoxMain.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -342,22 +352,21 @@ namespace BasicFacebookFeatures
 
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
         {
-            eComboboxMainOption selectedFeature = (eComboboxMainOption)comboBoxMain.SelectedIndex;
-
-            switch (selectedFeature)
+            if (m_ActiveUser != null)
             {
-                case eComboboxMainOption.Feed:
-                    new Thread(loadUserFeed).Start();
-                    break;
-                case eComboboxMainOption.Likes:
-                    new Thread(loadUserLikedPages).Start();
-                    break;
-                case eComboboxMainOption.Albums:
-                    new Thread(loadUserAlbums).Start();
-                    break;
-                case eComboboxMainOption.Groups:
-                    new Thread(loadUserGroups).Start();
-                    break;
+                ContentStrategyFactory.eContentType selectedType = (ContentStrategyFactory.eContentType)comboBoxMain.SelectedItem;
+                IContentLoadStrategy newStrategy = ContentStrategyFactory.CreateStrategy(selectedType);
+                r_ContentLoader.SetStrategy(newStrategy);
+
+                listBoxMain.Invoke(new Action(() =>
+                {
+                    listBoxMain.Items.Clear();
+                    listBoxMain.DisplayMember = "Name";
+                    foreach (object item in r_ContentLoader.LoadContent(m_ActiveUser))
+                    {
+                        listBoxMain.Items.Add(item);
+                    }
+                }));
             }
         }
 
