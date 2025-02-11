@@ -405,8 +405,8 @@ namespace BasicFacebookFeatures
                         try
                         {
                             m_PostReceiver = new PostReceiver(m_ActiveUser, r_FacebookSystemFacade);
-                            ICommand postCommand = new PostStatusCommand(m_PostReceiver, textBoxPost.Text);
-                            r_PostInvoker.SetCommand(postCommand);
+                            m_PostReceiver.SetPostData(textBoxPost.Text);
+                            r_PostInvoker.SetCommand(() => m_PostReceiver.PostStatus());
                             r_PostInvoker.ExecuteCommand();
                             changePostButtonsState(!v_PostButtonsEnabled);
                         }
@@ -414,7 +414,6 @@ namespace BasicFacebookFeatures
                         {
                             throw new Exception("Post failed");
                         }
-                        
                     }
                 }
                 else
@@ -449,8 +448,8 @@ namespace BasicFacebookFeatures
                     try
                     {
                         m_PostReceiver = new PostReceiver(m_ActiveUser, r_FacebookSystemFacade);
-                        ICommand postWithPictureCommand = new PostWithPictureCommand(m_PostReceiver, textBoxPost.Text, picturePath);
-                        r_PostInvoker.SetCommand(postWithPictureCommand);
+                        m_PostReceiver.SetPostData(textBoxPost.Text, picturePath);
+                        r_PostInvoker.SetCommand(() => m_PostReceiver.PostStatusWithPicture());
                         r_PostInvoker.ExecuteCommand();
                     }
                     catch (Exception)
