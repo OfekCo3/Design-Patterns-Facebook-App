@@ -23,7 +23,7 @@ namespace BasicFacebookFeatures.Strategy
                 case eContentType.Groups:
                     return new GroupsLoadStrategy();
                 default:
-                    return new FeedLoadStrategy(); // Default to feed
+                    return new FeedLoadStrategy();
             }
         }
     }

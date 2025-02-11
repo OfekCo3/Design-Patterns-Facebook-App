@@ -78,8 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="Command\FacebookCommandInvoker.cs" />
-    <Compile Include="Command\FacebookPostService.cs" />
+    <Compile Include="PostCommand\FacebookCommandInvoker.cs" />
+    <Compile Include="PostCommand\FacebookPostService.cs" />
     <Compile Include="Facade\FacebookSystemFacade.cs" />
     <Compile Include="Filters\FilterComposer.cs" />
     <Compile Include="Filters\IFilterBuilder.cs" />
@@ -98,17 +98,17 @@
     <Compile Include="Moods\MoodObjects\HungryMood.cs" />
     <Compile Include="Moods\MoodObjects\NoneMood.cs" />
     <Compile Include="Moods\Factory\MoodFactory.cs" />
-    <Compile Include="Observer\FriendsMoodObserver.cs" />
-    <Compile Include="Observer\IMoodObserver.cs" />
-    <Compile Include="Observer\MoodSubject.cs" />
-    <Compile Include="ProfileMood.cs" />
+    <Compile Include="MoodObserver\FriendsMoodObserver.cs" />
+    <Compile Include="MoodObserver\IMoodObserver.cs" />
+    <Compile Include="MoodObserver\MoodSubject.cs" />
+    <Compile Include="Moods\ProfileMood.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProfilePictureFilter.cs" />
+    <Compile Include="Filters\ProfilePictureFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategy\AlbumsLoadStrategy.cs" />
