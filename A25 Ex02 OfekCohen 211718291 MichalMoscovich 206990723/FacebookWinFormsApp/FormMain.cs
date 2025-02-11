@@ -12,6 +12,7 @@ using System.Threading;
 using System.ComponentModel;
 using BasicFacebookFeatures.Strategy;
 using BasicFacebookFeatures.Command;
+using BasicFacebookFeatures.Observer;
 
 namespace BasicFacebookFeatures
 {
@@ -20,7 +21,6 @@ namespace BasicFacebookFeatures
         private User m_ActiveUser;
         private LoginResult m_LoginResult;
         private readonly AppSettings r_AppSettings;
-        private FormFriendsWithSameMood m_FormFriendsWithSameMood;
         private Image m_OriginalProfilePicture;
         private Image m_OriginalCoverImage;
         private const int k_CollectionLimit = 25;
@@ -28,14 +28,8 @@ namespace BasicFacebookFeatures
         private readonly ContentLoader r_ContentLoader;
         private readonly FacebookCommandInvoker r_FacebookCommandInvoker;
         private FacebookPostService m_FacebookPostService;
-
-        private enum eComboboxMainOption
-        {
-            Feed,
-            Likes,
-            Albums,
-            Groups
-        }
+        private MoodSubject m_MoodSubject;
+        private FriendsMoodObserver m_FriendsMoodObserver;
 
         public FormMain()
         {
@@ -47,6 +41,7 @@ namespace BasicFacebookFeatures
             r_FacebookSystemFacade = new FacebookSystemFacade();
             r_ContentLoader = new ContentLoader(new FeedLoadStrategy());
             r_FacebookCommandInvoker = new FacebookCommandInvoker();
+            m_MoodSubject = new MoodSubject();
             initializeFilterFeature();
             initializeMoodFeature();
             initializeContentComboBox();
@@ -159,6 +154,8 @@ namespace BasicFacebookFeatures
             buttonLogin.BackColor = Color.LightGreen;
 
             tabMainApp.Text = $"{m_ActiveUser.Name}";
+
+            m_FriendsMoodObserver = new FriendsMoodObserver(m_ActiveUser, m_MoodSubject);
 
             updateUIBasedOnLoginStatus(v_IsLoggingIn);
             loadUserInformation();
@@ -522,6 +519,8 @@ namespace BasicFacebookFeatures
                 pictureBoxCover.Invoke(new Action(() => pictureBoxCover.Image = r_FacebookSystemFacade.ApplyMood(pictureBoxCover.Image, i_Mood)));
                 pictureBoxCover.Invoke(new Action(() => pictureBoxCover.SizeMode = PictureBoxSizeMode.StretchImage));
 
+                m_MoodSubject.CurrentMood = i_Mood;  // This will trigger the observer notification
+
                 if (i_Mood != eProfileMoodType.None)
                 {
                     labelMoodName.Visible = true;
@@ -602,8 +601,7 @@ namespace BasicFacebookFeatures
 
         private void buttonWhoInTheMood_Click(object sender, EventArgs e)
         {
-            m_FormFriendsWithSameMood = new FormFriendsWithSameMood(m_ActiveUser, (eProfileMoodType)comboBoxMood.SelectedIndex);
-            m_FormFriendsWithSameMood.ShowDialog();
+            m_FriendsMoodObserver.ShowFriendsWithSameMood();
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)

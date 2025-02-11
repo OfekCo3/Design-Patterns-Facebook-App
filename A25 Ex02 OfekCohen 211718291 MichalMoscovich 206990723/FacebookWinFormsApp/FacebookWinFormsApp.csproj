@@ -98,6 +98,9 @@
     <Compile Include="Moods\MoodObjects\HungryMood.cs" />
     <Compile Include="Moods\MoodObjects\NoneMood.cs" />
     <Compile Include="Moods\Factory\MoodFactory.cs" />
+    <Compile Include="Observer\FriendsMoodObserver.cs" />
+    <Compile Include="Observer\IMoodObserver.cs" />
+    <Compile Include="Observer\MoodSubject.cs" />
     <Compile Include="ProfileMood.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
