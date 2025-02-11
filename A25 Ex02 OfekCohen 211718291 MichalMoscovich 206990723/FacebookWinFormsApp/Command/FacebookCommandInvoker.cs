@@ -2,7 +2,7 @@ using System;
 
 namespace BasicFacebookFeatures.Command
 {
-    public class PostInvoker
+    public class FacebookCommandInvoker
     {
         private Action m_Command;
 

@@ -78,8 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="Command\PostInvoker.cs" />
-    <Compile Include="Command\PostReceiver.cs" />
+    <Compile Include="Command\FacebookCommandInvoker.cs" />
+    <Compile Include="Command\FacebookPostService.cs" />
     <Compile Include="Facade\FacebookSystemFacade.cs" />
     <Compile Include="Filters\FilterComposer.cs" />
     <Compile Include="Filters\IFilterBuilder.cs" />

@@ -26,8 +26,8 @@ namespace BasicFacebookFeatures
         private const int k_CollectionLimit = 25;
         private readonly FacebookSystemFacade r_FacebookSystemFacade;
         private readonly ContentLoader r_ContentLoader;
-        private readonly PostInvoker r_PostInvoker;
-        private PostReceiver m_PostReceiver;
+        private readonly FacebookCommandInvoker r_FacebookCommandInvoker;
+        private FacebookPostService m_FacebookPostService;
 
         private enum eComboboxMainOption
         {
@@ -46,7 +46,7 @@ namespace BasicFacebookFeatures
             r_AppSettings = AppSettings.LoadFromFile();
             r_FacebookSystemFacade = new FacebookSystemFacade();
             r_ContentLoader = new ContentLoader(new FeedLoadStrategy());
-            r_PostInvoker = new PostInvoker();
+            r_FacebookCommandInvoker = new FacebookCommandInvoker();
             initializeFilterFeature();
             initializeMoodFeature();
             initializeContentComboBox();
@@ -404,10 +404,10 @@ namespace BasicFacebookFeatures
                     {
                         try
                         {
-                            m_PostReceiver = new PostReceiver(m_ActiveUser, r_FacebookSystemFacade);
-                            m_PostReceiver.SetPostData(textBoxPost.Text);
-                            r_PostInvoker.SetCommand(() => m_PostReceiver.PostStatus());
-                            r_PostInvoker.ExecuteCommand();
+                            m_FacebookPostService = new FacebookPostService(m_ActiveUser, r_FacebookSystemFacade);
+                            m_FacebookPostService.SetPostData(textBoxPost.Text);
+                            r_FacebookCommandInvoker.SetCommand(() => m_FacebookPostService.PostStatus());
+                            r_FacebookCommandInvoker.ExecuteCommand();
                             changePostButtonsState(!v_PostButtonsEnabled);
                         }
                         catch (Exception)
@@ -447,10 +447,10 @@ namespace BasicFacebookFeatures
                 {
                     try
                     {
-                        m_PostReceiver = new PostReceiver(m_ActiveUser, r_FacebookSystemFacade);
-                        m_PostReceiver.SetPostData(textBoxPost.Text, picturePath);
-                        r_PostInvoker.SetCommand(() => m_PostReceiver.PostStatusWithPicture());
-                        r_PostInvoker.ExecuteCommand();
+                        m_FacebookPostService = new FacebookPostService(m_ActiveUser, r_FacebookSystemFacade);
+                        m_FacebookPostService.SetPostData(textBoxPost.Text, picturePath);
+                        r_FacebookCommandInvoker.SetCommand(() => m_FacebookPostService.PostStatusWithPicture());
+                        r_FacebookCommandInvoker.ExecuteCommand();
                     }
                     catch (Exception)
                     {

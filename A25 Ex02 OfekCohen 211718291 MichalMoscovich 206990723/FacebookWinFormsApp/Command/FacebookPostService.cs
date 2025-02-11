@@ -3,14 +3,14 @@ using BasicFacebookFeatures.Facade;
 
 namespace BasicFacebookFeatures.Command
 {
-    public class PostReceiver
+    public class FacebookPostService
     {
         private readonly User r_User;
         private readonly FacebookSystemFacade r_FacebookSystemFacade;
         private string m_PostText;
         private string m_PicturePath;
 
-        public PostReceiver(User i_User, FacebookSystemFacade i_FacebookSystemFacade)
+        public FacebookPostService(User i_User, FacebookSystemFacade i_FacebookSystemFacade)
         {
             r_User = i_User;
             r_FacebookSystemFacade = i_FacebookSystemFacade;
