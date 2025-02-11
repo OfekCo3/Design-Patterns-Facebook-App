@@ -57,11 +57,6 @@ namespace BasicFacebookFeatures.Facade
             r_ProfileSystem.UploadPicture(i_User, i_Image);
         }
 
-        public FormFriendsWithSameMood ShowFriendsWithSameMood(User i_User, eProfileMoodType i_MoodType)
-        {
-            return r_MoodSystem.ShowFriendsWithSameMood(i_User, i_MoodType);
-        }
-
         public void LoadUserFeed(User i_User, ListBox i_ListBox)
         {
             r_UserSystem.LoadUserFeed(i_User, i_ListBox);

@@ -62,6 +62,7 @@ namespace BasicFacebookFeatures.Subsystems
                     i_ListBox.Items.Add($"[{post.CreatedTime}]");
                 }
             }
+
             if (i_ListBox.Items.Count == 0)
             {
                 i_ListBox.Items.Add("No feed to display.");
@@ -137,6 +138,7 @@ namespace BasicFacebookFeatures.Subsystems
         public void PostStatus(User i_User, string i_Text)
         {
             Status postedStatus = i_User.PostStatus(i_Text);
+
             if (postedStatus == null)
             {
                 throw new Exception("Post failed");
@@ -152,6 +154,7 @@ namespace BasicFacebookFeatures.Subsystems
                 if (imageData != null)
                 {
                     Post postedPicture = i_User.PostPhoto(imageData);
+
                     if (postedPicture == null)
                     {
                         throw new Exception("Failed to post the picture");
@@ -171,10 +174,11 @@ namespace BasicFacebookFeatures.Subsystems
         public void PostStatusWithPicture(User i_User, string i_StatusText, string i_PicturePath)
         {
             Status postedStatus = i_User.PostStatus(i_StatusText, i_PicturePath);
+
             if (postedStatus == null)
             {
                 throw new Exception("Picture post failed");
             }
         }
     }
-} 
+}

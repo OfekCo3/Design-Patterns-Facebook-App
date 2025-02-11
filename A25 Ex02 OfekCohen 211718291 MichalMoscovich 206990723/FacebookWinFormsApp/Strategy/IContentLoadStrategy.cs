@@ -5,7 +5,7 @@ namespace BasicFacebookFeatures.Strategy
 {
     public interface IContentLoadStrategy
     {
-        IEnumerable<object> LoadContent(User user);
+        IEnumerable<object> LoadContent(User i_User);
         string GetContentDescription();
     }
 }
