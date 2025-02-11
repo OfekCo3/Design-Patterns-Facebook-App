@@ -26,7 +26,6 @@ namespace BasicFacebookFeatures.Observer
         public void UpdateFriendMood(User i_Friend, eProfileMoodType i_Mood)
         {
             r_FriendsMoods[i_Friend] = i_Mood;
-            NotifyFriendMoodChanged(i_Friend, i_Mood);
         }
 
         public void Attach(IMoodObserver i_Observer)
@@ -45,29 +44,6 @@ namespace BasicFacebookFeatures.Observer
             {
                 observer.Update(m_CurrentMood);
             }
-        }
-
-        private void NotifyFriendMoodChanged(User i_Friend, eProfileMoodType i_Mood)
-        {
-            foreach (IMoodObserver observer in r_Observers)
-            {
-                observer.OnFriendMoodChanged(i_Friend, i_Mood);
-            }
-        }
-
-        public Dictionary<User, eProfileMoodType> GetFriendsWithSameMood(eProfileMoodType i_Mood)
-        {
-            Dictionary<User, eProfileMoodType> sameMoodFriends = new Dictionary<User, eProfileMoodType>();
-            
-            foreach (var friendMood in r_FriendsMoods)
-            {
-                if (friendMood.Value == i_Mood)
-                {
-                    sameMoodFriends.Add(friendMood.Key, friendMood.Value);
-                }
-            }
-
-            return sameMoodFriends;
         }
     }
 }

@@ -31,14 +31,6 @@ namespace BasicFacebookFeatures
         private MoodSubject m_MoodSubject;
         private FriendsMoodObserver m_FriendsMoodObserver;
 
-        private enum eComboboxMainOption
-        {
-            Feed,
-            Likes,
-            Albums,
-            Groups
-        }
-
         public FormMain()
         {
             InitializeComponent();

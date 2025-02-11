@@ -45,14 +45,6 @@ namespace BasicFacebookFeatures.Observer
             }
         }
 
-        public void OnFriendMoodChanged(User i_Friend, eProfileMoodType i_NewMood)
-        {
-            if (i_NewMood == r_Subject.CurrentMood)
-            {
-                MessageBox.Show($"Your friend {i_Friend.Name} is now in the same mood as you!");
-            }
-        }
-
         public void ShowFriendsWithSameMood()
         {
             if (m_FormFriendsWithSameMood != null)
