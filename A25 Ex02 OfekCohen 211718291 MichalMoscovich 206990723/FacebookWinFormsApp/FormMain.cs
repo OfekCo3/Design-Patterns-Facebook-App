@@ -11,6 +11,7 @@ using BasicFacebookFeatures.Facade;
 using System.Threading;
 using System.ComponentModel;
 using BasicFacebookFeatures.Strategy;
+using BasicFacebookFeatures.Command;
 
 namespace BasicFacebookFeatures
 {
@@ -25,6 +26,8 @@ namespace BasicFacebookFeatures
         private const int k_CollectionLimit = 25;
         private readonly FacebookSystemFacade r_FacebookSystemFacade;
         private readonly ContentLoader r_ContentLoader;
+        private readonly FacebookCommandInvoker r_FacebookCommandInvoker;
+        private FacebookPostService m_FacebookPostService;
 
         private enum eComboboxMainOption
         {
@@ -43,6 +46,7 @@ namespace BasicFacebookFeatures
             r_AppSettings = AppSettings.LoadFromFile();
             r_FacebookSystemFacade = new FacebookSystemFacade();
             r_ContentLoader = new ContentLoader(new FeedLoadStrategy());
+            r_FacebookCommandInvoker = new FacebookCommandInvoker();
             initializeFilterFeature();
             initializeMoodFeature();
             initializeContentComboBox();
@@ -400,9 +404,11 @@ namespace BasicFacebookFeatures
                     {
                         try
                         {
-                            r_FacebookSystemFacade.PostStatus(m_ActiveUser, textBoxPost.Text);
+                            m_FacebookPostService = new FacebookPostService(m_ActiveUser, r_FacebookSystemFacade);
+                            m_FacebookPostService.SetPostData(textBoxPost.Text);
+                            r_FacebookCommandInvoker.SetCommand(() => m_FacebookPostService.PostStatus());
+                            r_FacebookCommandInvoker.ExecuteCommand();
                             changePostButtonsState(!v_PostButtonsEnabled);
-                            MessageBox.Show("Posted!");
                         }
                         catch (Exception)
                         {
@@ -421,7 +427,7 @@ namespace BasicFacebookFeatures
             }
             finally
             {
-                textBoxPost.Invoke(new Action(() => Text = string.Empty));
+                textBoxPost.Invoke(new Action(() => textBoxPost.Text = string.Empty));
             }
         }
 
@@ -441,8 +447,10 @@ namespace BasicFacebookFeatures
                 {
                     try
                     {
-                        r_FacebookSystemFacade.PostStatusWithPicture(m_ActiveUser, textBoxPost.Text, picturePath);
-                        MessageBox.Show("Posted successfully!");
+                        m_FacebookPostService = new FacebookPostService(m_ActiveUser, r_FacebookSystemFacade);
+                        m_FacebookPostService.SetPostData(textBoxPost.Text, picturePath);
+                        r_FacebookCommandInvoker.SetCommand(() => m_FacebookPostService.PostStatusWithPicture());
+                        r_FacebookCommandInvoker.ExecuteCommand();
                     }
                     catch (Exception)
                     {
@@ -516,6 +524,7 @@ namespace BasicFacebookFeatures
 
                 if (i_Mood != eProfileMoodType.None)
                 {
+                    labelMoodName.Visible = true;
                     labelMoodName.Invoke(new Action(() =>
                     {
                         labelMoodName.Text = $"Current Mood: {mood.GetMoodName()} {mood.GetMoodEmoji()}";
