@@ -17,6 +17,7 @@ namespace BasicFacebookFeatures.Moods.MoodObjects
             }
 
             Image moodOverlay = GetMoodOverlay();
+
             if (moodOverlay == null)
             {
                 return i_OriginalImage;
@@ -28,6 +29,7 @@ namespace BasicFacebookFeatures.Moods.MoodObjects
         private Image createMoodedImage(Image i_OriginalImage, Image i_MoodOverlay)
         {
             Bitmap resultImage = new Bitmap(i_OriginalImage.Width, i_OriginalImage.Height);
+
             using (Graphics g = Graphics.FromImage(resultImage))
             {
                 ColorMatrix colorMatrix = new ColorMatrix();

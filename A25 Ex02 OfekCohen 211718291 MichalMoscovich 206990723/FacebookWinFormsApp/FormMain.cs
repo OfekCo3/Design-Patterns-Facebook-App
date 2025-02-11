@@ -13,6 +13,8 @@ using System.ComponentModel;
 using BasicFacebookFeatures.Strategy;
 using BasicFacebookFeatures.Command;
 using BasicFacebookFeatures.Observer;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace BasicFacebookFeatures
 {
@@ -39,7 +41,7 @@ namespace BasicFacebookFeatures
             FacebookService.s_CollectionLimit = k_CollectionLimit;
             r_AppSettings = AppSettings.LoadFromFile();
             r_FacebookSystemFacade = new FacebookSystemFacade();
-            r_ContentLoader = new ContentLoader(new FeedLoadStrategy());
+            r_ContentLoader = new ContentLoader(new FeedLoadStrategy(listBoxMain, r_FacebookSystemFacade));
             r_FacebookCommandInvoker = new FacebookCommandInvoker();
             m_MoodSubject = new MoodSubject();
             initializeFilterFeature();
@@ -173,6 +175,26 @@ namespace BasicFacebookFeatures
             comboBoxMood.Invoke(new Action(() => comboBoxMood.Enabled = i_IsLoggedIn));
         }
 
+        private void updateListBoxContent(IEnumerable<object> i_Content)
+        {
+            var content = i_Content.ToList();
+            if (listBoxMain.InvokeRequired)
+            {
+                listBoxMain.Invoke(new Action(() =>
+                {
+                    listBoxMain.Items.Clear();
+                    listBoxMain.DisplayMember = "Name";
+                    listBoxMain.Items.AddRange(content.ToArray());
+                }));
+            }
+            else
+            {
+                listBoxMain.Items.Clear();
+                listBoxMain.DisplayMember = "Name";
+                listBoxMain.Items.AddRange(content.ToArray());
+            }
+        }
+
         private void loadUserInformation()
         {
             try
@@ -201,8 +223,9 @@ namespace BasicFacebookFeatures
             {
                 pictureBoxCover.Invoke(new Action(() => pictureBoxCover.Image = Properties.Resources.gray_background));
             }
-
-            new Thread(loadUserFeed).Start();
+            
+            // Load and display initial feed content
+            updateListBoxContent(r_ContentLoader.LoadContent(m_ActiveUser));
             new Thread(loadUserEvents).Start();
             new Thread(loadUserFriends).Start();
         }
@@ -234,19 +257,6 @@ namespace BasicFacebookFeatures
             catch
             {
                 this.Invoke(new Action(() => MessageBox.Show("Error retrieving events.")));
-            }
-        }
-
-        private void loadUserFeed()
-        {
-            this.Invoke(new Action(() => listBoxMain.Items.Clear()));
-            try
-            {
-                this.Invoke(new Action(() => r_FacebookSystemFacade.LoadUserFeed(m_ActiveUser, listBoxMain)));
-            }
-            catch
-            {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving feed.")));
             }
         }
 
@@ -282,60 +292,6 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void loadUserLikedPages()
-        {
-            listBoxMain.Invoke(new Action(() =>
-            {
-                listBoxMain.Items.Clear();
-                listBoxMain.DisplayMember = "Name";
-            }));
-
-            try
-            {
-                r_FacebookSystemFacade.LoadUserLikedPages(m_ActiveUser, listBoxMain);
-            }
-            catch
-            {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving liked pages.")));
-            }
-        }
-
-        private void loadUserGroups()
-        {
-            listBoxMain.Invoke(new Action(() =>
-            {
-                listBoxMain.Items.Clear();
-                listBoxMain.DisplayMember = "Name";
-            }));
-
-            try
-            {
-                r_FacebookSystemFacade.LoadUserGroups(m_ActiveUser, listBoxMain);
-            }
-            catch
-            {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving groups.")));
-            }
-        }
-
-        private void loadUserAlbums()
-        {
-            listBoxMain.Invoke(new Action(() =>
-            {
-                listBoxMain.Items.Clear();
-                listBoxMain.DisplayMember = "Name";
-            }));
-
-            try
-            {
-                r_FacebookSystemFacade.LoadUserAlbums(m_ActiveUser, listBoxMain);
-            }
-            catch
-            {
-                this.Invoke(new Action(() => MessageBox.Show("Error retrieving albums.")));
-            }
-        }
-
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             const bool v_LoginEnable = true;
@@ -348,7 +304,6 @@ namespace BasicFacebookFeatures
             }));
 
             buttonLogout.Invoke(new Action(() => buttonLogout.Enabled = !v_LoginEnable));
-
         }
 
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -356,18 +311,21 @@ namespace BasicFacebookFeatures
             if (m_ActiveUser != null)
             {
                 ContentStrategyFactory.eContentType selectedType = (ContentStrategyFactory.eContentType)comboBoxMain.SelectedItem;
-                IContentLoadStrategy newStrategy = ContentStrategyFactory.CreateStrategy(selectedType);
+                IContentLoadStrategy newStrategy = ContentStrategyFactory.CreateStrategy(selectedType, listBoxMain, r_FacebookSystemFacade);
                 r_ContentLoader.SetStrategy(newStrategy);
 
-                listBoxMain.Invoke(new Action(() =>
+                // Start a new thread to load content
+                new Thread(() =>
                 {
-                    listBoxMain.Items.Clear();
-                    listBoxMain.DisplayMember = "Name";
-                    foreach (object item in r_ContentLoader.LoadContent(m_ActiveUser))
+                    try
                     {
-                        listBoxMain.Items.Add(item);
+                        updateListBoxContent(r_ContentLoader.LoadContent(m_ActiveUser));
                     }
-                }));
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error loading content: {ex.Message}");
+                    }
+                }).Start();
             }
         }
 

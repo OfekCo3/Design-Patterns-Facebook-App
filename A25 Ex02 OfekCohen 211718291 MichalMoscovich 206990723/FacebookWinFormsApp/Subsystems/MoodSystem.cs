@@ -17,10 +17,5 @@ namespace BasicFacebookFeatures.Subsystems
         {
             return r_ProfileMood.ApplyMood(i_Image, i_MoodType);
         }
-
-        public FormFriendsWithSameMood ShowFriendsWithSameMood(User i_User, eProfileMoodType i_MoodType)
-        {
-            return new FormFriendsWithSameMood(i_User, i_MoodType);
-        }
     }
-} 
+}

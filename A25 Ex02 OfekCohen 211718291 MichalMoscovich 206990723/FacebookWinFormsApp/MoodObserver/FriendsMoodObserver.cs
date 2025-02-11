@@ -15,7 +15,6 @@ namespace BasicFacebookFeatures.Observer
             r_User = i_User;
             r_Subject = i_Subject;
             r_Subject.Attach(this);
-            createForm();
             initializeFriendsMoods();
         }
 
@@ -25,7 +24,7 @@ namespace BasicFacebookFeatures.Observer
             {
                 foreach (User friend in r_User.Friends)
                 {
-                    // For now, we'll assume None as default for friends' mood
+                    // We will assume None as default for friends' mood
                     r_Subject.UpdateFriendMood(friend, eProfileMoodType.None);
                 }
             }
